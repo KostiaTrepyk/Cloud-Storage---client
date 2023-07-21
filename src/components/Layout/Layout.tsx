@@ -1,31 +1,20 @@
-import { FC, PropsWithChildren } from "react";
+import { FC } from "react";
 
-import Footer from "./components/Footer/Footer";
-import Navbar from "./components/Navbar/Navbar";
-import Sidebar from "./components/Sidebar/Sidebar";
-import { Outlet } from "react-router-dom";
+import LayoutMobile from "./LayoutMobile";
+import LayoutPC from "./LayoutPC";
 
-const Layout: FC<PropsWithChildren> = ({ children }) => {
-    return (
-        <div className="flex text-neutral-100 bg-neutral-900 ">
-            <Sidebar />
-            <div className="min-h-screen w-full">
-                <Navbar />
+function detectMob() {
+    const toMatch = [/Android/i, /webOS/i, /iPhone/i, /iPad/i, /iPod/i, /BlackBerry/i, /Windows Phone/i];
 
-                {/* Divider */}
-                <div className="w-3/4 mx-auto border-neutral-600 border-t" />
+    return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+    });
+}
 
-                <div className="p-2">
-                    <Outlet />
-                </div>
+const isMobile = detectMob();
 
-                {/* Divider */}
-                <div className="w-3/4 mx-auto border-neutral-600 border-t" />
-
-                <Footer />
-            </div>
-        </div>
-    );
+const Layout: FC = () => {
+    return <div className="bg-white text-neutral-900">{isMobile ? <LayoutMobile /> : <LayoutPC />}</div>;
 };
 
 export default Layout;

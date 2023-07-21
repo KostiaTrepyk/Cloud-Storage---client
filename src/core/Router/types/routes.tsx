@@ -24,7 +24,6 @@ export const STORAGEROUTE: RouteObject = {
 
 export const PROFILEROUTE: RouteObject = {
     id: generateId(),
-
     path: "/profile",
     element: <ProfilePage />,
 };
@@ -41,5 +40,4 @@ const PAGENOTFOUNDROUTE: RouteObject = {
     element: <PageNotFound />,
 };
 
-export const publicRoutes: RouteObject[] = [HOMEROUTE, STORAGEROUTE, AUTHROUTE, PAGENOTFOUNDROUTE];
-export const privateRoutes: RouteObject[] = [PROFILEROUTE];
+export const routes: RouteObject[] = [HOMEROUTE, STORAGEROUTE, AUTHROUTE, PAGENOTFOUNDROUTE, PROFILEROUTE];
