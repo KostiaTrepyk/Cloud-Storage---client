@@ -34,7 +34,7 @@ const Navbar = () => {
                 <React.Fragment key={route.id}>
                     <NavLink
                         to={route.path!}
-                        className={`h-full w-full flex items-center justify-center rounded-t transition duration-300 ease-out ${
+                        className={`h-full w-full flex items-center justify-center rounded-t transition duration-500 ease-out ${
                             route.path === pathname && "text-rose-500 bg-neutral-100 shadow shadow-rose-500"
                         }`}
                     >
