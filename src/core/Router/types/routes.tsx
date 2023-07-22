@@ -30,7 +30,7 @@ export const PROFILEROUTE: RouteObject = {
 
 export const AUTHROUTE: RouteObject = {
     id: generateId(),
-    path: "/auth",
+    path: "/profile/auth",
     element: <AuthPage />,
 };
 

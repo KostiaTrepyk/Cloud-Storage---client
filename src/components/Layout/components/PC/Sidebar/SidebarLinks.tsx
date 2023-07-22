@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, RouteObject } from "react-router-dom";
+import { NavLink, RouteObject, useLocation } from "react-router-dom";
 import { Variants, motion } from "framer-motion";
 
 // Framer animations
@@ -28,14 +28,22 @@ interface Props {
 }
 
 const SidebarLinks: React.FC<Props> = ({ routes, isExpanded }) => {
+    const location = useLocation();
+    const pathname = "/" + location.pathname.split("/")[1];
+
     return (
         <div className="flex flex-col gap-8">
             {routes.map((route) => (
                 <React.Fragment key={route.id}>
-                    <NavLink to={route.path!} className="flex flex-row gap-1">
+                    <NavLink
+                        to={route.path!}
+                        className={`flex flex-row gap-1 transition duration-500 hover:text-rose-600 ${
+                            route.path === pathname && "text-rose-600"
+                        }`}
+                    >
                         <div className="h-10 w-10">{route.icon}</div>
                         <motion.b
-                            className={`${!isExpanded && "w-0 overflow-hidden"} self-end text-lg pb-1`}
+                            className={`self-end text-lg pb-1 overflow-hidden ${!isExpanded && "w-0"}`}
                             animate={isExpanded ? "expanded" : "closed"}
                             variants={linkLabelAnimation}
                         >

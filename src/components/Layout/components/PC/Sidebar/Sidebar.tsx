@@ -30,18 +30,20 @@ const Sidebar: FC = () => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     return (
-        <section>
+        <section className="sticky top-0 h-screen">
             <div className="h-14 pl-3 flex justify-end items-center">
                 <div
                     onClick={() => setIsExpanded((prev) => !prev)}
-                    className={`${isExpanded ? "rotate-180" : "rotate-0"} h-10 w-10 transition duration-300`}
+                    className={`h-10 w-10 rounded-full  transition duration-300 hover:bg-neutral-200 active:bg-neutral-500 ${
+                        isExpanded ? "rotate-180" : "rotate-0"
+                    }`}
                 >
                     <ArrowRightIcon />
                 </div>
             </div>
 
             {/* Dividfer */}
-            <div className="w-3/4 border-t-2 border-neutral-700" />
+            <div className="w-3/4 border-t-2 border-rose-900" />
 
             <nav className="pt-4 pl-3">
                 <SidebarLinks routes={routes} isExpanded={isExpanded} />

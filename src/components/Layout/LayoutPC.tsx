@@ -12,9 +12,6 @@ const LayoutPC: FC = () => {
             <div className="w-full pb-2 px-6">
                 <Header />
 
-                {/* Divider */}
-                <div className="w-3/4 mx-auto mb-3 border-neutral-600 border-t-2" />
-
                 <Outlet />
             </div>
         </div>

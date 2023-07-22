@@ -26,7 +26,8 @@ const routes = [
 ];
 
 const Navbar = () => {
-    const pathname = useLocation().pathname;
+    const location = useLocation();
+    const pathname = "/" + location.pathname.split("/")[1];
 
     return (
         <nav className="w-full h-16 px-1 fixed bottom-0 left-0 flex justify-around items-center bg-white shadow-inner">
