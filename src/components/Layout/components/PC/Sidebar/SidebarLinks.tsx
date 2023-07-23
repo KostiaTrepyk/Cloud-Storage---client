@@ -1,6 +1,7 @@
 import React from "react";
-import { NavLink, RouteObject, useLocation } from "react-router-dom";
+import { NavLink, RouteObject } from "react-router-dom";
 import { Variants, motion } from "framer-motion";
+import { usePathname } from "../../../../../hooks/usePathname";
 
 // Framer animations
 const linkLabelAnimation: Variants = {
@@ -28,30 +29,35 @@ interface Props {
 }
 
 const SidebarLinks: React.FC<Props> = ({ routes, isExpanded }) => {
-    const location = useLocation();
-    const pathname = "/" + location.pathname.split("/")[1];
+    const { current, redirect } = usePathname();
 
     return (
         <div className="flex flex-col gap-8">
-            {routes.map((route) => (
-                <React.Fragment key={route.id}>
-                    <NavLink
-                        to={route.path!}
-                        className={`flex flex-row gap-1 transition duration-500 hover:text-rose-600 ${
-                            route.path === pathname && "text-rose-600"
-                        }`}
-                    >
-                        <div className="h-10 w-10">{route.icon}</div>
-                        <motion.b
-                            className={`self-end text-lg pb-1 overflow-hidden ${!isExpanded && "w-0"}`}
-                            animate={isExpanded ? "expanded" : "closed"}
-                            variants={linkLabelAnimation}
+            {routes.map((route) => {
+                const isActive =
+                    route.path === redirect.rootPathname ||
+                    (route.path === current.rootPathname && !redirect.rootPathname);
+
+                return (
+                    <React.Fragment key={route.id}>
+                        <NavLink
+                            to={route.path!}
+                            className={`flex flex-row gap-1 transition duration-500 hover:text-rose-600 ${
+                                isActive && "text-rose-600"
+                            }`}
                         >
-                            {route.label}
-                        </motion.b>
-                    </NavLink>
-                </React.Fragment>
-            ))}
+                            <div className="h-10 w-10">{route.icon}</div>
+                            <motion.b
+                                className={`self-end text-md pb-1 overflow-hidden ${!isExpanded && "w-0"}`}
+                                animate={isExpanded ? "expanded" : "closed"}
+                                variants={linkLabelAnimation}
+                            >
+                                {route.label}
+                            </motion.b>
+                        </NavLink>
+                    </React.Fragment>
+                );
+            })}
         </div>
     );
 };

@@ -5,7 +5,7 @@ import Navbar from "./components/Mobile/Navbar";
 
 const LayoutMobile = () => {
     return (
-        <div className="min-h-screen pt-12 pb-16 flex flex-col">
+        <div className="min-h-screen pb-14 flex flex-col">
             <Header />
 
             <div className="grow px-3 py-2 bg-neutral-100">

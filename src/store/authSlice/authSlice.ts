@@ -11,7 +11,11 @@ const initialState: IInitialState = {
 const AuthSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        login(state) {
+            state.isAuth = true;
+        },
+    },
 });
 
 const AuthReducer = AuthSlice.reducer;

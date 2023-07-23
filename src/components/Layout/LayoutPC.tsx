@@ -6,13 +6,14 @@ import Sidebar from "./components/PC/Sidebar/Sidebar";
 
 const LayoutPC: FC = () => {
     return (
-        <div className="min-h-screen flex">
+        <div className="min-h-screen flex bg-neutral-50">
             <Sidebar />
 
-            <div className="w-full pb-2 px-6">
+            <div className="w-full">
                 <Header />
-
-                <Outlet />
+                <div className="w-full pb-2 px-6">
+                    <Outlet />
+                </div>
             </div>
         </div>
     );

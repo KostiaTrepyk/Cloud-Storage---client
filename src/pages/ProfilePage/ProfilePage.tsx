@@ -1,3 +1,5 @@
+import Private from "../Wrappers/Private";
+
 const ProfilePage = () => {
     return (
         <>
@@ -6,4 +8,9 @@ const ProfilePage = () => {
     );
 };
 
-export default ProfilePage;
+const PrivateProfilePage = () => (
+    <Private>
+        <ProfilePage />
+    </Private>
+);
+export default PrivateProfilePage;

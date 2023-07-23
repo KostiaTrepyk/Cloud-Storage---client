@@ -30,11 +30,11 @@ const Sidebar: FC = () => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     return (
-        <section className="sticky top-0 h-screen">
+        <section className="sticky top-0 h-screen pr-2 bg-white shadow-md z-10">
             <div className="h-14 pl-3 flex justify-end items-center">
                 <div
                     onClick={() => setIsExpanded((prev) => !prev)}
-                    className={`h-10 w-10 rounded-full  transition duration-300 hover:bg-neutral-200 active:bg-neutral-500 ${
+                    className={`h-10 w-10 rounded-full transition duration-300 hover:bg-neutral-200 active:bg-neutral-500 ${
                         isExpanded ? "rotate-180" : "rotate-0"
                     }`}
                 >
