@@ -4,14 +4,14 @@ import { setCookie } from "../../../helpers/cookie";
 import { getMe } from "./getMe";
 import { RootState } from "../../store";
 
-interface Body {
+export interface SignInArg {
 	email: string;
 	password: string;
 }
 
 export const signIn = createAsyncThunk(
 	"signIn",
-	async (body: Body, thunkAPI) => {
+	async (body: SignInArg, thunkAPI) => {
 		try {
 			const response = await axios.post<{ token: string }>(
 				"/auth/login",

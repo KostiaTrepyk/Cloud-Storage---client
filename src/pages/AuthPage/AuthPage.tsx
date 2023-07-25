@@ -1,24 +1,52 @@
+import { FormEvent } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { SignInArg, signIn } from "../../store/authSlice/reducers/signIn";
+import { SignUpArg, signUp } from "../../store/authSlice/reducers/signUp";
+import { searchParamsToObj } from "../../helpers/searchParamsToObj";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { usePathname } from "../../hooks/usePathname";
-import { SIGNUPROUTE } from "../../core/Router/types/routes";
+import { HOMEROUTE, SIGNUPROUTE } from "../../core/Router/types/routes";
+import { SearchParamsEnum } from "../../types/searchParamsEnum";
 
 import Redirect from "../Components/Redirect";
 import SignInForm from "../../components/Forms/AuthForms/SignInForm";
 import SignUpForm from "../../components/Forms/AuthForms/SignUpForm";
 
 const AuthPage = () => {
-	const { current } = usePathname();
+	const dispatch = useAppDispatch();
+	const location = useLocation();
+	const navigate = useNavigate();
+
+	const searchParams = searchParamsToObj(location.search);
 
 	const isAuth = useAppSelector((state) => state.auth.isAuth);
 
-	if (isAuth) return <Redirect />;
+	async function signUpHandler(
+		formData: SignUpArg,
+		e: FormEvent<HTMLFormElement>
+	) {
+		e.preventDefault();
+		await dispatch(signUp(formData));
+		!searchParams[SearchParamsEnum.REDIRECT] && navigate(HOMEROUTE.path!);
+	}
+
+	async function signInHandler(
+		formData: SignInArg,
+		e: FormEvent<HTMLFormElement>
+	) {
+		e.preventDefault();
+		await dispatch(signIn(formData));
+		!searchParams[SearchParamsEnum.REDIRECT] && navigate(HOMEROUTE.path!);
+	}
+
+	if (isAuth && searchParams[SearchParamsEnum.REDIRECT]) return <Redirect />;
 
 	return (
 		<main className="flex grow items-center pb-[7vh]">
-			{current.pathname === SIGNUPROUTE.path ? (
-				<SignUpForm />
+			{location.pathname === SIGNUPROUTE.path ? (
+				<SignUpForm onSubmit={signUpHandler} />
 			) : (
-				<SignInForm />
+				<SignInForm onSubmit={signInHandler} />
 			)}
 		</main>
 	);

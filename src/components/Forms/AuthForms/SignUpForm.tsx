@@ -1,36 +1,41 @@
-import { FormEvent, useState } from "react";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { FC, FormEvent, useState } from "react";
 import { SIGNINROUTE } from "../../../core/Router/types/routes";
 import { Link, useLocation } from "react-router-dom";
-import { signUp } from "../../../store/authSlice/reducers/signUp";
 import { useAppSelector } from "../../../hooks/useAppSelector";
+import { SignUpArg } from "../../../store/authSlice/reducers/signUp";
+
 import Input from "../../UI/Input";
 
-const SignUpForm = () => {
-	const dispatch = useAppDispatch();
+interface Props {
+	onSubmit: (formData: SignUpArg, e: FormEvent<HTMLFormElement>) => void;
+}
+
+const SignUpForm: FC<Props> = ({ onSubmit }) => {
 	const location = useLocation();
 
+	const [isSubmited, setIsSubmited] = useState<boolean>(false);
 	const [fullName, setFullName] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const status = useAppSelector((state) => state.auth.status);
 
-	function FormSubmitHandler(e: FormEvent) {
-		e.preventDefault();
-		dispatch(signUp({ fullName, email, password }));
-	}
-
 	return (
 		<div className="flex w-full flex-col items-center">
 			<form
 				className="flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[2px_2px_4px_0px_#bbb]"
-				onSubmit={FormSubmitHandler}
+				onSubmit={(e) => {
+					setIsSubmited(() => true);
+					onSubmit({ fullName, email, password }, e);
+				}}
 			>
 				<div className="mb-2 flex justify-center gap-4 text-center text-3xl font-bold max-sm:text-2xl">
-					{status === "idle" && "Sign up"}
-					{status === "pending" && "Wait a second please"}
-					{status === "rejected" && "Try again"}
-					{status === "fulfilled" && "Created :)"}
+					{!isSubmited && "Sign up"}
+					{/* {isSubmited && status === "idle" && "Oops..."} */}
+					{isSubmited &&
+						status === "pending" &&
+						"Wait a second please"}
+					{isSubmited && status === "rejected" && "Try again"}
+					{isSubmited && status === "fulfilled" && "Created :)"}
 				</div>
 
 				<Input

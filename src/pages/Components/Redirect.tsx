@@ -6,39 +6,49 @@ import { SearchParamsEnum } from "../../types/searchParamsEnum";
 import { searchParamsToObj } from "../../helpers/searchParamsToObj";
 
 const Redirect: FC = () => {
-    const location = useLocation();
-    const searchParams = searchParamsToObj(location.search);
+	const location = useLocation();
+	const searchParams = searchParamsToObj(location.search);
 
-    function getRedirectUrl(): string {
-        /* example: /profile === /profile/ */
-        let redirectUrl = searchParams[SearchParamsEnum.REDIRECT];
-        if (redirectUrl[redirectUrl.length - 1] === "/") {
-            redirectUrl = redirectUrl.slice(0, redirectUrl.length - 1);
-        }
+	function getRedirectUrl(): string {
+		let redirectUrl = searchParams[SearchParamsEnum.REDIRECT];
 
-        if (Object.values(RoutesPathnames).includes(redirectUrl)) {
-            return redirectUrl;
-        }
-        return HOMEROUTE.path!;
-    }
+		if (!redirectUrl) return HOMEROUTE.path!;
 
-    function getRedirectQuery(): string {
-        if (!searchParams[SearchParamsEnum.QUERY]) return "";
+		/* example: /profile === /profile/ */
+		if (redirectUrl[redirectUrl.length - 1] === "/") {
+			redirectUrl = redirectUrl.slice(0, redirectUrl.length - 1);
+		}
 
-        let query: string = "";
-        try {
-            return searchParamsFromObj(
-                /* %22 === " */
-                JSON.parse(searchParams[SearchParamsEnum.QUERY].replaceAll("%22", '"'))
-            );
-        } catch (error) {
-            console.error(error);
-        }
+		if (Object.values(RoutesPathnames).includes(redirectUrl)) {
+			return redirectUrl;
+		}
 
-        return query;
-    }
+		return HOMEROUTE.path!;
+	}
 
-    return <Navigate to={{ pathname: getRedirectUrl(), search: getRedirectQuery() }} />;
+	function getRedirectQuery(): string {
+		if (!searchParams[SearchParamsEnum.QUERY]) return "";
+
+		let query: string = "";
+		try {
+			return searchParamsFromObj(
+				/* %22 === " */
+				JSON.parse(
+					searchParams[SearchParamsEnum.QUERY].replaceAll("%22", '"')
+				)
+			);
+		} catch (error) {
+			console.error(error);
+		}
+
+		return query;
+	}
+
+	return (
+		<Navigate
+			to={{ pathname: getRedirectUrl(), search: getRedirectQuery() }}
+		/>
+	);
 };
 
 export default Redirect;

@@ -1,35 +1,40 @@
-import { FormEvent, useState } from "react";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { FC, FormEvent, useState } from "react";
 import { SIGNUPROUTE } from "../../../core/Router/types/routes";
 import { Link, useLocation } from "react-router-dom";
-import { signIn } from "../../../store/authSlice/reducers/signIn";
 import { useAppSelector } from "../../../hooks/useAppSelector";
+import { SignInArg } from "../../../store/authSlice/reducers/signIn";
+
 import Input from "../../UI/Input";
 
-const SignInForm = () => {
-	const dispatch = useAppDispatch();
+interface Props {
+	onSubmit: (formData: SignInArg, e: FormEvent<HTMLFormElement>) => void;
+}
+
+const SignInForm: FC<Props> = ({ onSubmit }) => {
 	const location = useLocation();
 
+	const [isSubmited, setIsSubmited] = useState<boolean>(false);
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const status = useAppSelector((state) => state.auth.status);
-
-	function FormSubmitHandler(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-		if (email && password) dispatch(signIn({ email, password }));
-	}
 
 	return (
 		<div className="flex w-full flex-col items-center">
 			<form
 				className="flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[2px_2px_4px_0px_#bbb]"
-				onSubmit={FormSubmitHandler}
+				onSubmit={(e) => {
+					setIsSubmited(() => true);
+					onSubmit({ email, password }, e);
+				}}
 			>
 				<div className="mb-2 flex justify-center gap-4 text-center text-3xl font-bold max-sm:text-2xl">
-					{status === "idle" && "Sign in"}
-					{status === "pending" && "Wait a second please"}
-					{status === "rejected" && "Try again"}
-					{status === "fulfilled" && "OK :)"}
+					{!isSubmited && "Sign in"}
+					{/* {isSubmited && status === "idle" && "Oops..."} */}
+					{isSubmited &&
+						status === "pending" &&
+						"Wait a second please"}
+					{isSubmited && status === "rejected" && "Try again"}
+					{isSubmited && status === "fulfilled" && "OK :)"}
 				</div>
 
 				<Input
