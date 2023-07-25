@@ -4,17 +4,30 @@ import LayoutMobile from "./LayoutMobile";
 import LayoutPC from "./LayoutPC";
 
 function detectMob() {
-    const toMatch = [/Android/i, /webOS/i, /iPhone/i, /iPad/i, /iPod/i, /BlackBerry/i, /Windows Phone/i];
+	const toMatch = [
+		/Android/i,
+		/webOS/i,
+		/iPhone/i,
+		/iPad/i,
+		/iPod/i,
+		/BlackBerry/i,
+		/Windows Phone/i,
+	];
 
-    return toMatch.some((toMatchItem) => {
-        return navigator.userAgent.match(toMatchItem);
-    });
+	return toMatch.some((toMatchItem) => {
+		return navigator.userAgent.match(toMatchItem);
+	});
 }
 
 const isMobile = detectMob();
 
+/* If page needs full height use className="grow" */
 const Layout: FC = () => {
-    return <div className="bg-white text-neutral-900">{isMobile ? <LayoutMobile /> : <LayoutPC />}</div>;
+	return (
+		<div className="bg-white text-neutral-900">
+			{isMobile ? <LayoutMobile /> : <LayoutPC />}
+		</div>
+	);
 };
 
 export default Layout;
