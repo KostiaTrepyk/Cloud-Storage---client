@@ -9,29 +9,29 @@ import SidebarLinks from "./SidebarLinks";
 
 import HomeIcon from "../../../../SvgIcons/HomeIcon";
 import StorageIcon from "../../../../SvgIcons/StorageIcon";
-import ProfileIcon from "../../../../SvgIcons/ProfileIcon";
+import ProfileIcon from "../../ProfileIcon";
 import ArrowRightIcon from "../../../../SvgIcons/ArrowRightIcon";
-
-const routes = [
-	{
-		...HOMEROUTE,
-		label: "Home",
-		icon: <HomeIcon />,
-	},
-	{
-		...STORAGEROUTE,
-		label: "Storage",
-		icon: <StorageIcon />,
-	},
-	{
-		...PROFILEROUTE,
-		label: "Profile",
-		icon: <ProfileIcon />,
-	},
-];
 
 const Sidebar: FC = () => {
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+	const routes = [
+		{
+			...HOMEROUTE,
+			label: "Home",
+			icon: <HomeIcon />,
+		},
+		{
+			...STORAGEROUTE,
+			label: "Storage",
+			icon: <StorageIcon />,
+		},
+		{
+			...PROFILEROUTE,
+			label: "Profile",
+			icon: <ProfileIcon />,
+		},
+	];
 
 	return (
 		<section className="sticky top-0 z-10 h-screen bg-white pr-2 shadow-md">
