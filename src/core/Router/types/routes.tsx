@@ -8,48 +8,55 @@ import ProfilePage from "../../../pages/ProfilePage/ProfilePage";
 import AuthPage from "../../../pages/AuthPage/AuthPage";
 import PageNotFound from "../../../pages/PageNotFound/PageNotFound";
 
-export const RootPathes = {
-    HOMEPATHNAME: "/",
-    STORAGEPATHNAME: "/storage",
-    PROFILEPATHNAME: "/profile",
+export const RootPathnames = {
+    HOME: "/",
+    STORAGE: "/storage",
+    PROFILE: "/profile",
 };
 
-/* Should start with RootPathes */
+// If it's not in the RootPathnames, use a redirect (<Redirect/>)!
 export const RoutesPathnames = {
-    HOMEPATHNAME: RootPathes.HOMEPATHNAME,
-    STORAGEPATHNAME: RootPathes.STORAGEPATHNAME,
-    FILESPATHNAME: RootPathes.STORAGEPATHNAME + "/files",
-    PROFILEPATHNAME: RootPathes.PROFILEPATHNAME,
-    AUTHPATHNAME: RootPathes.PROFILEPATHNAME + "/auth",
+    HOME: RootPathnames.HOME,
+    STORAGE: RootPathnames.STORAGE,
+    FILES: RootPathnames.STORAGE + "/files",
+    PROFILE: RootPathnames.PROFILE,
+    SIGNIN: "/auth/signin",
+    SIGNUP: "/auth/signup",
 };
 
 export const HOMEROUTE: RouteObject = {
     id: generateId(),
-    path: RoutesPathnames.HOMEPATHNAME,
+    path: RoutesPathnames.HOME,
     element: <HomePage />,
 };
 
 export const STORAGEROUTE: RouteObject = {
     id: generateId(),
-    path: RoutesPathnames.STORAGEPATHNAME,
+    path: RoutesPathnames.STORAGE,
     element: <StoragePage />,
 };
 
 export const FILESROUTE: RouteObject = {
     id: generateId(),
-    path: RoutesPathnames.FILESPATHNAME,
+    path: RoutesPathnames.FILES,
     element: <StoragePage />,
 };
 
 export const PROFILEROUTE: RouteObject = {
     id: generateId(),
-    path: RoutesPathnames.PROFILEPATHNAME,
+    path: RoutesPathnames.PROFILE,
     element: <ProfilePage />,
 };
 
-export const AUTHROUTE: RouteObject = {
+export const SIGNINROUTE: RouteObject = {
     id: generateId(),
-    path: RoutesPathnames.AUTHPATHNAME,
+    path: RoutesPathnames.SIGNIN,
+    element: <AuthPage />,
+};
+
+export const SIGNUPROUTE: RouteObject = {
+    id: generateId(),
+    path: RoutesPathnames.SIGNUP,
     element: <AuthPage />,
 };
 
@@ -59,4 +66,12 @@ const PAGENOTFOUNDROUTE: RouteObject = {
     element: <PageNotFound />,
 };
 
-export const routes: RouteObject[] = [HOMEROUTE, STORAGEROUTE, AUTHROUTE, PAGENOTFOUNDROUTE, PROFILEROUTE];
+export const routes: RouteObject[] = [
+    HOMEROUTE,
+    STORAGEROUTE,
+    PROFILEROUTE,
+    SIGNINROUTE,
+    SIGNUPROUTE,
+
+    PAGENOTFOUNDROUTE,
+];

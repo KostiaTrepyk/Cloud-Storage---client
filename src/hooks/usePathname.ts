@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { searchParamsToObj } from "../helpers/searchParamsToObj";
 import { SearchParamsEnum } from "../types/searchParamsEnum";
-import { RootPathes, RoutesPathnames } from "../core/Router/types/routes";
+import { RootPathnames, RoutesPathnames } from "../core/Router/types/routes";
 
 export function usePathname() {
     const location = useLocation();
@@ -12,7 +12,7 @@ export function usePathname() {
 
     const currentRootPathname: string = verifyPathname(currentPathname)
         ? getRootPathname(currentPathname)
-        : RoutesPathnames.HOMEPATHNAME;
+        : RoutesPathnames.HOME;
 
     const redirectPathname = verifyPathname(redirectTo) ? redirectTo : null;
 
@@ -27,7 +27,7 @@ export function usePathname() {
         }
 
         if (
-            Object.values(RootPathes).includes(getRootPathname(path)) &&
+            Object.values(RootPathnames).includes(getRootPathname(path)) &&
             Object.values(RoutesPathnames).includes(path)
         ) {
             return true;

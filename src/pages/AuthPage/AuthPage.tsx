@@ -1,29 +1,27 @@
-import { FormEvent } from "react";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { AuthActions } from "../../store/authSlice/authSlice";
+import { usePathname } from "../../hooks/usePathname";
+import { SIGNUPROUTE } from "../../core/Router/types/routes";
 
 import Redirect from "../Components/Redirect";
+import SignInForm from "../../components/Forms/AuthForms/SignInForm";
+import SignUpForm from "../../components/Forms/AuthForms/SignUpForm";
 
 const AuthPage = () => {
-    const dispatch = useAppDispatch();
+	const { current } = usePathname();
 
-    const isAuth = useAppSelector((state) => state.auth.isAuth);
+	const isAuth = useAppSelector((state) => state.auth.isAuth);
 
-    function FormSubmitHandler(e: FormEvent) {
-        e.preventDefault();
-        dispatch(AuthActions.login());
-    }
+	if (isAuth) return <Redirect />;
 
-    if (isAuth) return <Redirect />;
-
-    return (
-        <form onSubmit={FormSubmitHandler}>
-            <input type="text" />
-            <input type="text" />
-            <button type="submit">Login</button>
-        </form>
-    );
+	return (
+		<main className="flex grow items-center pb-[7vh]">
+			{current.pathname === SIGNUPROUTE.path ? (
+				<SignUpForm />
+			) : (
+				<SignInForm />
+			)}
+		</main>
+	);
 };
 
 export default AuthPage;
