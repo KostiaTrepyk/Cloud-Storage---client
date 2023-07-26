@@ -5,6 +5,7 @@ import { useAppSelector } from "../../../hooks/useAppSelector";
 import { SignInArg } from "../../../store/authSlice/reducers/signIn";
 
 import Input from "../../UI/Input";
+import Button from "../../UI/Buttons/Button";
 
 interface Props {
 	onSubmit: (formData: SignInArg, e: FormEvent<HTMLFormElement>) => void;
@@ -21,7 +22,7 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 	return (
 		<div className="flex w-full flex-col items-center">
 			<form
-				className="flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[2px_2px_4px_0px_#bbb]"
+				className="flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[1px_2px_4px_0px_#bbb]"
 				onSubmit={(e) => {
 					setIsSubmited(() => true);
 					onSubmit({ email, password }, e);
@@ -40,10 +41,11 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 				<Input
 					label="Email"
 					value={email}
-					type="email"
 					onChange={(e) => setEmail(e.target.value)}
+					type="email"
 					disabled={status === "pending"}
 					pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+					autoComplete="email"
 					required
 				/>
 
@@ -55,6 +57,7 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 					disabled={status === "pending"}
 					pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
 					title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+					autoComplete="current-password"
 					required
 				/>
 
@@ -66,13 +69,13 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 						Create account
 					</Link>
 
-					<button
-						className="w-20 min-w-fit rounded bg-rose-600 p-2 font-semibold text-white transition hover:bg-rose-700 active:bg-rose-800 disabled:bg-neutral-600"
+					<Button
 						type="submit"
 						disabled={status === "pending"}
+						title="Sign in"
 					>
 						Sign in
-					</button>
+					</Button>
 				</div>
 			</form>
 		</div>

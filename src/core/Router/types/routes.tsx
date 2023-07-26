@@ -18,7 +18,6 @@ export const RootPathnames = {
 export const RoutesPathnames = {
     HOME: RootPathnames.HOME,
     STORAGE: RootPathnames.STORAGE,
-    FILES: RootPathnames.STORAGE + "/files",
     PROFILE: RootPathnames.PROFILE,
     SIGNIN: "/auth/signin",
     SIGNUP: "/auth/signup",
@@ -33,12 +32,6 @@ export const HOMEROUTE: RouteObject = {
 export const STORAGEROUTE: RouteObject = {
     id: generateId(),
     path: RoutesPathnames.STORAGE,
-    element: <StoragePage />,
-};
-
-export const FILESROUTE: RouteObject = {
-    id: generateId(),
-    path: RoutesPathnames.FILES,
     element: <StoragePage />,
 };
 
