@@ -1,4 +1,5 @@
 export enum SearchParamsEnum {
-    REDIRECT = "redirect",
-    QUERY = "query",
+	REDIRECT = "redirect",
+	QUERY = "query",
+	IMMEDIATELY = "immediately",
 }

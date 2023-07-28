@@ -9,7 +9,7 @@ import SidebarLinks from "./SidebarLinks";
 
 import HomeIcon from "../../../../SvgIcons/HomeIcon";
 import StorageIcon from "../../../../SvgIcons/StorageIcon";
-import ProfileIcon from "../../ProfileIcon";
+import ProfileIcon from "../../../../SvgIcons/Dynamic/ProfileIcon";
 import ArrowRightIcon from "../../../../SvgIcons/ArrowRightIcon";
 
 const Sidebar: FC = () => {

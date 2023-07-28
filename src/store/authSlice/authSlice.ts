@@ -33,9 +33,7 @@ const AuthSlice = createSlice({
 		builder.addCase(signUp.pending, (state) => {
 			state.status = "pending";
 		});
-		builder.addCase(signUp.fulfilled, (state) => {
-			state.status = "fulfilled";
-		});
+		builder.addCase(signUp.fulfilled, (state) => {});
 		builder.addCase(signUp.rejected, (state) => {
 			state.status = "rejected";
 		});
@@ -44,9 +42,7 @@ const AuthSlice = createSlice({
 		builder.addCase(signIn.pending, (state) => {
 			state.status = "pending";
 		});
-		builder.addCase(signIn.fulfilled, (state, action) => {
-			state.status = "fulfilled";
-		});
+		builder.addCase(signIn.fulfilled, (state, action) => {});
 		builder.addCase(signIn.rejected, (state) => {
 			state.status = "rejected";
 		});

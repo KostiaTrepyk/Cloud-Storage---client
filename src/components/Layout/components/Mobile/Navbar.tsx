@@ -10,7 +10,7 @@ import { usePathname } from "../../../../hooks/usePathname";
 // Icons
 import HomeIcon from "../../../SvgIcons/HomeIcon";
 import StorageIcon from "../../../SvgIcons/StorageIcon";
-import ProfileIcon from "../ProfileIcon";
+import ProfileIcon from "../../../SvgIcons/Dynamic/ProfileIcon";
 
 const routes = [
 	{

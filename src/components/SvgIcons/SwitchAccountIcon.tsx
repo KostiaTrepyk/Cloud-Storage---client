@@ -15,7 +15,7 @@ const SwitchAccountIcon = () => {
 				opacity="0.4"
 				d="M16.4093 4C18.3493 4 19.9093 5.57 19.9093 7.5C19.9093 9.39 18.4093 10.93 16.5393 11C16.4593 10.99 16.3693 10.99 16.2793 11"
 				stroke="currentColor"
-				stroke-width="1.5"
+				strokeWidth="1.5"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			></path>
