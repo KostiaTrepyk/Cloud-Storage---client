@@ -51,7 +51,7 @@ const ProfilePage = () => {
 					</tbody>
 				</table>
 
-				<div className="flex justify-end gap-2">
+				<div className="flex h-10 justify-end gap-2">
 					<IconButton
 						onClick={switchAccountBtnHandler}
 						title="Switch account"

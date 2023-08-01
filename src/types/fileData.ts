@@ -1,4 +1,4 @@
-export interface File {
+export interface FileData {
 	id: number;
 	filename: string;
 	originalname: string;
@@ -6,3 +6,5 @@ export interface File {
 	mimetype: string;
 	deletedAt: Date | null;
 }
+
+export type FileType = "all" | "photos" | "trash" | 'applications';

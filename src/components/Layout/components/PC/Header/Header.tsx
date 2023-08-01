@@ -6,7 +6,7 @@ import Logo from "../../../../../assets/Logo.webp";
 
 const Header = () => {
 	return (
-		<header className="sticky top-0 flex h-14 items-center bg-white px-6 py-1 shadow">
+		<header className="sticky top-0 z-50 flex h-14 items-center bg-white px-6 py-1 shadow">
 			<Link
 				to={HOMEROUTE.path!}
 				className="flex items-center gap-2"

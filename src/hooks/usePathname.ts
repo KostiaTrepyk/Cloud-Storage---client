@@ -10,15 +10,19 @@ export function usePathname() {
 
 	const redirectTo = searchParams[SearchParamsEnum.REDIRECT];
 
-	const currentRootPathname: string = verifyPathname(currentPathname)
-		? getRootPathname(currentPathname)
-		: RoutesPathnames.HOME;
+	const currentRootPathname: string =
+		verifyPathname(currentPathname) &&
+		Object.values(RootPathnames).includes(getRootPathname(currentPathname))
+			? getRootPathname(currentPathname)
+			: RoutesPathnames.HOME;
 
 	const redirectPathname = verifyPathname(redirectTo) ? redirectTo : null;
 
-	const redirectRootPathname = verifyPathname(redirectTo)
-		? getRootPathname(redirectTo)
-		: null;
+	const redirectRootPathname =
+		verifyPathname(redirectTo) &&
+		Object.values(RootPathnames).includes(getRootPathname(redirectTo))
+			? getRootPathname(redirectTo)
+			: null;
 
 	function verifyPathname(path: string | undefined): boolean {
 		if (!path) return false;
@@ -28,12 +32,29 @@ export function usePathname() {
 			path = path.slice(0, path.length - 1);
 		}
 
-		if (
-			Object.values(RootPathnames).includes(getRootPathname(path)) &&
-			Object.values(RoutesPathnames).includes(path)
-		) {
-			return true;
+		const availableRoutes = Object.values(RoutesPathnames).map((route) =>
+			route
+				.split("/")
+				.slice(1)
+				.map((s) => (s.includes(":") ? "*" : s))
+		);
+		const currentRoute = path.split("/").slice(1);
+		// console.log(availableRoutes);
+
+		for (const route of availableRoutes) {
+			for (let i = 0; i < currentRoute.length && i < route.length; i++) {
+				if (route[i] !== currentRoute[i] && route[i] !== "*") break;
+
+				const isLastIteration =
+					currentRoute.length === route.length &&
+					currentRoute.length === i + 1;
+
+				if (isLastIteration) {
+					return true;
+				}
+			}
 		}
+
 		return false;
 	}
 

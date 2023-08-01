@@ -5,10 +5,10 @@ import Navbar from "./components/Mobile/Navbar";
 
 const LayoutMobile = () => {
 	return (
-		<div className="min-h-screen pb-14 flex flex-col">
+		<div className="flex min-h-screen flex-col pb-14">
 			<Header />
 
-			<div className="flex flex-col grow px-3 py-2 bg-neutral-100">
+			<div className="flex grow flex-col bg-neutral-100 px-3 pb-3 pt-2">
 				<Outlet />
 			</div>
 

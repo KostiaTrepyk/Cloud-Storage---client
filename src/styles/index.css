@@ -9,3 +9,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
+
+:focus-visible {
+    outline: rgba(225, 29, 72, 0.5) auto 2px;
+    outline-offset: 2px;
+}
