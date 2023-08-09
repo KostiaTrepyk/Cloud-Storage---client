@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { FileData } from "../../../types/fileData";
 
-import FilesListItem from "./FilesListItem";
+import FilesListItem from "./FilesLisetItem/FilesListItem";
 
 interface Props {
 	files: FileData[];

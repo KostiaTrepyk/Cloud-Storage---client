@@ -36,14 +36,13 @@ const PageConfig: FC<PropsWithChildren<Props>> = ({
 	const location = useLocation();
 	const searcParams = searchParamsToObj(location.search);
 
-	if (redirect) {
-		if (
-			(searcParams[SearchParamsEnum.IMMEDIATELY] &&
-				redirect.immediately?.when) ||
-			redirect.when
-		) {
-			return <Redirect />;
-		}
+	if (
+		redirect &&
+		((searcParams[SearchParamsEnum.IMMEDIATELY] &&
+			redirect.immediately?.when) ||
+			redirect.when)
+	) {
+		return <Redirect />;
 	}
 
 	if (navigate && navigate.when)

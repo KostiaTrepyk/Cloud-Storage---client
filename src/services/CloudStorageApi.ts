@@ -20,7 +20,7 @@ export const cloudStorageApi = createApi({
 					type,
 				},
 				headers: { Authorization: "Bearer " + token },
-				timeout: 1000 * 5, // 5sec,
+				timeout: 1000 * 30, // 30sec,
 			}),
 			providesTags: ["Files"],
 		}),
@@ -35,7 +35,24 @@ export const cloudStorageApi = createApi({
 				headers: {
 					Authorization: "Bearer " + token,
 				},
-				timeout: 1000 * 5, // 5sec,
+				timeout: 1000 * 60, // 1min,
+			}),
+			invalidatesTags: ["Files"],
+		}),
+		deleteFile: builder.mutation<
+			FileData,
+			{ ids: string; token: string | undefined }
+		>({
+			query: ({ ids, token }) => ({
+				url: "/files",
+				method: "DELETE",
+				params: {
+					ids,
+				},
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+				timeout: 1000 * 30, // 30sec,
 			}),
 			invalidatesTags: ["Files"],
 		}),

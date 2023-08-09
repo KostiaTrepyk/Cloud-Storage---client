@@ -31,7 +31,7 @@ const ProfilePage = () => {
 	}
 
 	return (
-		<main className="pt-2">
+		<main className="px-3 pb-3 pt-2 max-sm:px-2">
 			<div className="flex w-full max-w-lg flex-col gap-4 overflow-hidden p-6 shadow-md lg:px-8">
 				<h1 className="text-3xl lg:text-4xl">Profile</h1>
 				<table className="lg:text-lg">

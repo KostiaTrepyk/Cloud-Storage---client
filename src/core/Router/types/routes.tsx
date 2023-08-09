@@ -8,6 +8,7 @@ import ProfilePage from "../../../pages/ProfilePage/ProfilePage";
 import AuthPage from "../../../pages/AuthPage/AuthPage";
 import PageNotFound from "../../../pages/PageNotFound/PageNotFound";
 import FilePage from "../../../pages/StoragePage/FilePage/FilePage";
+import TrashPage from "../../../pages/StoragePage/TrashPage/TrashPage";
 
 export const RootPathnames = {
     HOME: "/",
@@ -19,7 +20,8 @@ export const RootPathnames = {
 export const RoutesPathnames = {
     HOME: RootPathnames.HOME,
     STORAGE: RootPathnames.STORAGE,
-    FILE: RootPathnames.STORAGE + '/:id',
+    FILE: RootPathnames.STORAGE + '/:filename',
+    TRASH: RootPathnames.STORAGE + '/trash',
     PROFILE: RootPathnames.PROFILE,
     SIGNIN: "/auth/signin",
     SIGNUP: "/auth/signup",
@@ -41,6 +43,12 @@ export const FILEROUTE: RouteObject = {
     id: generateId(),
     path: RoutesPathnames.FILE,
     element: <FilePage />,
+};
+
+export const TRASHROUTE: RouteObject = {
+    id: generateId(),
+    path: RoutesPathnames.TRASH,
+    element: <TrashPage />,
 };
 
 export const PROFILEROUTE: RouteObject = {
@@ -72,6 +80,7 @@ export const routes: RouteObject[] = [
     STORAGEROUTE,
     PROFILEROUTE,
     FILEROUTE,
+    TRASHROUTE,
     SIGNINROUTE,
     SIGNUPROUTE,
 

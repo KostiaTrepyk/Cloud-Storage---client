@@ -50,7 +50,7 @@ const AuthPage = () => {
 		<PageConfig
 			redirect={{ when: isRedericting, immediately: { when: isAuth } }}
 		>
-			<main className="flex grow items-center pb-[7vh]">
+			<main className="flex grow items-center px-3 pb-[7vh] max-[340px]:px-2">
 				{isImmediatelyRedirect ? (
 					<span className="w-full text-center text-3xl font-bold text-rose-600">
 						Wait a second

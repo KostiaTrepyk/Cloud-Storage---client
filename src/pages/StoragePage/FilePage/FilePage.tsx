@@ -1,24 +1,28 @@
 import { useParams } from "react-router-dom";
+import { getFileExtension } from "../../../helpers/getFileExtension";
 
 const FilePage = () => {
 	const params = useParams();
 
-	const fileUrl = "http://localhost:5000/uploads/" + params.id;
+	const fileUrl = "http://localhost:5000/uploads/" + params.filename;
+	const fileExtension = getFileExtension(params.filename || "");
+	console.log(fileExtension);
 
 	return (
-		<main className="grow">
+		<main className="flex grow items-center justify-center">
 			<object
-				className="h-full w-full rounded bg-contain object-cover shadow-lg"
+				className="aspect-squar h-5/6 w-3/4 rounded bg-contain object-contain"
 				data={fileUrl}
 			>
 				<p>
-					Unable to display PDF file.
+					Unable to display {params.filename}.<br />
 					<a
+						className="underline"
 						href={fileUrl}
 						download
 					>
 						Download
-					</a>
+					</a>{" "}
 					instead.
 				</p>
 			</object>

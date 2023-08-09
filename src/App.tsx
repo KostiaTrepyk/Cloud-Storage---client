@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import Router from "./core/Router/Router";
 import { useAppDispatch } from "./hooks/useAppDispatch";
 import { getMe } from "./store/authSlice/reducers/getMe";
 import { axiosConfig } from "./core/Configs/Axios";
+
+import Router from "./core/Router/Router";
 
 const App = () => {
 	const dispatch = useAppDispatch();
