@@ -6,7 +6,7 @@ import Logo from "../../../../assets/Logo.webp";
 
 const Header = () => {
 	return (
-		<div className="sticky left-0 top-0 z-50 flex h-14 w-full items-center bg-white px-3 shadow-md">
+		<header className="sticky left-0 top-0 z-50 flex h-12 w-full items-center bg-white px-3">
 			<Link
 				to={HOMEROUTE.path!}
 				className="flex items-center gap-1"
@@ -14,13 +14,13 @@ const Header = () => {
 				<img
 					src={Logo}
 					alt="Logo"
-					className="h-12 w-12 rounded-full"
+					className="aspect-square h-8 rounded-full"
 				/>
-				<span className="text-2xl font-bold text-neutral-900">
-					Cloud Storage
+				<span className="text-lg font-bold text-neutral-900">
+					FileVault
 				</span>
 			</Link>
-		</div>
+		</header>
 	);
 };
 

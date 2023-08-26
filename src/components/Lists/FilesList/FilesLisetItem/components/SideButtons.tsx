@@ -22,7 +22,8 @@ const SideButtons: FC<Props> = forwardRef(
 				ref={ref}
 			>
 				<IconButton
-					className="h-7 border-neutral-500 bg-lime-400 p-[.3rem] text-black hover:bg-lime-300"
+					className="h-7 border-0 text-black"
+					color="lime"
 					title="Download"
 					onClick={downloadFileHandler}
 				>
@@ -30,14 +31,16 @@ const SideButtons: FC<Props> = forwardRef(
 				</IconButton>
 
 				<IconButton
-					className="h-7 border-neutral-500 bg-amber-400 p-[.3rem] text-black hover:bg-amber-300"
+					className="border-0 text-black"
+					color="amber"
 					title="Share"
 					onClick={(e) => console.log("Share")}
 				>
 					<ShareIcon />
 				</IconButton>
 				<IconButton
-					className="h-7 border-neutral-500 bg-red-400 p-[.3rem] text-black hover:bg-red-300"
+					className="border-0 text-black"
+					color="red"
 					title="Delete"
 					onClick={deleteFileHandler}
 				>

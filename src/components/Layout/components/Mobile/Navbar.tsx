@@ -34,7 +34,7 @@ const Navbar = () => {
 	const { current, redirect } = usePathname();
 
 	return (
-		<nav className="fixed bottom-0 flex h-14 w-full items-center justify-around bg-white px-1 shadow-inner">
+		<nav className="fixed bottom-0 z-50 flex h-14 w-full items-center justify-around border-t border-neutral-200 bg-white px-1">
 			{routes.map((route) => {
 				const isActive =
 					route.path === redirect.rootPathname ||
@@ -46,8 +46,7 @@ const Navbar = () => {
 						<NavLink
 							to={route.path!}
 							className={`flex h-full w-full items-center justify-center rounded-t transition duration-500 ease-out ${
-								isActive &&
-								"bg-neutral-100 text-rose-500 shadow shadow-rose-500"
+								isActive && "text-rose-500"
 							}`}
 						>
 							<div className="h-8 w-8">{route.icon}</div>

@@ -61,7 +61,7 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 					required
 				/>
 
-				<div className="mt-4 flex items-center justify-between">
+				<div className="mt-4 flex h-10 items-center justify-between">
 					<Link
 						className="rounded bg-opacity-50 p-2 font-semibold text-rose-600 underline underline-offset-2 transition hover:bg-rose-50 hover:text-rose-700 max-sm:text-sm"
 						to={SIGNUPROUTE.path! + location.search}
@@ -73,6 +73,7 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 						type="submit"
 						disabled={status === "pending"}
 						title="Sign in"
+						color="rose"
 					>
 						Sign in
 					</Button>

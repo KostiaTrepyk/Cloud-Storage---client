@@ -85,6 +85,7 @@ const SignUpForm: FC<Props> = ({ onSubmit }) => {
 						type="submit"
 						disabled={status === "pending"}
 						title="Sign up"
+						color="rose"
 					>
 						Sign up
 					</Button>

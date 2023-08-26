@@ -1,8 +1,8 @@
-import { SelectHTMLAttributes } from "react";
+import { SelectHTMLAttributes, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 
-interface Option<Values extends string> {
+export interface Option<Values extends string> {
 	id: string | number;
 	label: string;
 	value: Values;
@@ -17,38 +17,38 @@ interface Props<Values extends string>
 	) => void;
 }
 
-const Select = <Values extends string>({
-	options,
-	onChange: customOnChange,
-	...selectAttributes
-}: Props<Values>) => {
-	return (
-		<select
-			{...selectAttributes}
-			className={twMerge(
-				"rounded border p-2 outline-none transition focus:border-neutral-600",
-				selectAttributes.className
-			)}
-			onChange={(event) =>
-				customOnChange &&
-				customOnChange(
-					options.find(
-						(option) => option.value === event.target.value
-					),
-					event
-				)
-			}
-		>
-			{options.map((option) => (
-				<option
-					key={option.id}
-					value={option.value}
+const Select = (<Values extends string>() =>
+	forwardRef<HTMLSelectElement, Props<Values>>(
+		({ options, onChange: customOnChange, ...selectAttributes }, ref) => {
+			return (
+				<select
+					{...selectAttributes}
+					className={twMerge(
+						"cursor-pointer rounded border border-neutral-300 px-2 py-1 outline-none transition focus:border-neutral-500",
+						selectAttributes.className
+					)}
+					onChange={(event) =>
+						customOnChange &&
+						customOnChange(
+							options.find(
+								(option) => option.value === event.target.value
+							),
+							event
+						)
+					}
+					ref={ref}
 				>
-					{option.label}
-				</option>
-			))}
-		</select>
-	);
-};
+					{options.map((option) => (
+						<option
+							key={option.id}
+							value={option.value}
+						>
+							{option.label}
+						</option>
+					))}
+				</select>
+			);
+		}
+	))();
 
 export default Select;

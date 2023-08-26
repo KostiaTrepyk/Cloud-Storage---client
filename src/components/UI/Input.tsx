@@ -1,29 +1,30 @@
-import { FC, InputHTMLAttributes } from "react";
-import {twMerge} from 'tailwind-merge'
+import { forwardRef } from "react";
+import { twMerge } from 'tailwind-merge'
 
-interface Props
-	extends React.DetailedHTMLProps<
-		InputHTMLAttributes<HTMLInputElement>,
-		HTMLInputElement
-	> {
-	label: string;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+	label?: string;
+	labelClassName?: string;
+	inputClassName?: string;
 }
 
-const Input: FC<Props> = ({ label, ...inputAttributes }) => {
-	return (
-		<label className="grid gap-1">
-			<span>{label}</span>
-			<input
-				{...inputAttributes}
-				className={twMerge(
-					`text-md w-full rounded border border-neutral-400 px-2 py-1 outline-none transition focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600 ${
-						inputAttributes.value && "invalid:border-rose-600"
-					}`,
-					inputAttributes.className
-				)}
-			/>
-		</label>
-	);
-};
+const Input = forwardRef<HTMLInputElement, Props>(
+	({ label, labelClassName, ...inputAttributes }, ref) => {
+		return (
+			<label className={twMerge("grid w-full gap-1", labelClassName)}>
+				{label && <span>{label}</span>}
+				<input
+					{...inputAttributes}
+					className={twMerge(
+						`w-full rounded border border-neutral-300 px-2 py-1 outline-none transition focus:border-neutral-500 focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600 ${
+							inputAttributes.value && "invalid:border-rose-600"
+						}`,
+						inputAttributes.className
+					)}
+					ref={ref}
+				/>
+			</label>
+		);
+	}
+);
 
 export default Input;

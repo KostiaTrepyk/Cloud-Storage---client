@@ -2,6 +2,7 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getCookieValue } from "../../../helpers/cookie";
 import { User } from "../../../types/user";
+import { cookieKeys } from "../../../types/cookie";
 
 export const getMe = createAsyncThunk(
 	"getMe",
@@ -9,7 +10,7 @@ export const getMe = createAsyncThunk(
 		try {
 			const response = await axios.get<User>("/users/me", {
 				headers: {
-					Authorization: `Bearer ${getCookieValue("token")}`,
+					Authorization: `Bearer ${getCookieValue(cookieKeys.TOKEN)}`,
 				},
 			});
 			return thunkAPI.fulfillWithValue(response.data);
@@ -19,7 +20,7 @@ export const getMe = createAsyncThunk(
 	},
 	{
 		condition(_, { getState, extra }) {
-			const token = getCookieValue("token");
+			const token = getCookieValue(cookieKeys.TOKEN);
 			if (!token) return false;
 		},
 	}

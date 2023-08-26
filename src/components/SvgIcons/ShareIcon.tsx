@@ -1,8 +1,14 @@
-const ShareIcon = () => {
+import { forwardRef } from "react";
+
+interface Props extends React.SVGAttributes<SVGSVGElement> {}
+
+const ShareIcon = forwardRef<SVGSVGElement, Props>((svgAttrs, ref) => {
 	return (
 		<svg
+			{...svgAttrs}
 			viewBox="0 0 24 24"
 			fill="none"
+			ref={ref}
 		>
 			<path
 				fillRule="evenodd"
@@ -12,6 +18,6 @@ const ShareIcon = () => {
 			></path>
 		</svg>
 	);
-};
+});
 
 export default ShareIcon;

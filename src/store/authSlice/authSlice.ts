@@ -1,20 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 import { signIn } from "./reducers/signIn";
 import { User } from "../../types/user";
 import { getMe } from "./reducers/getMe";
 import { signUp } from "./reducers/signUp";
 import { deleteCookieByName } from "../../helpers/cookie";
+import { cookieKeys } from "../../types/cookie";
 
 interface InitialState {
 	userData: User | null;
 	isAuth: boolean;
-	status: "idle" | "pending" | "fulfilled" | "rejected";
+	status: keyof typeof QueryStatus;
 }
 
 const initialState: InitialState = {
 	userData: null,
 	isAuth: false,
-	status: "idle",
+	status: "uninitialized",
 };
 
 const AuthSlice = createSlice({
@@ -22,10 +24,10 @@ const AuthSlice = createSlice({
 	initialState,
 	reducers: {
 		logout(state) {
-			state.status = "idle";
+			state.status = "uninitialized";
 			state.isAuth = false;
 			state.userData = null;
-			deleteCookieByName("token", { path: "/" });
+			deleteCookieByName(cookieKeys.TOKEN, { path: "/" });
 		},
 	},
 	extraReducers(builder) {
@@ -60,7 +62,7 @@ const AuthSlice = createSlice({
 			state.status = "rejected";
 			state.isAuth = false;
 			state.userData = null;
-			deleteCookieByName("token", { path: "/" });
+			deleteCookieByName(cookieKeys.TOKEN, { path: "/" });
 		});
 	},
 });

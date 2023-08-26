@@ -1,3 +1,5 @@
+import { cookieKeys } from "../types/cookie";
+
 /**
  * @returns Returns the cookie in the object.
  */
@@ -17,7 +19,7 @@ export function getAllCookies(): Record<string, string> {
 /**
  * @returns Returns the value of a cookie by name.
  */
-export function getCookieValue(name: string): string | undefined {
+export function getCookieValue(name: cookieKeys): string | undefined {
 	const coockies = document.cookie.split(";");
 
 	for (let i = 0; i < coockies.length; i++) {
@@ -35,7 +37,7 @@ export function getCookieValue(name: string): string | undefined {
  * @description Sets the value of a cookie by name.
  */
 export function setCookie(
-	name: string,
+	name: cookieKeys,
 	value: string,
 	params?: CookieParams
 ): void {
@@ -53,7 +55,7 @@ export function setCookie(
  * @description Deletes cookie by name. It will not delete cookie with HttpOnly flag set.
  */
 export function deleteCookieByName(
-	name: string,
+	name: cookieKeys,
 	params?: { path?: string }
 ): void {
 	const cookies = document.cookie.split(";");

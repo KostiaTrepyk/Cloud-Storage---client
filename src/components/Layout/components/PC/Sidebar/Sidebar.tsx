@@ -1,20 +1,19 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
 	HOMEROUTE,
 	PROFILEROUTE,
 	STORAGEROUTE,
 } from "../../../../../core/Router/types/routes";
+import { Link } from "react-router-dom";
 
 import SidebarLinks from "./SidebarLinks";
 
+import Logo from "../../../../../assets/Logo.webp";
 import HomeIcon from "../../../../SvgIcons/HomeIcon";
 import StorageIcon from "../../../../SvgIcons/StorageIcon";
 import ProfileIcon from "../../../../SvgIcons/Dynamic/ProfileIcon";
-import ArrowRightIcon from "../../../../SvgIcons/ArrowRightIcon";
 
 const Sidebar: FC = () => {
-	const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
 	const routes = [
 		{
 			...HOMEROUTE,
@@ -34,28 +33,22 @@ const Sidebar: FC = () => {
 	];
 
 	return (
-		<section className="sticky top-0 z-10 h-screen bg-white pr-2 shadow-md">
-			<div className="flex h-14 items-center justify-end pl-3">
-				<button
-					onClick={() => setIsExpanded((prev) => !prev)}
-					className={`h-10 w-10 rounded-full transition duration-300 hover:bg-neutral-200 active:bg-neutral-500 ${
-						isExpanded ? "rotate-180" : "rotate-0"
-					}`}
-				>
-					<ArrowRightIcon />
-				</button>
-			</div>
-
-			{/* Dividfer */}
-			<div className="w-3/4 border-t-2 border-rose-900" />
-
-			<nav className="pl-3 pt-7">
-				<SidebarLinks
-					routes={routes}
-					isExpanded={isExpanded}
+		<aside className="fixed left-0 top-0 z-50 h-screen w-36 pb-4 pl-3 pr-2 pt-3">
+			<Link
+				className="mb-8 flex items-center gap-3"
+				to={HOMEROUTE.path!}
+			>
+				<img
+					className="aspect-square h-10 rounded-full"
+					src={Logo}
+					alt="Logo"
 				/>
-			</nav>
-		</section>
+				<span className="text-lg font-bold tracking-tighter text-neutral-900">
+					FileVault
+				</span>
+			</Link>
+			<SidebarLinks routes={routes} />
+		</aside>
 	);
 };
 

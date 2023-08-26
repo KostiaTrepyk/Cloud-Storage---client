@@ -1,8 +1,14 @@
-const LogoutIcon = () => {
+import { forwardRef } from "react";
+
+interface Props extends React.SVGAttributes<SVGSVGElement> {}
+
+const LogoutIcon = forwardRef<SVGSVGElement, Props>((svgAttrs, ref) => {
 	return (
 		<svg
+			{...svgAttrs}
 			viewBox="0 0 24 24"
 			fill="none"
+			ref={ref}
 		>
 			<path
 				stroke="currentColor"
@@ -13,6 +19,6 @@ const LogoutIcon = () => {
 			></path>
 		</svg>
 	);
-};
+});
 
 export default LogoutIcon;

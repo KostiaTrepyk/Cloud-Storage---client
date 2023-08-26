@@ -1,19 +1,14 @@
 import { FC } from "react";
 import { Outlet } from "react-router-dom";
 
-import Header from "./components/PC/Header/Header";
 import Sidebar from "./components/PC/Sidebar/Sidebar";
 
 const LayoutPC: FC = () => {
 	return (
-		<div className="flex min-h-screen">
+		<div className="flex min-h-screen bg-white tracking-tight">
 			<Sidebar />
-
-			<div className="flex w-full flex-col">
-				<Header />
-				<div className="flex w-full grow flex-col bg-neutral-50">
-					<Outlet />
-				</div>
+			<div className="flex grow pl-36">
+				<Outlet />
 			</div>
 		</div>
 	);

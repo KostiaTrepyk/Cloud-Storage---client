@@ -3,6 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setCookie } from "../../../helpers/cookie";
 import { getMe } from "./getMe";
 import { RootState } from "../../store";
+import { cookieKeys } from "../../../types/cookie";
 
 export interface SignInArg {
 	email: string;
@@ -18,7 +19,7 @@ export const signIn = createAsyncThunk(
 				body
 			);
 
-			setCookie("token", response.data.token, {
+			setCookie(cookieKeys.TOKEN, response.data.token, {
 				//secure: true,
 				path: "/",
 			});

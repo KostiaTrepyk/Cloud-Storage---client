@@ -1,33 +1,14 @@
 import { FC } from "react";
+import { Device, localStorageKeys } from "../../types/localStorage";
 
 import LayoutMobile from "./LayoutMobile";
 import LayoutPC from "./LayoutPC";
 
-function detectMob() {
-	const toMatch = [
-		/Android/i,
-		/webOS/i,
-		/iPhone/i,
-		/iPad/i,
-		/iPod/i,
-		/BlackBerry/i,
-		/Windows Phone/i,
-	];
-
-	return toMatch.some((toMatchItem) => {
-		return navigator.userAgent.match(toMatchItem);
-	});
-}
-
-const isMobile = detectMob();
-
-/* If page needs full height use className="grow" */
 const Layout: FC = () => {
-	return (
-		<div className="bg-white text-neutral-900">
-			{isMobile ? <LayoutMobile /> : <LayoutPC />}
-		</div>
-	);
+	const isMobile =
+		(localStorage.getItem(localStorageKeys.DEVICE) as Device) === "mobile";
+
+	return <>{isMobile ? <LayoutMobile /> : <LayoutPC />}</>;
 };
 
 export default Layout;
