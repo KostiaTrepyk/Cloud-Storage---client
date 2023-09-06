@@ -2,7 +2,8 @@ import { FC, useState } from "react";
 import { cloudStorageApi } from "../../../services/CloudStorageApi";
 import { getCookieValue } from "../../../helpers/cookie";
 import { cookieKeys } from "../../../types/cookie";
-import { FileType } from "../../../types/fileData";
+import { FileData, FileType } from "../../../types/fileData";
+import { SortValue } from "../StoragePage";
 
 import UploadButton from "../../../components/UI/Buttons/UploadButton";
 import IconButton from "../../../components/UI/Buttons/IconButton";
@@ -12,24 +13,36 @@ import SearchActions from "./BarsActions/SearchActions";
 import MenuIcon from "../../../components/SvgIcons/MenuIcon";
 import DefaultActions from "./BarsActions/DefaultActions";
 
-export type SortValue = "asc" | "desc" | "no";
+type ToolBarType = "file" | "search" | "default";
 
 interface Props {
-	checkedFiles: number[];
+	search: string;
+	setSearch: React.Dispatch<React.SetStateAction<string>>;
+	sort: SortValue;
+	setSort: React.Dispatch<React.SetStateAction<SortValue>>;
 	filesType: Exclude<FileType, "trash">;
 	changeFilesType: (newType: Exclude<FileType, "trash">) => void;
+	checkedFiles: FileData[];
 	clearCheckedFiles: () => void;
 }
 
-const ToolsBar: FC<Props> = ({
-	checkedFiles,
+const ToolBar: FC<Props> = ({
+	search,
+	setSearch,
+	sort,
+	setSort,
 	filesType,
 	changeFilesType,
+	checkedFiles,
 	clearCheckedFiles,
 }) => {
-	const [sort, setSort] = useState<SortValue>("no");
 	const [isSearching, setIsSearching] = useState<boolean>(false);
 	const [uploadFile, uploadStatus] = cloudStorageApi.useUploadFileMutation();
+	const currentToolBar: ToolBarType = Boolean(checkedFiles.length)
+		? "file"
+		: isSearching
+		? "search"
+		: "default";
 
 	const { data: files } = cloudStorageApi.useGetAllFilesQuery({
 		type: filesType,
@@ -53,8 +66,19 @@ const ToolsBar: FC<Props> = ({
 		else setSort("asc");
 	}
 
+	function formSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+
+		if (currentToolBar === "search") {
+			isSearching && setIsSearching(() => false);
+		}
+	}
+
 	return (
-		<div className="sticky top-0 z-50 mb-2 flex h-16 w-full items-center gap-2 overflow-x-auto bg-inherit bg-white py-3 sm:gap-3">
+		<form
+			className="sticky top-0 z-50 mb-2 flex h-16 w-full items-center gap-2 overflow-x-auto bg-inherit bg-white py-3 sm:gap-3"
+			onSubmit={formSubmitHandler}
+		>
 			<IconButton
 				className="rounded-md"
 				color="rose"
@@ -62,31 +86,39 @@ const ToolsBar: FC<Props> = ({
 			>
 				<MenuIcon />
 			</IconButton>
+
 			<UploadButton
 				className="sm:mr-2"
 				isLoading={uploadStatus.isLoading}
 				onUpload={uploadFileHandler}
 			/>
 
-			{checkedFiles.length ? (
+			{currentToolBar === "file" && (
 				<FileActions
 					files={files}
 					checkedFiles={checkedFiles}
 					clearCheckedFiles={clearCheckedFiles}
 				/>
-			) : isSearching ? (
-				<SearchActions setIsSearching={setIsSearching} />
-			) : (
-				<DefaultActions
-					filesType={filesType}
-					sort={sort}
+			)}
+			{currentToolBar === "search" && (
+				<SearchActions
+					search={search}
+					setSearch={setSearch}
 					setIsSearching={setIsSearching}
+				/>
+			)}
+			{currentToolBar === "default" && (
+				<DefaultActions
+					search={search}
+					setIsSearching={setIsSearching}
+					sort={sort}
 					toggleSort={toggleSort}
+					filesType={filesType}
 					changeFilesType={changeFilesType}
 				/>
 			)}
-		</div>
+		</form>
 	);
 };
 
-export default ToolsBar;
+export default ToolBar;

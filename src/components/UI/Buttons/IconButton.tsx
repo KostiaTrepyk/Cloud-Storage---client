@@ -21,11 +21,11 @@ const MErrorIcon = motion(ErrorIcon);
 const colorVarinats: Record<Color, string> = {
 	neutral: "bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500",
 	default:
-		"bg-neutral-100 backdrop-blur hover:bg-neutral-200 active:bg-neutral-300 text-neutral-950",
-	red: "bg-red-500 hover:bg-red-600 active:bg-red-700 text-red-950",
-	amber: "bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-amber-950",
-	lime: "bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-lime-950",
-	rose: "bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-rose-950",
+		"bg-neutral-100 backdrop-blur hover:bg-neutral-200 active:bg-neutral-300",
+	red: "bg-red-500 hover:bg-red-600 active:bg-red-700",
+	amber: "bg-amber-500 hover:bg-amber-600 active:bg-amber-700",
+	lime: "bg-lime-500 hover:bg-lime-600 active:bg-lime-700",
+	rose: "bg-rose-500 hover:bg-rose-600 active:bg-rose-700",
 };
 
 interface Props
@@ -49,7 +49,7 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					`aspect-square h-full rounded-full border border-neutral-200 bg-neutral-400 duration-300 hover:bg-neutral-300 active:bg-neutral-200 ${colorVarinats[color]}`,
+					`aspect-square h-full rounded-full border border-neutral-200 bg-neutral-400 text-black duration-300 hover:bg-neutral-300 active:bg-neutral-200 ${colorVarinats[color]}`,
 					buttonAtributes.className
 				)}
 				ref={ref}

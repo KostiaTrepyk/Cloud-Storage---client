@@ -1,6 +1,5 @@
-import { FC, Ref, forwardRef, useState } from "react";
+import { FC, Ref, forwardRef, useLayoutEffect, useState } from "react";
 import { Variants, motion } from "framer-motion";
-import { twMerge } from "tailwind-merge";
 import { cloudStorageApi } from "../../../../services/CloudStorageApi";
 import { getFileExtension } from "../../../../helpers/getFileExtension";
 import { getCookieValue } from "../../../../helpers/cookie";
@@ -41,24 +40,38 @@ const sideButtonsAnimation: Variants = {
 const MSideButtons = motion(SideButtons);
 
 interface Props {
-	addFileToChecked: (id: number) => void;
-	removeFilefromChecked: (id: number) => void;
-	className?: string;
 	file: FileData;
+	checked?: boolean;
+	removeFilefromChecked: (id: FileData) => void;
+	addFileToChecked: (id: FileData) => void;
+	showCheckIndicator?: boolean;
 }
 
 const FilesListItem: FC<Props> = forwardRef(
 	(
-		{ file, className, addFileToChecked, removeFilefromChecked },
+		{
+			file,
+			addFileToChecked,
+			removeFilefromChecked,
+			checked = false,
+			showCheckIndicator = false,
+		},
 		ref: Ref<HTMLLIElement>
 	) => {
-		const [isChecked, setIsChecked] = useState<boolean>(false);
-
 		const fileUrl = `http://localhost:5000/uploads/${file.filename}`;
 		const fileExtesion = getFileExtension(file.filename);
+		const fileType = file.mimetype.split("/")[0];
+
+		const [isImageLoading, setIsIamgeLoading] = useState<boolean>(false);
 
 		const [deleteFile, deleteStatus] =
 			cloudStorageApi.useDeleteFileMutation();
+
+		useLayoutEffect(() => {
+			if (fileType === "image") {
+				setIsIamgeLoading(true);
+			}
+		}, [fileType]);
 
 		function downloadFileHandler(
 			e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -101,22 +114,16 @@ const FilesListItem: FC<Props> = forwardRef(
 		}
 
 		function CheckedChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-			const newState = !isChecked;
-
-			setIsChecked(() => newState);
-			if (newState) addFileToChecked(file.id);
-			else removeFilefromChecked(file.id);
+			if (!checked) addFileToChecked(file);
+			else removeFilefromChecked(file);
 		}
 
 		return (
 			<motion.li
 				ref={ref}
-				className={twMerge(
-					`relative flex aspect-square h-56 select-none flex-col items-center justify-normal rounded border border-neutral-50 p-1 pb-0 shadow max-[480px]:w-full ${
-						isChecked && "text-rose-900"
-					}`,
-					className
-				)}
+				className={`relative flex aspect-square h-56 select-none flex-col items-center justify-normal rounded border border-neutral-50 p-1 pb-0 shadow max-[480px]:w-full ${
+					checked && "text-rose-900"
+				}`}
 				initial={["hideSideButtons", "cardInitial"]}
 				whileHover="showSideButtons"
 				animate="cardAppear"
@@ -126,17 +133,23 @@ const FilesListItem: FC<Props> = forwardRef(
 			>
 				<label className="mx-2 flex h-44 w-full cursor-pointer items-center justify-center">
 					<input
-						className="absolute left-2 top-2 z-10 accent-rose-600"
+						className={`absolute left-2 top-2 z-10 accent-rose-600 transition duration-[500ms] hover:opacity-100 focus-visible:opacity-100
+						 ${!showCheckIndicator && "opacity-0"}`}
 						onChange={CheckedChangeHandler}
-						checked={isChecked}
+						checked={checked}
 						type="checkbox"
 					/>
-					{file.mimetype.startsWith("image/") ? (
+					{fileType === "image" ? (
 						/* Lags !!!!!!!!!!! */
+
 						<img
-							className="max-h-full min-h-[7rem] min-w-[7rem] max-w-full rounded-sm object-contain transition duration-500 hover:scale-90"
+							className={`max-h-full min-h-[7rem] min-w-[7rem] max-w-full rounded-sm object-contain transition duration-500 hover:scale-90 ${
+								isImageLoading &&
+								"m-1 h-full w-full animate-pulse rounded-md bg-neutral-100"
+							}`}
 							src={fileUrl}
 							alt={fileExtesion || "file"}
+							onLoad={() => setIsIamgeLoading(false)}
 							loading="lazy"
 							decoding="async"
 						/>

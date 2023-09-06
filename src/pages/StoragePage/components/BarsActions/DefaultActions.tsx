@@ -2,8 +2,8 @@ import { FC } from "react";
 import { motion } from "framer-motion";
 import { Option } from "../../../../components/UI/Select";
 import { FileType } from "../../../../types/fileData";
-import { SortValue } from "../ToolsBar";
 import { buttonVariants, inputVariants } from "./animations";
+import { SortValue } from "../../StoragePage";
 
 import Select from "../../../../components/UI/Select";
 import IconButton from "../../../../components/UI/Buttons/IconButton";
@@ -37,6 +37,7 @@ const FilesTypeOptions: Option<Exclude<FileType, "trash">>[] = [
 ];
 
 interface Props {
+	search: string;
 	filesType: Exclude<FileType, "trash">;
 	sort: SortValue;
 	toggleSort: () => void;
@@ -45,6 +46,7 @@ interface Props {
 }
 
 const DefaultActions: FC<Props> = ({
+	search,
 	filesType,
 	sort,
 	toggleSort,
@@ -59,6 +61,7 @@ const DefaultActions: FC<Props> = ({
 				variants={buttonVariants}
 				custom={0}
 				title="Search"
+				color={search ? "amber" : "default"}
 				onClick={() => setIsSearching(() => true)}
 			>
 				<SearchIcon />

@@ -15,7 +15,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
 				<input
 					{...inputAttributes}
 					className={twMerge(
-						`w-full rounded border border-neutral-300 px-2 py-1 outline-none transition focus:border-neutral-500 focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600 ${
+						`w-full rounded border border-neutral-300 px-2 py-1 outline-none transition duration-300 hover:bg-neutral-100 focus:border-neutral-500 focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600 ${
 							inputAttributes.value && "invalid:border-rose-600"
 						}`,
 						inputAttributes.className

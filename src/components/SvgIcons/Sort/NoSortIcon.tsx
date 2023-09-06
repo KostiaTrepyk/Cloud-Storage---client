@@ -8,24 +8,35 @@ const NoSortIcon = forwardRef<SVGSVGElement, Props>((svgAttrs, ref) => {
 			{...svgAttrs}
 			viewBox="0 0 24 24"
 			fill="none"
-			strokeWidth="2.5"
 			ref={ref}
 		>
-			<path
-				d="M18 6.5L6 6.5"
-				stroke="#1C274C"
-				strokeLinecap="round"
-			></path>
-			<path
-				d="M24 12H2"
-				stroke="#1C274C"
-				strokeLinecap="round"
-			></path>
-			<path
-				d="M21 18H4"
-				stroke="#1C274C"
-				strokeLinecap="round"
-			></path>
+			<g
+				stroke="currentColor"
+				strokeWidth="2.2"
+			>
+				<path
+					d="M10 7L2 7"
+					strokeLinecap="round"
+				></path>
+				<path
+					d="M8 12H2"
+					strokeLinecap="round"
+				></path>
+				<path
+					d="M10 17H2"
+					strokeLinecap="round"
+				></path>
+				<circle
+					cx="17"
+					cy="12"
+					r="5"
+				></circle>
+				<path
+					d="M17 10V11.8462L18 13"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				></path>
+			</g>
 		</svg>
 	);
 });

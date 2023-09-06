@@ -11,6 +11,7 @@ import { searchParamsToObj } from "../../helpers/searchParamsToObj";
 import SignInForm from "../../components/Forms/AuthForms/SignInForm";
 import SignUpForm from "../../components/Forms/AuthForms/SignUpForm";
 import PageConfig from "../Wrappers/PageConfig";
+import LoadIcon from "../../components/SvgIcons/LoadIcon";
 
 const AuthPage = () => {
 	const dispatch = useAppDispatch();
@@ -52,9 +53,9 @@ const AuthPage = () => {
 		>
 			<main className="flex grow items-center px-3 pb-[7vh] max-[340px]:px-2">
 				{isImmediatelyRedirect ? (
-					<span className="w-full text-center text-3xl font-bold text-rose-600">
-						Wait a second
-					</span>
+					<div className="flex aspect-square h-12 w-full justify-center text-rose-600">
+						<LoadIcon spin />
+					</div>
 				) : (
 					<>
 						{location.pathname === SIGNUPROUTE.path ? (

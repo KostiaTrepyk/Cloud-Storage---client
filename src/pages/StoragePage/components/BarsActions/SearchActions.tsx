@@ -5,17 +5,19 @@ import { buttonVariants, inputVariants } from "./animations";
 import IconButton from "../../../../components/UI/Buttons/IconButton";
 import Input from "../../../../components/UI/Input";
 
-import CloseIcon from "../../../../components/SvgIcons/CloseIcon";
+import BackIcon from "../../../../components/SvgIcons/BackIcon";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
 const MInput = motion(Input);
 
 interface Props {
+	search: string;
+	setSearch: React.Dispatch<React.SetStateAction<string>>;
 	setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchActions: FC<Props> = ({ setIsSearching }) => {
+const SearchActions: FC<Props> = ({ search, setSearch, setIsSearching }) => {
 	return (
 		<>
 			<MIconButton
@@ -26,16 +28,20 @@ const SearchActions: FC<Props> = ({ setIsSearching }) => {
 				title="Close"
 				onClick={() => setIsSearching(() => false)}
 			>
-				<CloseIcon />
+				<BackIcon />
 			</MIconButton>
 
 			<MInput
 				initial="initial"
 				animate="reveal"
 				variants={inputVariants}
-				custom={1}
-				labelClassName="max-w-xl h-full sm:max-w-[15rem]"
+				custom={2}
+				labelClassName="max-w-xl h-full sm:max-w-[15rem] min-w-[9rem]"
 				placeholder="Search..."
+				type="search"
+				value={search}
+				onChange={(e) => setSearch(e.target.value)}
+				autoFocus
 			/>
 		</>
 	);

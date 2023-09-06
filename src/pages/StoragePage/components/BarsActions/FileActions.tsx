@@ -19,7 +19,7 @@ const MIconButton = motion(IconButton);
 
 interface Props {
 	files: FileData[] | undefined;
-	checkedFiles: number[];
+	checkedFiles: FileData[];
 	clearCheckedFiles: () => void;
 }
 
@@ -31,7 +31,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 
 	function downloadCheckedFiles() {
 		const filesToDownload =
-			files?.filter((file) => checkedFiles.includes(file.id)) || [];
+			files?.filter((file) => checkedFiles.includes(file)) || [];
 
 		filesToDownload.forEach((file) => {
 			fetch("http://localhost:5000/uploads/" + file.filename, {
@@ -54,6 +54,21 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 
 					link.parentNode?.removeChild(link);
 				});
+		});
+
+		clearCheckedFiles();
+	}
+
+	function deleteCheckedFiles() {
+		let checkedFilesIds: number[] = [];
+
+		checkedFiles.forEach((file) => {
+			checkedFilesIds.push(file.id);
+		});
+
+		deleteFiles({
+			ids: checkedFilesIds.join(","),
+			token: getCookieValue(cookieKeys.TOKEN),
 		});
 	}
 
@@ -100,12 +115,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 				custom={3}
 				color="red"
 				title="Delete"
-				onClick={() =>
-					deleteFiles({
-						ids: checkedFiles.join(","),
-						token: getCookieValue(cookieKeys.TOKEN),
-					})
-				}
+				onClick={deleteCheckedFiles}
 				status={deleteFilesStatus}
 			>
 				<TrashIcon />
