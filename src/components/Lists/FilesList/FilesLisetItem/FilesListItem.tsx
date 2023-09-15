@@ -1,15 +1,12 @@
 import { FC, Ref, forwardRef, useLayoutEffect, useState } from "react";
 import { Variants, motion } from "framer-motion";
-import { cloudStorageApi } from "../../../../services/CloudStorageApi";
 import { getFileExtension } from "../../../../helpers/getFileExtension";
-import { getCookieValue } from "../../../../helpers/cookie";
 import { FileData } from "../../../../types/fileData";
-import { cookieKeys } from "../../../../types/cookie";
 
 import IconButton from "../../../UI/Buttons/IconButton";
-import SideButtons from "./components/SideButtons";
 
-import CopyIcon from "../../../SvgIcons/CopyIcon";
+import FavouriteIcon from "../../../SvgIcons/FavouriteIcon";
+import ShareIcon from "../../../SvgIcons/ShareIcon";
 
 // Framer Animations
 const cardAnimations: Variants = {
@@ -24,26 +21,27 @@ const cardAnimations: Variants = {
 	},
 };
 
-const sideButtonsAnimation: Variants = {
+const sideButtonsAnimations: Variants = {
 	hideSideButtons: {
-		visibility: "hidden",
+		display: "none",
 		opacity: 0,
+		scale: 0.7,
 	},
 	showSideButtons: {
+		display: "block",
 		opacity: 1,
-		visibility: "visible",
-		transition: { duration: 0.5, ease: [0.1, 0.3, 0.6, 1] },
+		scale: 1,
 	},
 };
 
 // Framer Components
-const MSideButtons = motion(SideButtons);
+const MIconButton = motion(IconButton);
 
 interface Props {
 	file: FileData;
 	checked?: boolean;
-	removeFilefromChecked: (id: FileData) => void;
-	addFileToChecked: (id: FileData) => void;
+	removeFilefromChecked: (file: FileData) => void;
+	addFileToChecked: (file: FileData) => void;
 	showCheckIndicator?: boolean;
 }
 
@@ -64,54 +62,11 @@ const FilesListItem: FC<Props> = forwardRef(
 
 		const [isImageLoading, setIsIamgeLoading] = useState<boolean>(false);
 
-		const [deleteFile, deleteStatus] =
-			cloudStorageApi.useDeleteFileMutation();
-
 		useLayoutEffect(() => {
 			if (fileType === "image") {
 				setIsIamgeLoading(true);
 			}
 		}, [fileType]);
-
-		function downloadFileHandler(
-			e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-		) {
-			fetch("http://localhost:5000/uploads/" + file.filename, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/pdf",
-				},
-			})
-				.then((response) => response.blob())
-				.then((blob) => {
-					const url = window.URL.createObjectURL(new Blob([blob]));
-
-					const link = document.createElement("a");
-					link.href = url;
-					link.download = file.originalname;
-
-					document.body.appendChild(link);
-
-					link.click();
-
-					link.parentNode?.removeChild(link);
-				});
-		}
-
-		function deleteFileHandler(
-			e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-		) {
-			deleteFile({
-				ids: String(file.id),
-				token: getCookieValue(cookieKeys.TOKEN),
-			});
-		}
-
-		function copyFileName(
-			e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-		) {
-			navigator.clipboard.writeText(file.originalname);
-		}
 
 		function CheckedChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
 			if (!checked) addFileToChecked(file);
@@ -139,9 +94,7 @@ const FilesListItem: FC<Props> = forwardRef(
 						checked={checked}
 						type="checkbox"
 					/>
-					{fileType === "image" ? (
-						/* Lags !!!!!!!!!!! */
-
+					{fileType === "image" && file.size < 50_000 ? (
 						<img
 							className={`max-h-full min-h-[7rem] min-w-[7rem] max-w-full rounded-sm object-contain transition duration-500 hover:scale-90 ${
 								isImageLoading &&
@@ -161,38 +114,30 @@ const FilesListItem: FC<Props> = forwardRef(
 				</label>
 
 				<div className="mt-auto flex h-9 w-full select-text items-center justify-between border-t px-2 py-1">
-					<span className="line-clamp-1 grow">
+					<span className="line-clamp-1 grow text-center">
 						{file.originalname}
 					</span>
-
-					<motion.div
-						className="aspect-square h-full"
-						variants={sideButtonsAnimation}
-					>
-						<IconButton onClick={copyFileName}>
-							<CopyIcon />
-						</IconButton>
-					</motion.div>
 				</div>
 
-				<MSideButtons
-					variants={sideButtonsAnimation}
-					deleteFileHandler={deleteFileHandler}
-					downloadFileHandler={downloadFileHandler}
-				/>
-
-				{/* Status */}
-				{deleteStatus.isLoading && (
-					<div className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center text-2xl font-bold text-red-600 backdrop-blur-sm">
-						Wait
-					</div>
-				)}
-
-				{deleteStatus.isSuccess && (
-					<div className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center text-2xl font-bold text-red-600 backdrop-blur-sm">
-						Deleted
-					</div>
-				)}
+				<div className="absolute right-1 top-1 flex w-9 flex-col gap-1">
+					{/* FIX */}
+					<MIconButton
+						className="border-0 text-rose-600"
+						variants={sideButtonsAnimations}
+						animate={file.isFavourite && "showSideButtons"}
+					>
+						<FavouriteIcon filled={file.isFavourite} />
+					</MIconButton>
+					<MIconButton
+						className="border-0 text-orange-600"
+						variants={sideButtonsAnimations}
+						/* animate={
+							file.sharedWith.length > 0 && "showSideButtons"
+						} */
+					>
+						<ShareIcon />
+					</MIconButton>
+				</div>
 			</motion.li>
 		);
 	}

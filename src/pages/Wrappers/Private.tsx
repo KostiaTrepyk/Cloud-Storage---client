@@ -5,7 +5,7 @@ import { useAppSelector } from "../../hooks/useAppSelector";
 import PageConfig from "./PageConfig";
 
 const Private: FC<PropsWithChildren> = ({ children }) => {
-	const userData = useAppSelector((state) => state.auth.userData);
+	const userData = useAppSelector((state) => state.auth.user);
 	const isAuth = useAppSelector((state) => state.auth.isAuth);
 	const isRedirecting = !Boolean(isAuth && userData);
 

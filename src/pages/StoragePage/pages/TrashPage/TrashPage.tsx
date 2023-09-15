@@ -7,13 +7,13 @@ import FilesList from "../../../../components/Lists/FilesList/FilesList";
 
 const TrashPage = () => {
 	const { data, isSuccess } = cloudStorageApi.useGetAllFilesQuery({
-		type: "trash",
+		filesType: "trash",
 		token: getCookieValue(cookieKeys.TOKEN),
 	});
 
 	return (
 		<main className="grow p-2">
-			{isSuccess && <FilesList files={data} />}
+			{isSuccess && <FilesList files={data.files} />}
 		</main>
 	);
 };

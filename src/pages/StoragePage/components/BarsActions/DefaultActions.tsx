@@ -1,11 +1,8 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { Option } from "../../../../components/UI/Select";
-import { FileType } from "../../../../types/fileData";
+import Select, { Option } from "../../../../components/UI/Select";
 import { buttonVariants, inputVariants } from "./animations";
-import { SortValue } from "../../StoragePage";
 
-import Select from "../../../../components/UI/Select";
 import IconButton from "../../../../components/UI/Buttons/IconButton";
 
 import SearchIcon from "../../../../components/SvgIcons/SearchIcon";
@@ -13,6 +10,7 @@ import NoSortIcon from "../../../../components/SvgIcons/Sort/NoSortIcon";
 import SortAscIcon from "../../../../components/SvgIcons/Sort/SortAscIcon";
 import SortDescIcon from "../../../../components/SvgIcons/Sort/SortDescIcon";
 import TrashIcon from "../../../../components/SvgIcons/TrashIcon";
+import { FileType, SortValue } from "../../../../types/fileData";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
@@ -75,9 +73,9 @@ const DefaultActions: FC<Props> = ({
 				title="Sort"
 				onClick={toggleSort}
 			>
-				{sort === "asc" && <SortAscIcon />}
-				{sort === "desc" && <SortDescIcon />}
-				{sort === "no" && <NoSortIcon />}
+				{sort === "ASC" && <SortAscIcon />}
+				{sort === "DESC" && <SortDescIcon />}
+				{sort === "NO" && <NoSortIcon />}
 			</MIconButton>
 
 			<MIconButton

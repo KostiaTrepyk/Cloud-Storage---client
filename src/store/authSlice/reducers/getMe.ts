@@ -1,14 +1,14 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getCookieValue } from "../../../helpers/cookie";
-import { User } from "../../../types/user";
+import { UserStatistic } from "../../../types/user";
 import { cookieKeys } from "../../../types/cookie";
 
 export const getMe = createAsyncThunk(
 	"getMe",
 	async (_, thunkAPI) => {
 		try {
-			const response = await axios.get<User>("/users/me", {
+			const response = await axios.get<UserStatistic>("/users/me", {
 				headers: {
 					Authorization: `Bearer ${getCookieValue(cookieKeys.TOKEN)}`,
 				},

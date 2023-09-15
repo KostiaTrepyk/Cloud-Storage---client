@@ -2,16 +2,16 @@ import { FC, useState } from "react";
 import { cloudStorageApi } from "../../../services/CloudStorageApi";
 import { getCookieValue } from "../../../helpers/cookie";
 import { cookieKeys } from "../../../types/cookie";
-import { FileData, FileType } from "../../../types/fileData";
-import { SortValue } from "../StoragePage";
+import { SortValue, FileType, FileData } from "../../../types/fileData";
 
+
+import DefaultActions from "./BarsActions/DefaultActions";
 import UploadButton from "../../../components/UI/Buttons/UploadButton";
 import IconButton from "../../../components/UI/Buttons/IconButton";
 import FileActions from "./BarsActions/FileActions";
 import SearchActions from "./BarsActions/SearchActions";
 
 import MenuIcon from "../../../components/SvgIcons/MenuIcon";
-import DefaultActions from "./BarsActions/DefaultActions";
 
 type ToolBarType = "file" | "search" | "default";
 
@@ -44,8 +44,8 @@ const ToolBar: FC<Props> = ({
 		? "search"
 		: "default";
 
-	const { data: files } = cloudStorageApi.useGetAllFilesQuery({
-		type: filesType,
+	const { data } = cloudStorageApi.useGetAllFilesQuery({
+		filesType,
 		token: getCookieValue(cookieKeys.TOKEN),
 	});
 
@@ -61,9 +61,9 @@ const ToolBar: FC<Props> = ({
 	}
 
 	function toggleSort() {
-		if (sort === "asc") setSort("desc");
-		else if (sort === "desc") setSort("no");
-		else setSort("asc");
+		if (sort === "ASC") setSort("DESC");
+		else if (sort === "DESC") setSort("NO");
+		else setSort("ASC");
 	}
 
 	function formSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
@@ -95,7 +95,7 @@ const ToolBar: FC<Props> = ({
 
 			{currentToolBar === "file" && (
 				<FileActions
-					files={files}
+					files={data?.files}
 					checkedFiles={checkedFiles}
 					clearCheckedFiles={clearCheckedFiles}
 				/>

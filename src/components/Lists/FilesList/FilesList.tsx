@@ -1,7 +1,7 @@
 import { FC, HTMLAttributes, memo } from "react";
-import { FileData } from "../../../types/fileData";
 import { twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
+import { FileData } from "../../../types/fileData";
 
 import FilesListItem from "./FilesLisetItem/FilesListItem";
 

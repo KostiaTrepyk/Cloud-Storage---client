@@ -17,7 +17,7 @@ const ProfilePage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const userData = useAppSelector((state) => state.auth.userData);
+	const user = useAppSelector((state) => state.auth.user);
 
 	function switchAccountBtnHandler() {
 		navigate(
@@ -38,15 +38,25 @@ const ProfilePage = () => {
 					<tbody>
 						<tr>
 							<td className="pr-4 text-left">Id</td>
-							<td>{userData?.id}</td>
+							<td>{user?.user.id}</td>
 						</tr>
 						<tr>
 							<td className="pr-4 text-left">Full name</td>
-							<td>{userData?.fullName}</td>
+							<td>{user?.user.fullName}</td>
 						</tr>
 						<tr>
 							<td className="pr-4 text-left">Email</td>
-							<td>{userData?.email}</td>
+							<td>{user?.user.email}</td>
+						</tr>
+						<tr>
+							<td className="pr-4 text-left">Created at</td>
+							<td>
+								{user
+									? new Date(
+											user?.user.createdAt
+									  ).toDateString()
+									: "-"}
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -73,8 +83,8 @@ const ProfilePage = () => {
 
 const PrivateProfilePage = () => {
 	const isAuth = useAppSelector((state) => state.auth.isAuth);
-	const userData = useAppSelector((state) => state.auth.userData);
-	const isRedirecting = !Boolean(isAuth && userData);
+	const user = useAppSelector((state) => state.auth.user);
+	const isRedirecting = !Boolean(isAuth && user);
 
 	return (
 		<PageConfig

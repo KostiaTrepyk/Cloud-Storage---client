@@ -17,6 +17,7 @@ interface Props<Values extends string>
 	) => void;
 }
 
+/* Какая-то хуйня здесь происходит !!! */
 const Select = (<Values extends string>() =>
 	forwardRef<HTMLSelectElement, Props<Values>>(
 		({ options, onChange: customOnChange, ...selectAttributes }, ref) => {

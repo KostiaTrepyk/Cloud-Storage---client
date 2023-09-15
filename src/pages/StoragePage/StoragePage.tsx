@@ -1,39 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useThrottle } from "../../hooks/useThrottle";
 import { getCookieValue } from "../../helpers/cookie";
 import { cloudStorageApi } from "../../services/CloudStorageApi";
-import { FileData, FileType } from "../../types/fileData";
+import { SortValue, FileType, FileData } from "../../types/fileData";
 import { cookieKeys } from "../../types/cookie";
 
 import Private from "../Wrappers/Private";
-import FilesList from "../../components/Lists/FilesList/FilesList";
 import ToolBar from "./components/ToolBar";
+import FilesList from "../../components/Lists/FilesList/FilesList";
 import LoadIcon from "../../components/SvgIcons/LoadIcon";
-
-export type SortValue = "asc" | "desc" | "no";
 
 const StoragePage = () => {
 	const [search, setSearch] = useState<string>("");
 	const throttledSearch = useThrottle<string>(search, 800);
-	const [sort, setSort] = useState<SortValue>("no");
+	const [sort, setSort] = useState<SortValue>("NO");
 	const [filesType, setFilesType] =
 		useState<Exclude<FileType, "trash">>("all");
 	const [checkedFiles, setCheckedFiles] = useState<FileData[]>([]);
 
-	const {
-		data: files = [],
-		isLoading,
-		isError,
-	} = cloudStorageApi.useGetAllFilesQuery({
-		type: filesType,
+	const { data, isLoading, isError } = cloudStorageApi.useGetAllFilesQuery({
+		filesType,
 		token: getCookieValue(cookieKeys.TOKEN),
 	});
 
 	useEffect(() => {
 		checkedFiles.length && setCheckedFiles([]);
 		// eslint-disable-next-line
-	}, [files]);
+	}, [data?.files]);
 
 	function changeFilesType(newType: Exclude<FileType, "trash">) {
 		setFilesType(newType);
@@ -66,9 +60,9 @@ const StoragePage = () => {
 				</motion.div>
 			)}
 
-			{files && !isLoading && !isError && (
+			{data?.files && !isLoading && !isError && (
 				<FilesList
-					files={files.filter((file) =>
+					files={data.files.filter((file) =>
 						file.originalname
 							.toUpperCase()
 							.includes(throttledSearch.toUpperCase())
