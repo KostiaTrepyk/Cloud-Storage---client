@@ -8,13 +8,13 @@ import { deleteCookieByName } from "../../helpers/cookie";
 import { cookieKeys } from "../../types/cookie";
 
 interface InitialState {
-	user: UserStatistic | null;
+	userData: UserStatistic | null;
 	isAuth: boolean;
 	status: keyof typeof QueryStatus;
 }
 
 const initialState: InitialState = {
-	user: null,
+	userData: null,
 	isAuth: false,
 	status: "uninitialized",
 };
@@ -26,7 +26,7 @@ const AuthSlice = createSlice({
 		logout(state) {
 			state.status = "uninitialized";
 			state.isAuth = false;
-			state.user = null;
+			state.userData = null;
 			deleteCookieByName(cookieKeys.TOKEN, { path: "/" });
 		},
 	},
@@ -56,12 +56,12 @@ const AuthSlice = createSlice({
 		builder.addCase(getMe.fulfilled, (state, action) => {
 			state.status = "fulfilled";
 			state.isAuth = true;
-			state.user = action.payload;
+			state.userData = action.payload;
 		});
 		builder.addCase(getMe.rejected, (state) => {
 			state.status = "rejected";
 			state.isAuth = false;
-			state.user = null;
+			state.userData = null;
 			deleteCookieByName(cookieKeys.TOKEN, { path: "/" });
 		});
 	},

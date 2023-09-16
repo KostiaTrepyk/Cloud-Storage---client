@@ -14,9 +14,3 @@ export interface FileData {
 
 export type FileType = "all" | "photos" | "trash" | "applications";
 export type SortValue = "NO" | 'ASC' | "DESC"
-
-export interface GetFiles {
-	files: FileData[];
-	count: number;
-	isLastPage: boolean;
-}
