@@ -7,7 +7,7 @@ import StoragePage from "../../../pages/StoragePage/StoragePage";
 import ProfilePage from "../../../pages/ProfilePage/ProfilePage";
 import AuthPage from "../../../pages/AuthPage/AuthPage";
 import PageNotFound from "../../../pages/PageNotFound/PageNotFound";
-import TrashPage from "../../../pages/StoragePage/pages/TrashPage/TrashPage";
+import TrashPage from "../../../pages/TrashPage/TrashPage";
 
 export const RootPathnames = {
 	HOME: "/",

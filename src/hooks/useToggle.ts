@@ -4,8 +4,8 @@ export function useToggle(
 	initialValue: boolean
 ): readonly [
 	value: boolean,
-	setValue: React.Dispatch<React.SetStateAction<boolean>>,
 	toggle: () => void,
+	setValue: React.Dispatch<React.SetStateAction<boolean>>,
 ] {
 	const [value, setValue] = useState<boolean>(initialValue);
 
@@ -13,5 +13,5 @@ export function useToggle(
 		setValue((prev) => !prev);
 	}
 
-	return [value, setValue, toggle] as const;
+	return [value, toggle, setValue] as const;
 }

@@ -11,6 +11,7 @@ const LoadIcon = forwardRef<SVGSVGElement, Props>(
 			<svg
 				{...svgAttrs}
 				className={twMerge(
+					"aspect-square h-full text-rose-600",
 					spin && "animate-[spin_2.5s_linear_infinite]",
 					svgAttrs.className
 				)}

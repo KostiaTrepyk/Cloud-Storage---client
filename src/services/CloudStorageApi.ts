@@ -14,6 +14,7 @@ export const cloudStorageApi = createApi({
 				files: FileData[];
 				count: number;
 				isLastPage: boolean;
+				page: number;
 			},
 			{
 				filesType?: FileType;
@@ -51,7 +52,7 @@ export const cloudStorageApi = createApi({
 		}),
 
 		uploadFile: builder.mutation<
-			File,
+			FileData,
 			{ file: FormData; token: string | undefined }
 		>({
 			query: ({ file, token }) => ({
@@ -68,13 +69,13 @@ export const cloudStorageApi = createApi({
 
 		deleteFile: builder.mutation<
 			boolean,
-			{ ids: string; token: string | undefined }
+			{ ids: number[]; token: string | undefined }
 		>({
 			query: ({ ids, token }) => ({
 				url: "/files",
 				method: "DELETE",
 				params: {
-					ids,
+					ids: ids.join(", "),
 				},
 				headers: {
 					Authorization: "Bearer " + token,
