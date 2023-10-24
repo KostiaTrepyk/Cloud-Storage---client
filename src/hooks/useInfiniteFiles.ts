@@ -19,11 +19,8 @@ export function useInfiniteFiles(
 	const [files, setFiles] = useState<FileDataWithSharedWith[]>([]);
 	const [page, setPage] = useState<number>(1);
 
-	const fetchFilesStatus = cloudStorageApi.useGetAllFilesQuery({
-		...query,
-		page,
-		token: getCookieValue(cookieKeys.TOKEN),
-	});
+	const [fetchFiles, fetchFilesStatus] =
+		cloudStorageApi.useLazyGetAllFilesQuery();
 
 	const observer = useRef<IntersectionObserver>();
 	const lastFileElementRef = useCallback(
@@ -58,19 +55,20 @@ export function useInfiniteFiles(
 
 	/* setData */
 	useEffect(() => {
-		if (fetchFilesStatus.data)
-			if (fetchFilesStatus.data.page === 1) {
-				setFiles(fetchFilesStatus.data?.files);
-			} else {
-				setFiles((prev) => [
-					...prev,
-					...(fetchFilesStatus.data?.files || []),
-				]);
-			}
-	}, [fetchFilesStatus.data]);
+		fetchFiles({ ...query, page, token: getCookieValue(cookieKeys.TOKEN) })
+			.unwrap()
+			.then((res) => {
+				if (res.page === 1) {
+					setFiles(res.files);
+				} else {
+					setFiles((prev) => [...prev, ...res.files]);
+				}
+			});
+	}, [page, query, fetchFiles]);
 
 	function restorePagination() {
 		setPage(1);
+		setFiles([]);
 	}
 
 	return {
