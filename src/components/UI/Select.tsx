@@ -26,6 +26,7 @@ const Select = (<Values extends string>() =>
 					{...selectAttributes}
 					className={twMerge(
 						"cursor-pointer rounded border border-neutral-300 px-2 py-1 outline-none transition duration-300 hover:bg-neutral-100 focus:border-neutral-500",
+						selectAttributes.disabled && "contrast-75",
 						selectAttributes.className
 					)}
 					onChange={(event) =>

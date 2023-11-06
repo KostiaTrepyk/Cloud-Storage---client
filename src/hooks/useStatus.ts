@@ -1,24 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 
 export function useStatus(
-	initialStatus: QueryStatus,
+	initialStatus: keyof typeof QueryStatus,
 	statusDuration: number = 1
 ) {
 	const [status, setStatus] =
 		useState<keyof typeof QueryStatus>(initialStatus);
 
-	useEffect(() => {
-		let timeout: NodeJS.Timeout;
+	const timeout = useRef<NodeJS.Timeout>();
 
+	useEffect(() => {
 		if (status === "fulfilled" || status === "rejected") {
-			timeout = setTimeout(() => {
+			timeout.current = setTimeout(() => {
 				setStatus("uninitialized");
-			}, statusDuration * 1000);
+			}, statusDuration);
 		}
 
 		return () => {
-			clearTimeout(timeout);
+			clearTimeout(timeout.current);
+			
 		};
 	}, [status, statusDuration]);
 
@@ -26,5 +27,10 @@ export function useStatus(
 		setStatus(initialStatus);
 	}, [initialStatus]);
 
-	return [status] as const;
+	function changeStatus(newStatus: keyof typeof QueryStatus) {
+		setStatus(newStatus);
+		clearTimeout(timeout.current);
+	}
+
+	return [status, changeStatus] as const;
 }

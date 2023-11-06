@@ -21,19 +21,19 @@ interface Props {
 	files: FileData[] | undefined;
 	checkedFiles: FileData[];
 	clearCheckedFiles: () => void;
+
+	disabled?: boolean
 }
 
-const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
-	const [deleteFiles, __deleteStatus] =
-		cloudStorageApi.useDeleteFileMutation();
+const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabled }) => {
+	const [deleteFiles, __deleteStatus] = cloudStorageApi.useDeleteFileMutation(
+		{ fixedCacheKey: "1" }
+	);
 
 	const [deleteFilesStatus] = useStatus(__deleteStatus.status);
 
 	function downloadCheckedFiles() {
-		const filesToDownload =
-			files?.filter((file) => checkedFiles.includes(file)) || [];
-
-		filesToDownload.forEach((file) => {
+		checkedFiles.forEach((file) => {
 			fetch("http://localhost:5000/uploads/" + file.filename, {
 				method: "GET",
 				headers: {
@@ -67,7 +67,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 		});
 
 		deleteFiles({
-			ids: checkedFilesIds.join(","),
+			ids: checkedFilesIds,
 			token: getCookieValue(cookieKeys.TOKEN),
 		});
 	}
@@ -81,6 +81,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 				custom={0}
 				title="Uncheck"
 				onClick={clearCheckedFiles}
+				disabled={disabled}
 			>
 				<CloseIcon />
 			</MIconButton>
@@ -93,6 +94,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 				color="lime"
 				title="Download"
 				onClick={downloadCheckedFiles}
+				disabled={disabled}
 			>
 				<DownloadIcon />
 			</MIconButton>
@@ -104,8 +106,9 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 				custom={2}
 				color="amber"
 				title="Share"
+				disabled={disabled}
 			>
-				<ShareIcon />
+				<ShareIcon filled />
 			</MIconButton>
 
 			<MIconButton
@@ -117,6 +120,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles }) => {
 				title="Delete"
 				onClick={deleteCheckedFiles}
 				status={deleteFilesStatus}
+				disabled={disabled}
 			>
 				<TrashIcon />
 			</MIconButton>

@@ -9,8 +9,21 @@ export interface FileData {
 	isFavourite: boolean;
 	deletedAt: Date | null;
 	createdAt: Date;
+	owner: UserData
+}
+
+export interface FileDataWithSharedWith {
+	id: number;
+	filename: string;
+	originalname: string;
+	size: number;
+	mimetype: string;
+	isFavourite: boolean;
+	deletedAt: Date | null;
+	createdAt: Date;
 	sharedWith: UserData[];
+	owner: UserData
 }
 
 export type FileType = "all" | "photos" | "trash" | "applications";
-export type SortValue = "NO" | 'ASC' | "DESC"
+export type SortValue = "NO" | "ASC" | "DESC";

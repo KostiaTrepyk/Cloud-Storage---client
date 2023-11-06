@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import { twMerge } from 'tailwind-merge'
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -9,20 +9,30 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = forwardRef<HTMLInputElement, Props>(
 	({ label, labelClassName, ...inputAttributes }, ref) => {
+		const inputId = useId();
+
 		return (
-			<label className={twMerge("grid w-full gap-1", labelClassName)}>
-				{label && <span>{label}</span>}
+			<>
+				{label && (
+					<label
+						htmlFor={inputId}
+						className={twMerge("grid w-full gap-1", labelClassName)}
+					>
+						<span>{label}</span>
+					</label>
+				)}
 				<input
 					{...inputAttributes}
+					id={inputId}
 					className={twMerge(
-						`w-full rounded border border-neutral-300 px-2 py-1 outline-none transition duration-300 hover:bg-neutral-100 focus:border-neutral-500 focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600 ${
-							inputAttributes.value && "invalid:border-rose-600"
-						}`,
+						"w-full rounded border border-neutral-300 px-2 py-1 outline-none transition duration-300 hover:bg-neutral-100 focus:border-neutral-500 focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600",
+						inputAttributes.value && "invalid:border-red-600",
+						inputAttributes.disabled && "contrast-75",
 						inputAttributes.className
 					)}
 					ref={ref}
 				/>
-			</label>
+			</>
 		);
 	}
 );

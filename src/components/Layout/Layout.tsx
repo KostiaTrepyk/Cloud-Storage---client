@@ -1,12 +1,11 @@
 import { FC } from "react";
-import { Device, localStorageKeys } from "../../types/localStorage";
+import { getDevice } from "../../helpers/getDevice";
 
 import LayoutMobile from "./LayoutMobile";
 import LayoutPC from "./LayoutPC";
 
 const Layout: FC = () => {
-	const isMobile =
-		(localStorage.getItem(localStorageKeys.DEVICE) as Device) === "mobile";
+	const isMobile = getDevice() === "mobile";
 
 	return <>{isMobile ? <LayoutMobile /> : <LayoutPC />}</>;
 };

@@ -41,6 +41,7 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 			children,
 			color = "default",
 			status = "uninitialized",
+
 			...buttonAtributes
 		},
 		ref
@@ -49,7 +50,8 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					`aspect-square h-full rounded-full border border-neutral-200 bg-neutral-400 text-black duration-300 hover:bg-neutral-300 active:bg-neutral-200 ${colorVarinats[color]}`,
+					`aspect-square h-full rounded-full border duration-300 ${colorVarinats[color]}`,
+					buttonAtributes.disabled && "contrast-75",
 					buttonAtributes.className
 				)}
 				ref={ref}

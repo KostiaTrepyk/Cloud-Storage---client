@@ -1,17 +1,18 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { FileType, SortValue, FileData } from "../types/fileData";
+import { FileType, SortValue, FileDataWithSharedWith } from "../types/fileData";
+import { UserDataWithSharedFiles } from "../types/user";
 
 export const cloudStorageApi = createApi({
 	reducerPath: "cloudStorageApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:5000",
 	}),
-	tagTypes: ["Files", "FavouriteFiles", "SharedFiles"],
+	tagTypes: ["Files", "FavouriteFiles", "SharedFiles", "Users"],
 	endpoints: (builder) => ({
 		getAllFiles: builder.query<
 			{
-				files: FileData[];
+				files: FileDataWithSharedWith[];
 				count: number;
 				isLastPage: boolean;
 				page: number;
@@ -26,33 +27,18 @@ export const cloudStorageApi = createApi({
 				token: string | undefined;
 			}
 		>({
-			query: ({
-				filesType,
-				page,
-				limit,
-				sort,
-				search,
-				createdAy,
-				token,
-			}) => ({
+			query: ({ token, ...params }) => ({
 				url: "/files",
 				method: "GET",
-				params: {
-					filesType,
-					page,
-					limit,
-					sort,
-					search,
-					createdAy,
-				},
+				params,
 				headers: { Authorization: "Bearer " + token },
 				timeout: 1000 * 30, // 30sec,
 			}),
-			providesTags: ["Files"],
+			providesTags: ["Files", "SharedFiles", "FavouriteFiles"],
 		}),
 
 		uploadFile: builder.mutation<
-			FileData,
+			FileDataWithSharedWith,
 			{ file: FormData; token: string | undefined }
 		>({
 			query: ({ file, token }) => ({
@@ -87,7 +73,7 @@ export const cloudStorageApi = createApi({
 
 		/* Favourite */
 		getFavouriteFiles: builder.query<
-			FileData[],
+			FileDataWithSharedWith[],
 			{ token: string | undefined }
 		>({
 			query: ({ token }) => ({
@@ -101,7 +87,7 @@ export const cloudStorageApi = createApi({
 		}),
 
 		addToFavourite: builder.mutation<
-			FileData,
+			FileDataWithSharedWith,
 			{ fileId: number; token: string | undefined }
 		>({
 			query: ({ fileId, token }) => ({
@@ -115,11 +101,11 @@ export const cloudStorageApi = createApi({
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
-			invalidatesTags: ["FavouriteFiles", "Files", "SharedFiles"],
+			invalidatesTags: ["FavouriteFiles", "Files" /*  "SharedFiles" */],
 		}),
 
 		removeFromFavourite: builder.mutation<
-			FileData,
+			FileDataWithSharedWith,
 			{ fileId: number; token: string | undefined }
 		>({
 			query: ({ fileId, token }) => ({
@@ -133,12 +119,12 @@ export const cloudStorageApi = createApi({
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
-			invalidatesTags: ["FavouriteFiles", "Files", "SharedFiles"],
+			invalidatesTags: ["FavouriteFiles", "Files" /* "SharedFiles" */],
 		}),
 
 		/* Share */
 		getSharedFiles: builder.query<
-			FileData[],
+			FileDataWithSharedWith[],
 			{ token: string | undefined }
 		>({
 			query: ({ token }) => ({
@@ -152,7 +138,7 @@ export const cloudStorageApi = createApi({
 		}),
 
 		share: builder.mutation<
-			FileData,
+			FileDataWithSharedWith,
 			{ fileId: number; shareWith: number[]; token: string | undefined }
 		>({
 			query: ({ fileId, shareWith, token }) => ({
@@ -167,11 +153,11 @@ export const cloudStorageApi = createApi({
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
-			invalidatesTags: ["FavouriteFiles", "Files", "SharedFiles"],
+			invalidatesTags: [/* "FavouriteFiles", */ "Files", "SharedFiles"],
 		}),
 
 		removeFromShared: builder.mutation<
-			FileData,
+			FileDataWithSharedWith,
 			{
 				fileId: number;
 				userIdsToRemove: number[];
@@ -190,7 +176,35 @@ export const cloudStorageApi = createApi({
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
-			invalidatesTags: ["FavouriteFiles", "Files", "SharedFiles"],
+			invalidatesTags: [/* "FavouriteFiles",  */ "Files", "SharedFiles"],
+		}),
+
+		/* USERS */
+		getAllUsers: builder.query<
+			{
+				page: number;
+				count: number;
+				isLastPage: boolean;
+				users: UserDataWithSharedFiles[];
+			},
+			{
+				orderBy?: "SharedWith" | "Creation";
+				orderValue?: "ASC" | "DESC";
+				page?: number;
+				limit?: number;
+				searchByEmail?: string;
+				token: string | undefined;
+			}
+		>({
+			query: ({ token, ...params }) => ({
+				url: "/users",
+				params,
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+				timeout: 1000 * 30, // 30sec,
+			}),
+			providesTags: ["Users"],
 		}),
 	}),
 });

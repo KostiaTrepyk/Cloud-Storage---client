@@ -15,9 +15,16 @@ interface Props {
 	search: string;
 	setSearch: React.Dispatch<React.SetStateAction<string>>;
 	setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+
+	disabled?: boolean;
 }
 
-const SearchActions: FC<Props> = ({ search, setSearch, setIsSearching }) => {
+const SearchActions: FC<Props> = ({
+	search,
+	setSearch,
+	setIsSearching,
+	disabled,
+}) => {
 	return (
 		<>
 			<MIconButton
@@ -25,8 +32,9 @@ const SearchActions: FC<Props> = ({ search, setSearch, setIsSearching }) => {
 				animate="reveal"
 				variants={buttonVariants}
 				custom={0}
-				title="Close"
+				title="Back"
 				onClick={() => setIsSearching(() => false)}
+				disabled={disabled}
 			>
 				<BackIcon />
 			</MIconButton>

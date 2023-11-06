@@ -41,6 +41,8 @@ interface Props {
 	toggleSort: () => void;
 	setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 	changeFilesType: (newType: Exclude<FileType, "trash">) => void;
+
+	disabled?: boolean
 }
 
 const DefaultActions: FC<Props> = ({
@@ -50,17 +52,20 @@ const DefaultActions: FC<Props> = ({
 	toggleSort,
 	setIsSearching,
 	changeFilesType,
+
+	disabled
 }) => {
 	return (
 		<>
 			<MIconButton
+				color={search ? "amber" : "default"}
 				initial="initial"
 				animate="reveal"
 				variants={buttonVariants}
 				custom={0}
 				title="Search"
-				color={search ? "amber" : "default"}
 				onClick={() => setIsSearching(() => true)}
+				disabled={disabled}
 			>
 				<SearchIcon />
 			</MIconButton>
@@ -72,6 +77,7 @@ const DefaultActions: FC<Props> = ({
 				custom={1}
 				title="Sort"
 				onClick={toggleSort}
+				disabled={disabled}
 			>
 				{sort === "ASC" && <SortAscIcon />}
 				{sort === "DESC" && <SortDescIcon />}
@@ -79,27 +85,29 @@ const DefaultActions: FC<Props> = ({
 			</MIconButton>
 
 			<MIconButton
-				title="Trash"
 				initial="initial"
 				animate="reveal"
 				variants={buttonVariants}
 				custom={2}
+				title="Trash"
+				disabled={disabled}
 			>
 				<TrashIcon />
 			</MIconButton>
 
 			<MSelect
 				className="h-full text-black"
-				title="Trash"
 				initial="initial"
 				animate="reveal"
 				variants={inputVariants}
 				custom={3}
+				title="File type"
 				options={FilesTypeOptions}
 				value={filesType}
 				onChange={(option) =>
 					changeFilesType((option?.value as any) || filesType)
 				}
+				disabled={disabled}
 			/>
 		</>
 	);

@@ -31,20 +31,22 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
 			animate={{ opacity: 1 }}
 			onClick={close}
 		>
-			<div
+			<motion.div
 				onClick={(e) => {
 					e.stopPropagation();
 				}}
-				className="relative min-h-[10rem] w-2/3 min-w-[16rem] max-w-2xl rounded-md bg-white p-4 shadow-lg md:p-8"
+				className="relative w-5/6 max-w-sm rounded-md bg-white p-7 shadow-lg sm:w-2/3 sm:max-w-xl sm:p-8"
+				layout={true}
 			>
 				<IconButton
-					className="absolute -right-2 -top-2 h-8 text-black hover:text-red-600 sm:h-10"
+					className="absolute -right-0 -top-0 h-6 rounded border-0 text-black hover:text-red-600 sm:h-7"
 					onClick={close}
+					title="Close"
 				>
 					<CloseIcon />
 				</IconButton>
 				{children}
-			</div>
+			</motion.div>
 		</motion.div>,
 		portalContainer
 	);

@@ -33,7 +33,7 @@ const Sidebar: FC = () => {
 	];
 
 	return (
-		<aside className="fixed left-0 top-0 z-50 h-screen w-36 pb-4 pl-3 pr-2 pt-3">
+		<aside className="fixed left-0 top-0 h-screen w-36 pb-4 pl-3 pr-2 pt-3">
 			<Link
 				className="mb-8 flex items-center gap-3"
 				to={HOMEROUTE.path!}

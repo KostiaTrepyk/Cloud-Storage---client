@@ -1,16 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HOMEROUTE } from "../../core/Router/types/routes";
 
 const PageNotFound = () => {
-	const { pathname } = useLocation();
-
 	return (
 		<main className="flex grow items-center justify-center pb-[7vh] text-center">
-			<div className="flex flex-col gap-1">
-				<h1 className="text-3xl max-sm:text-2xl">
-					<b>Page</b> {pathname} <b>not found.</b>
+			<div className="flex flex-col gap-1 sm:gap-2">
+				<h1 className="text-xl font-bold sm:text-3xl">
+					Page not found.
 				</h1>
-				<span className="text-2xl max-sm:text-lg">
+				<span className="text-xl sm:text-3xl">
 					Get back to{" "}
 					<Link
 						to={HOMEROUTE.path!}

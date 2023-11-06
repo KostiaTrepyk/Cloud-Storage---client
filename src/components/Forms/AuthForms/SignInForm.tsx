@@ -6,6 +6,7 @@ import { SignInArg } from "../../../store/authSlice/reducers/signIn";
 
 import Input from "../../UI/Input";
 import Button from "../../UI/Buttons/Button";
+import LoadIcon from "../../SvgIcons/LoadIcon";
 
 interface Props {
 	onSubmit: (formData: SignInArg, e: FormEvent<HTMLFormElement>) => void;
@@ -14,28 +15,22 @@ interface Props {
 const SignInForm: FC<Props> = ({ onSubmit }) => {
 	const location = useLocation();
 
-	const [isSubmited, setIsSubmited] = useState<boolean>(false);
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+
 	const status = useAppSelector((state) => state.auth.status);
 
 	return (
 		<div className="flex w-full flex-col items-center">
 			<form
-				className="flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[1px_2px_4px_0px_#bbb]"
+				className="relative flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[1px_2px_4px_0px_#bbb]"
 				onSubmit={(e) => {
-					setIsSubmited(() => true);
 					onSubmit({ email, password }, e);
 				}}
+			
 			>
 				<div className="mb-2 flex justify-center gap-4 text-center text-3xl font-bold max-sm:text-2xl">
-					{!isSubmited && "Sign in"}
-					{/* {isSubmited && status === "idle" && "Oops..."} */}
-					{isSubmited &&
-						status === "pending" &&
-						"Wait a second please"}
-					{isSubmited && status === "rejected" && "Try again"}
-					{isSubmited && status === "fulfilled" && "OK :)"}
+					Sign in
 				</div>
 
 				<Input
@@ -78,6 +73,12 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 						Sign in
 					</Button>
 				</div>
+
+				{status === "pending" && (
+					<div className="absolute left-1/2 top-1/2 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white bg-opacity-50 p-1">
+						<LoadIcon spin />
+					</div>
+				)}
 			</form>
 		</div>
 	);
