@@ -1,6 +1,9 @@
-import { PropsWithChildren, forwardRef, memo } from "react";
+import { forwardRef, memo } from "react";
+import { twMerge } from "tailwind-merge";
 
-interface FlexListProps extends PropsWithChildren {
+interface FlexListProps
+	extends React.PropsWithChildren,
+		React.HTMLAttributes<HTMLUListElement> {
 	direction?: "horizontal" | "vertical";
 	/**  num * 4 */
 	gap?: number;
@@ -9,12 +12,19 @@ interface FlexListProps extends PropsWithChildren {
 
 const FlexList = memo(
 	forwardRef<HTMLUListElement, FlexListProps>(
-		({ direction = "horizontal", gap = 1, wrap, children }, ref) => {
+		(
+			{ direction = "horizontal", gap = 1, wrap, children, ...ulAttrs },
+			ref
+		) => {
 			return (
 				<ul
-					className={`flex justify-center gap-${gap} flex-${
-						direction == "horizontal" ? "row" : "col"
-					} ${wrap && "flex-wrap"}`}
+					{...ulAttrs}
+					className={twMerge(
+						`flex justify-center gap-${gap} flex-${
+							direction == "horizontal" ? "row" : "col"
+						} ${wrap && "flex-wrap"}`,
+						ulAttrs.className
+					)}
 					ref={ref}
 				>
 					{children}

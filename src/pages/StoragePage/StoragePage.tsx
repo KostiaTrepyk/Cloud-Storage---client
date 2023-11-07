@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { AnimatePresence, Variants, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useThrottle } from "../../hooks/useThrottle";
 import { useCheckedItems } from "../../hooks/useCheckedItems";
 import { cloudStorageApi } from "../../services/CloudStorageApi";
@@ -10,6 +10,7 @@ import {
 } from "../../types/fileData";
 import { getCookieValue } from "../../helpers/cookie";
 import { cookieKeys } from "../../types/cookie";
+import { getLocalStorageValue } from "../../helpers/getLocalStorageValue";
 import { getDevice } from "../../helpers/getDevice";
 
 import Private from "../Wrappers/Private";
@@ -24,17 +25,15 @@ import Select from "../../components/UI/Select";
 
 const MLoadIcon = motion(LoadIcon);
 
-/** FIX */
-let limitFromLocalStorage = JSON.parse(localStorage.getItem("limit") || "");
+let limitFromLocalStorage = Number(
+	getLocalStorageValue(
+		"STORAGEPAGE_filesLimit",
+		getDevice() === "mobile" ? 25 : 50
+	)
+);
 
 const StoragePage = () => {
-	const [limit, setLimit] = useState<number>(
-		limitFromLocalStorage
-			? limitFromLocalStorage
-			: getDevice() === "mobile"
-			? 25
-			: 50
-	);
+	const [limit, setLimit] = useState<number>(limitFromLocalStorage);
 	const [page, setPage] = useState<number>(1);
 	const [search, setSearch] = useState<string>("");
 	const throttledSearch = useThrottle<string>(search, 800);
@@ -78,7 +77,7 @@ const StoragePage = () => {
 	});
 
 	useEffect(() => {
-		localStorage.setItem("limit", JSON.stringify(limit));
+		localStorage.setItem("STORAGEPAGE_filesLimit", JSON.stringify(limit));
 	}, [limit]);
 
 	useEffect(() => {
