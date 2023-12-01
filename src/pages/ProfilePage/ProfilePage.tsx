@@ -19,7 +19,7 @@ const ProfilePage = () => {
 
 	const userData = useAppSelector((state) => state.auth.userData);
 
-	const userTotalFileSize = userData?.totalFileSize! / 1024 / 1024; /* MB */
+	const userTotalFileSize = userData?.statistic.totalFileSize! / 1024 / 1024; /* MB */
 	const maxTotalFileSize = 100; /* MB */
 	const totalSizePercentage = Number(
 		((userTotalFileSize / maxTotalFileSize) * 100).toFixed(1)
@@ -64,7 +64,7 @@ const ProfilePage = () => {
 							<td className="pr-4 text-left">
 								Quantity of files
 							</td>
-							<td>{userData?.filesCount}</td>
+							<td>{userData?.statistic.filesCount}</td>
 						</tr>
 						<tr>
 							<td className="pr-4 text-left">Memory remaining</td>
@@ -81,7 +81,7 @@ const ProfilePage = () => {
 							</td>
 							<td>
 								{(
-									userData?.averageFileSize! /
+									userData?.statistic.averageFileSize! /
 									1024 /
 									1024
 								).toFixed(1)}{" "}
