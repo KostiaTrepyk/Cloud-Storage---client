@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { cloudStorageApi } from "../../../../services/CloudStorageApi";
+import { filesApi } from "../../../../services/filesApi";
 import { useStatus } from "../../../../hooks/useStatus";
 import { FileData } from "../../../../types/fileData";
 import { getCookieValue } from "../../../../helpers/cookie";
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabled }) => {
-	const [deleteFiles, __deleteStatus] = cloudStorageApi.useDeleteFileMutation(
+	const [deleteFiles, __deleteStatus] = filesApi.useDeleteFileMutation(
 		{ fixedCacheKey: "1" }
 	);
 

@@ -4,16 +4,16 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 // Reducers
 import AuthReducer from "./authSlice/authSlice";
 
-import { cloudStorageApi } from "../services/CloudStorageApi";
+import { emptySplitApi } from "../services/emptySplitApi";
 
 export const store = configureStore({
 	reducer: {
 		auth: AuthReducer,
-		[cloudStorageApi.reducerPath]: cloudStorageApi.reducer,
+		[emptySplitApi.reducerPath]: emptySplitApi.reducer,
 	},
 
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(cloudStorageApi.middleware),
+		getDefaultMiddleware().concat(emptySplitApi.middleware),
 });
 
 setupListeners(store.dispatch);

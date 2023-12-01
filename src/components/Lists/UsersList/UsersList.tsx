@@ -1,9 +1,9 @@
 import { getCookieValue } from "../../../helpers/cookie";
-import { cloudStorageApi } from "../../../services/CloudStorageApi";
+import { usersApi } from "../../../services/usersApi";
 import { cookieKeys } from "../../../types/cookie";
 
 const UsersList = () => {
-	const { data, isFetching } = cloudStorageApi.useGetAllUsersQuery({
+	const { data, isFetching } = usersApi.useGetAllUsersQuery({
 		orderBy: "SharedWith",
 		orderValue: "DESC",
 		token: getCookieValue(cookieKeys.TOKEN),

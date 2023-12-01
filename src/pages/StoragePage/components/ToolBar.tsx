@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { cloudStorageApi } from "../../../services/CloudStorageApi";
+import { filesApi } from "../../../services/filesApi";
 import { getCookieValue } from "../../../helpers/cookie";
 import { cookieKeys } from "../../../types/cookie";
 import {
@@ -50,7 +50,7 @@ const ToolBar: FC<Props> = ({
 	disabled,
 }) => {
 	const [isSearching, setIsSearching] = useState<boolean>(false);
-	const [uploadFile, uploadStatus] = cloudStorageApi.useUploadFileMutation({
+	const [uploadFile, uploadStatus] = filesApi.useUploadFileMutation({
 		fixedCacheKey: "1",
 	});
 	const currentToolBar: ToolBarType = Boolean(checkedFiles.length)

@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { FileDataWithSharedWith } from "../types/fileData";
 import { getCookieValue } from "../helpers/cookie";
-import { cloudStorageApi } from "../services/CloudStorageApi";
+import { usersApi } from "../services/usersApi";
+import { filesApi } from "../services/filesApi";
 import { cookieKeys } from "../types/cookie";
 import { UserDataWithSharedFiles } from "../types/user";
 
@@ -20,7 +21,7 @@ interface ShareUsersModalProps {
 const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 	const [users, setUsers] = useState<UserDataWithSharedFiles[]>([]);
 
-	const getAllUsers = cloudStorageApi.useGetAllUsersQuery(
+	const getAllUsers = usersApi.useGetAllUsersQuery(
 		{
 			token: getCookieValue(cookieKeys.TOKEN),
 			orderBy: "SharedWith",
@@ -29,9 +30,8 @@ const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 		{ skip: !open }
 	);
 
-	const [share, shareStatus] = cloudStorageApi.useShareMutation();
-	const [unshare, unshareStatus] =
-		cloudStorageApi.useRemoveFromSharedMutation();
+	const [share, shareStatus] = filesApi.useShareMutation();
+	const [unshare, unshareStatus] = filesApi.useRemoveFromSharedMutation();
 
 	useEffect(() => {
 		setUsers(getAllUsers.data?.users || []);

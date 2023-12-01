@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { FileDataWithSharedWith } from "../../../../types/fileData";
-import { cloudStorageApi } from "../../../../services/CloudStorageApi";
+import { filesApi } from "../../../../services/filesApi";
 import { getCookieValue } from "../../../../helpers/cookie";
 import { cookieKeys } from "../../../../types/cookie";
 
@@ -18,9 +18,9 @@ const SideButtons: FC<SideButtonsProps> = ({ file }) => {
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 	const [addToFavorite, addToFavoriteStatus] =
-		cloudStorageApi.useAddToFavouriteMutation();
+		filesApi.useAddToFavouriteMutation();
 	const [removeFromFavorite, removeFromFavoriteStatus] =
-		cloudStorageApi.useRemoveFromFavouriteMutation();
+		filesApi.useRemoveFromFavouriteMutation();
 
 	function toggleFavourite() {
 		if (file.isFavourite) {

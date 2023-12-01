@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useThrottle } from "../../hooks/useThrottle";
 import { useCheckedItems } from "../../hooks/useCheckedItems";
-import { cloudStorageApi } from "../../services/CloudStorageApi";
+import { filesApi } from "../../services/filesApi";
 import {
 	SortValue,
 	FileType,
@@ -50,7 +50,7 @@ const StoragePage = () => {
 		[filesType, throttledSearch, sort, limit]
 	);
 
-	const fetchFilesStatus = cloudStorageApi.useGetAllFilesQuery({
+	const fetchFilesStatus = filesApi.useGetAllFilesQuery({
 		...queryData,
 		limit,
 		page,
@@ -69,10 +69,10 @@ const StoragePage = () => {
 		addToChecked,
 	} = useCheckedItems<FileDataWithSharedWith>(files || []);
 
-	const [, uploadFileStatus] = cloudStorageApi.useUploadFileMutation({
+	const [, uploadFileStatus] = filesApi.useUploadFileMutation({
 		fixedCacheKey: "1",
 	});
-	const [, deleteFilesStatus] = cloudStorageApi.useDeleteFileMutation({
+	const [, deleteFilesStatus] = filesApi.useDeleteFileMutation({
 		fixedCacheKey: "1",
 	});
 

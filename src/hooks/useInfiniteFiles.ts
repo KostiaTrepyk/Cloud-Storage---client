@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FileDataWithSharedWith, SortValue } from "../types/fileData";
 import { cookieKeys } from "../types/cookie";
-import { cloudStorageApi } from "../services/CloudStorageApi";
+import { filesApi } from "../services/filesApi";
 import { getCookieValue } from "../helpers/cookie";
 
 export interface GetFilesQuery {
@@ -19,8 +19,7 @@ export function useInfiniteFiles(
 	const [files, setFiles] = useState<FileDataWithSharedWith[]>([]);
 	const [page, setPage] = useState<number>(1);
 
-	const [fetchFiles, fetchFilesStatus] =
-		cloudStorageApi.useLazyGetAllFilesQuery();
+	const [fetchFiles, fetchFilesStatus] = filesApi.useLazyGetAllFilesQuery();
 
 	const observer = useRef<IntersectionObserver>();
 	const lastFileElementRef = useCallback(

@@ -21,7 +21,7 @@ const FlexList = memo(
 					{...ulAttrs}
 					className={twMerge(
 						`flex justify-center gap-${gap} flex-${
-							direction == "horizontal" ? "row" : "col"
+							direction === "horizontal" ? "row" : "col"
 						} ${wrap && "flex-wrap"}`,
 						ulAttrs.className
 					)}
