@@ -1,10 +1,10 @@
-import Button from "../../components/UI/Buttons/Button";
-import IconButton from "../../components/UI/Buttons/IconButton";
-import Input from "../../components/UI/Input";
-import Select from "../../components/UI/Select";
-import Image from "../../components/UI/Image";
+import Button from "components/UI/Buttons/Button";
+import IconButton from "components/UI/Buttons/IconButton";
+import Input from "components/UI/Input";
+import Select from "components/UI/Select";
+import Image from "components/UI/Image";
 
-import ShareIcon from "../../components/SvgIcons/ShareIcon";
+import ShareIcon from "components/SvgIcons/ShareIcon";
 
 const HomePage = () => {
 	const options = [
