@@ -1,8 +1,8 @@
 import { ButtonHTMLAttributes, PropsWithChildren, forwardRef } from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { Color } from "../types";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
+import { Color, Variants, colorVariants } from "../types";
 
 import LoadIcon from "../../SvgIcons/LoadIcon";
 import SuccessIcon from "../../SvgIcons/SuccessIcon";
@@ -13,29 +13,31 @@ const MSuccessIcon = motion(SuccessIcon);
 const MLoadIcon = motion(LoadIcon);
 const MErrorIcon = motion(ErrorIcon);
 
-const colorVarinats: Record<Color, string> = {
-	neutral: "bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500",
-	default:
-		"bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300 text-black",
-	red: "bg-red-500 hover:bg-red-600 active:bg-red-700",
-	amber: "bg-amber-500 hover:bg-amber-600 active:bg-amber-700",
-	lime: "bg-lime-500 hover:bg-lime-600 active:bg-lime-700",
-	rose: "bg-rose-500 hover:bg-rose-600 active:bg-rose-700",
-};
-
 interface Props
 	extends ButtonHTMLAttributes<HTMLButtonElement>,
 		PropsWithChildren {
+	/**  @default "default" */
 	color?: Color;
+
 	status?: keyof typeof QueryStatus;
+
+	/**  @default "medium" */
+	size?: "small" | "medium" | "large";
+
+	/**  @default "contained" */
+	variant?: Variants;
 }
 
+/** Fix click animation */
 const Button = forwardRef<HTMLButtonElement, Props>(
 	(
 		{
-			children,
-			color = "default",
+			color = "neutral",
 			status = "uninitialized",
+			size = "medium",
+			variant = "contained",
+
+			children,
 			...buttonAtributes
 		},
 		ref
@@ -44,10 +46,21 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					"h-full min-w-[5rem] rounded p-2 text-center font-semibold text-white transition",
-					color && colorVarinats[color],
-					!status && "disabled:bg-neutral-600",
+					"relative min-w-[4rem] select-none overflow-hidden rounded text-center font-semibold uppercase text-white transition duration-200",
+					"after:visible after:absolute after:left-1/2 after:top-1/2 after:h-[125%] after:w-[125%] after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-current after:opacity-0 after:transition-all after:duration-1000 after:ease-out after:content-[''] active:after:invisible active:after:h-0 active:after:w-0 active:after:opacity-75 after:active:transition-none",
+
+					colorVariants[variant][color],
+
+					size === "small" && "px-2 py-1.5 text-[0.8125rem]",
+					size === "medium" && "px-3 py-2 text-[0.875rem]",
+					size === "large" && "px-4 py-3 text-[0.9375rem]",
+
+					variant === "contained" && "",
+					variant === "outlined" && "border",
+					variant === "text" && "",
+
 					buttonAtributes.disabled && "contrast-75",
+					!status && "border-neutral-900 disabled:bg-neutral-600",
 					buttonAtributes.className
 				)}
 				ref={ref}

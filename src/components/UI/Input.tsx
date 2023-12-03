@@ -16,7 +16,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
 				{label && (
 					<label
 						htmlFor={inputId}
-						className={twMerge("grid w-full gap-1", labelClassName)}
+						className={labelClassName}
 					>
 						<span>{label}</span>
 					</label>
@@ -25,7 +25,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
 					{...inputAttributes}
 					id={inputId}
 					className={twMerge(
-						"w-full rounded border border-neutral-300 px-2 py-1 outline-none transition duration-300 hover:bg-neutral-100 focus:border-neutral-500 focus:bg-neutral-200 disabled:border-neutral-500 disabled:text-neutral-600",
+						"rounded border border-neutral-300 px-2 py-1 outline-none transition duration-300 hover:bg-neutral-100 focus:border-neutral-500 focus:bg-neutral-200",
 						inputAttributes.value && "invalid:border-red-600",
 						inputAttributes.disabled && "contrast-75",
 						inputAttributes.className

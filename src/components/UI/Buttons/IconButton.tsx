@@ -6,7 +6,7 @@ import {
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { Color } from "../types";
+import { Color, Variants, colorVariants } from "../types";
 
 /* Icons */
 import LoadIcon from "../../SvgIcons/LoadIcon";
@@ -18,30 +18,26 @@ const MSuccessIcon = motion(SuccessIcon);
 const MLoadIcon = motion(LoadIcon);
 const MErrorIcon = motion(ErrorIcon);
 
-const colorVarinats: Record<Color, string> = {
-	neutral: "bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500",
-	default:
-		"bg-neutral-100 backdrop-blur hover:bg-neutral-200 active:bg-neutral-300",
-	red: "bg-red-500 hover:bg-red-600 active:bg-red-700",
-	amber: "bg-amber-500 hover:bg-amber-600 active:bg-amber-700",
-	lime: "bg-lime-500 hover:bg-lime-600 active:bg-lime-700",
-	rose: "bg-rose-500 hover:bg-rose-600 active:bg-rose-700",
-};
-
 interface Props
 	extends ButtonHTMLAttributes<HTMLButtonElement>,
 		PropsWithChildren {
+	/** @default "neutral" */
 	color?: Color;
+
 	status?: keyof typeof QueryStatus;
+
+	/** @default "contained" */
+	variant?: Exclude<Variants, "text">;
 }
 
 const IconButton = forwardRef<HTMLButtonElement, Props>(
 	(
 		{
-			children,
-			color = "default",
+			color = "neutral",
+			variant = "contained",
 			status = "uninitialized",
 
+			children,
 			...buttonAtributes
 		},
 		ref
@@ -50,7 +46,9 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					`aspect-square h-full rounded-full border duration-300 ${colorVarinats[color]}`,
+					`relative aspect-square h-full overflow-hidden rounded-full border duration-300 ${colorVariants[variant][color]}`,
+					"after:visible after:absolute after:left-1/2 after:top-1/2 after:h-[100%] after:w-[100%] after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-current after:opacity-0 after:transition-all after:duration-700 after:ease-out after:content-[''] active:after:invisible active:after:h-0 active:after:w-0 active:after:opacity-75 after:active:transition-none",
+
 					buttonAtributes.disabled && "contrast-75",
 					buttonAtributes.className
 				)}
