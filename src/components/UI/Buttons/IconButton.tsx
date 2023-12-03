@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { Color, Variants, colorVariants } from "../types";
 
+import Ripple from "../Ripple/Ripple";
+
 /* Icons */
 import LoadIcon from "../../SvgIcons/LoadIcon";
 import SuccessIcon from "../../SvgIcons/SuccessIcon";
@@ -47,29 +49,42 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 				{...buttonAtributes}
 				className={twMerge(
 					`relative aspect-square h-full overflow-hidden rounded-full border duration-300 ${colorVariants[variant][color]}`,
-					"after:visible after:absolute after:left-1/2 after:top-1/2 after:h-[100%] after:w-[100%] after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-current after:opacity-0 after:transition-all after:duration-700 after:ease-out after:content-[''] active:after:invisible active:after:h-0 active:after:w-0 active:after:opacity-75 after:active:transition-none",
 
 					buttonAtributes.disabled && "contrast-75",
 					buttonAtributes.className
 				)}
 				ref={ref}
 			>
-				<motion.span
-					className="block scale-[.55]"
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{ duration: 0.3 }}
-				>
+				<span className="block scale-[.55]">
 					{status === "pending" ? (
-						<MLoadIcon className="animate-[spin_2s_linear_infinite]" />
+						<MLoadIcon
+							className="animate-[spin_2s_linear_infinite]"
+							initial={{ opacity: 0, scale: 0.5 }}
+							animate={{ opacity: 1, scale: 1 }}
+							transition={{ duration: 0.3 }}
+						/>
 					) : status === "fulfilled" ? (
-						<MSuccessIcon />
+						<MSuccessIcon
+							initial={{ opacity: 0, scale: 0.5 }}
+							animate={{ opacity: 1, scale: 1 }}
+							transition={{ duration: 0.3 }}
+						/>
 					) : status === "rejected" ? (
-						<MErrorIcon className="ping-[spin_2s_linear_infinite]" />
+						<MErrorIcon
+							className="ping-[spin_2s_linear_infinite]"
+							initial={{ opacity: 0, scale: 0.5 }}
+							animate={{ opacity: 1, scale: 1 }}
+							transition={{ duration: 0.3 }}
+						/>
 					) : (
 						<>{children}</>
 					)}
-				</motion.span>
+				</span>
+
+				<Ripple
+					color={variant === "contained" ? "white" : color}
+					duration={10000000}
+				/>
 			</button>
 		);
 	}
