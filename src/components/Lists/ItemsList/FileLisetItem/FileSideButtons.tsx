@@ -1,20 +1,19 @@
 import { FC, useState } from "react";
-import { FileDataWithSharedWith } from "../../../../types/fileData";
-import { filesApi } from "../../../../services/filesApi";
-import { getCookieValue } from "../../../../helpers/cookie";
-import { cookieKeys } from "../../../../types/cookie";
+import { FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { getCookieValue } from "helpers/cookie";
+import { cookieKeys } from "types/cookie";
 
-import IconButton from "../../../UI/Buttons/IconButton";
-import ShareUsersModal from "../../../ShareUsersModal";
+import IconButton from "components/UI/Buttons/IconButton";
+import ShareUsersModal from "components/ShareUsersModal";
 
-import FavouriteIcon from "../../../SvgIcons/FavouriteIcon";
-import ShareIcon from "../../../SvgIcons/ShareIcon";
+import FavouriteIcon from "components/SvgIcons/FavouriteIcon";
+import ShareIcon from "components/SvgIcons/ShareIcon";
 
 interface SideButtonsProps {
 	file: FileDataWithSharedWith;
 }
 
-const SideButtons: FC<SideButtonsProps> = ({ file }) => {
+const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 	const [addToFavorite, addToFavoriteStatus] =
@@ -85,4 +84,4 @@ const SideButtons: FC<SideButtonsProps> = ({ file }) => {
 	);
 };
 
-export default SideButtons;
+export default FileSideButtons;

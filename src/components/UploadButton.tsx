@@ -16,11 +16,10 @@ const UploadButton = forwardRef<HTMLLabelElement, Props>(
 			<label
 				className={twMerge(
 					"flex h-full w-fit cursor-pointer items-center rounded bg-amber-500 px-3 py-2 text-center text-lg font-semibold text-white outline-2 outline-offset-2 outline-rose-600 transition duration-300 focus-within:outline-dashed hover:bg-orange-500 aria-disabled:bg-neutral-500 sm:gap-2",
-
-					disabled && "contrast-75",
+					disabled && "cursor-default contrast-75",
 					className
 				)}
-				aria-disabled={isLoading}
+				aria-disabled={isLoading || disabled}
 				title="Upload"
 				ref={ref}
 			>
@@ -35,7 +34,7 @@ const UploadButton = forwardRef<HTMLLabelElement, Props>(
 					className="h-0 w-0 focus-visible:outline-none"
 					type="file"
 					onChange={onUpload}
-					disabled={isLoading}
+					disabled={isLoading || disabled}
 				/>
 			</label>
 		);

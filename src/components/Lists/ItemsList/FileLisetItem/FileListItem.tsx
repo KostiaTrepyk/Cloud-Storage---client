@@ -1,10 +1,10 @@
-import { forwardRef, memo, useId } from "react";
-import { motion } from "framer-motion";
-import { getFileExtension } from "../../../../helpers/getFileExtension";
-import { FileDataWithSharedWith } from "../../../../types/fileData";
+import { forwardRef, memo } from "react";
+import { getFileExtension } from "helpers/getFileExtension";
+import { FileDataWithSharedWith } from "services/filesApi";
 
-import SideButtons from "./SideButtons";
-import Image from "../../../UI/Image";
+import { ItemContainer } from "components/Lists/ItemsList/ItemContainer";
+import FileSideButtons from "./FileSideButtons";
+import Image from "components/UI/Image";
 
 interface Props {
 	file: FileDataWithSharedWith;
@@ -30,37 +30,24 @@ const FileListItem = memo(
 			const fileExtesion = getFileExtension(file.filename);
 			const fileType = file.mimetype.split("/")[0];
 
-			const checkboxId = useId();
-
 			function CheckedChangeHandler() {
 				if (!checked) addFileToChecked(file);
 				else removeFilefromChecked(file);
 			}
 
 			return (
-				<motion.li
-					ref={ref}
-					className={`group relative flex aspect-square h-32 select-none flex-col items-center justify-normal rounded border border-neutral-50 p-1 pb-0 shadow transition-colors duration-300 sm:h-40 md:h-44 ${
-						checked ? "bg-neutral-100 text-rose-900" : ""
-					}`}
-					initial={{
-						opacity: 0,
-					}}
-					animate={{ opacity: 1 }}
-					layout="position"
+				<ItemContainer
+					className="group/item"
+					checked={checked}
 				>
 					<input
-						className={`absolute left-2 top-2 z-10 cursor-pointer accent-rose-600 transition duration-[500ms] hover:opacity-100 focus-visible:opacity-100
-						 ${!showCheckIndicator && "opacity-0"}`}
-						id={checkboxId}
+						className={`absolute left-2 top-2 z-10 aspect-square h-4 cursor-pointer accent-rose-600 transition duration-[500ms] hover:opacity-100 focus-visible:opacity-100 group-hover/item:opacity-100
+						${showCheckIndicator ? "opacity-1000" : "opacity-0"}`}
 						type="checkbox"
 						onChange={CheckedChangeHandler}
 						checked={checked}
 					/>
-					<label
-						className="mx-2 flex h-[5.5rem] w-full cursor-pointer items-center justify-center sm:h-[7.5rem] md:h-[8.5rem]"
-						htmlFor={checkboxId}
-					>
+					<label className="mx-2 flex h-[5.5rem] w-full cursor-pointer items-center justify-center sm:h-[7.5rem] md:h-[8.5rem]">
 						{fileType === "image" /* &&
 						file.size < 250_000 */ /* 250KB */ ? (
 							<Image
@@ -84,11 +71,12 @@ const FileListItem = memo(
 						</span>
 					</div>
 
-					<SideButtons file={file} />
-				</motion.li>
+					<FileSideButtons file={file} />
+				</ItemContainer>
 			);
 		}
 	)
 );
 
 export default FileListItem;
+		
