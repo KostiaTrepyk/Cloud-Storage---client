@@ -1,5 +1,5 @@
 import { emptySplitApi } from "./emptySplitApi";
-import { FileDataWithSharedWith } from "types/fileData";
+import { FileDataWithSharedWith } from "./filesApi";
 
 export const foldersApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -13,7 +13,7 @@ export const foldersApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 120, // 2min
 			}),
-			providesTags: ["Folders"],
+			providesTags: ["Folders", "Files"],
 		}),
 
 		createFolder: build.mutation<createFolderResponse, createFolderBody>({
@@ -57,7 +57,7 @@ export const foldersApi = emptySplitApi.injectEndpoints({
 	}),
 });
 
-interface Folder {
+export interface Folder {
 	id: number;
 	name: string;
 	createdAt: string;
@@ -66,12 +66,12 @@ interface Folder {
 
 /* Get */
 
-interface getFolderBody {
+export interface getFolderBody {
 	folderId: number;
 	token: string | undefined;
 }
 
-interface getFolderResponse {
+export interface getFolderResponse {
 	currentFolder: Folder | null;
 	folders: Folder[];
 	files: FileDataWithSharedWith[];
@@ -79,29 +79,29 @@ interface getFolderResponse {
 
 /* Create */
 
-interface createFolderBody {
+export interface createFolderBody {
 	folderName: string;
 	parrentFolderId?: number;
 	token: string | undefined;
 }
 
-type createFolderResponse = Folder;
+export type createFolderResponse = Folder;
 
 /* Upload */
 
-interface updateFolderBody {
+export interface updateFolderBody {
 	folderId: number;
 	newFolderName?: string;
 	newParrentFolderId?: number;
 	token: string | undefined;
 }
 
-type updateFolderResponse = boolean;
+export type updateFolderResponse = boolean;
 
 /* Delete */
-interface deleteFolderBody {
+export interface deleteFolderBody {
 	foldersIds: number[];
 	token: string | undefined;
 }
 
-type deleteFolderResponse = boolean;
+export type deleteFolderResponse = boolean;
