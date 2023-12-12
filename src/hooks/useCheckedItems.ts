@@ -6,31 +6,30 @@ export function useCheckedItems<Item extends { id: number | string }>(
 	const [checkedItems, setCheckedItems] = useState<Item[]>([]);
 
 	useEffect(() => {
-		setCheckedItems((prev) =>
-			prev.filter((prevItem) => items.includes(prevItem))
-		);
+		if (checkedItems.length)
+			setCheckedItems((prev) =>
+				prev.filter((prevItem) => items.includes(prevItem))
+			);
 	}, [items]);
 
-	function addToChecked(item: Item) {
+	function addItemToChecked(item: Item) {
 		if (!items.includes(item)) return;
 
 		setCheckedItems((prev) => [...prev, item]);
 	}
 
-	function removeFromChecked(item: Item) {
-		setCheckedItems((prev) =>
-			prev.filter((prevItem) => prevItem.id !== item.id)
-		);
+	function removeItemFromChecked(item: Item) {
+		setCheckedItems((prev) => prev.filter((prevItem) => prevItem !== item));
 	}
 
-	function clearChecked() {
-		setCheckedItems([]);
+	function clearCheckedItems() {
+		if (checkedItems.length) setCheckedItems([]);
 	}
 
 	return {
 		checkedItems,
-		removeFromChecked,
-		clearChecked,
-		addToChecked,
+		addItemToChecked,
+		removeItemFromChecked,
+		clearCheckedItems,
 	} as const;
 }
