@@ -6,7 +6,7 @@ interface ItemContainerProps extends HTMLMotionProps<"li"> {
 	checked?: boolean;
 }
 
-export const ItemContainer = forwardRef<HTMLLIElement, ItemContainerProps>(
+const ItemContainer = forwardRef<HTMLLIElement, ItemContainerProps>(
 	({ checked, children, ...liAttrs }, ref) => {
 		return (
 			<motion.li
@@ -29,3 +29,5 @@ export const ItemContainer = forwardRef<HTMLLIElement, ItemContainerProps>(
 		);
 	}
 );
+
+export default ItemContainer;

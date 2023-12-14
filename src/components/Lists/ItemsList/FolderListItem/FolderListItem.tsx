@@ -1,10 +1,13 @@
 import { Folder } from "services/foldersApi";
-import { ItemContainer } from "./ItemContainer";
+import { useContextMenuContext } from "contexts/ContextMenuContext";
 
 import { FolderIcon } from "components/SvgIcons/FolderIcon";
+import ItemContainer from "../ItemContainer";
+import FolderContextMenu from "../../../ContextMenus/FolderContextMenu";
 
 interface FolderListItemProps {
 	item: Folder;
+	changeFolderId: (id: number) => void;
 	onDoubleClick: () => void;
 
 	checked?: boolean;
@@ -15,12 +18,15 @@ interface FolderListItemProps {
 
 const FolderListItem: React.FC<FolderListItemProps> = ({
 	item,
+	changeFolderId,
 	onDoubleClick,
 	checked,
 	removeItemfromChecked,
 	addItemToChecked,
 	showCheckIndicator,
 }) => {
+	const { handleContextMenu } = useContextMenuContext();
+
 	function CheckedChangeHandler() {
 		if (!checked) addItemToChecked(item);
 		else removeItemfromChecked(item);
@@ -30,6 +36,16 @@ const FolderListItem: React.FC<FolderListItemProps> = ({
 		<ItemContainer
 			className="group/item"
 			checked={checked}
+			onContextMenu={(e) =>
+				handleContextMenu(
+					e,
+					<FolderContextMenu
+						key={item.id}
+						item={item}
+						changeFolderId={changeFolderId}
+					/>
+				)
+			}
 		>
 			<input
 				className={`absolute left-2 top-2 z-10 aspect-square h-4 cursor-pointer accent-rose-600 transition duration-[500ms] focus-visible:opacity-100 group-hover/item:opacity-100

@@ -46,6 +46,7 @@ export const ContextMenuContextProvider: React.FC<React.PropsWithChildren> = ({
 	const handleContextMenu = useCallback(
 		(e: React.MouseEvent, contextMenu: JSX.Element) => {
 			e.preventDefault();
+			e.stopPropagation();
 
 			setCoords({ x: e.pageX, y: e.pageY });
 			setContextMenuElement(contextMenu);

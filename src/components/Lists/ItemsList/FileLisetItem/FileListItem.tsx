@@ -1,10 +1,12 @@
 import { forwardRef, memo } from "react";
 import { getFileExtension } from "helpers/getFileExtension";
 import { FileDataWithSharedWith } from "services/filesApi";
+import { useContextMenuContext } from "contexts/ContextMenuContext";
 
-import { ItemContainer } from "components/Lists/ItemsList/ItemContainer";
-import FileSideButtons from "./FileSideButtons";
+import FileContextMenu from "components/ContextMenus/FileContextMenu";
+import ItemContainer from "components/Lists/ItemsList/ItemContainer";
 import Image from "components/UI/Image";
+import FileSideButtons from "./FileSideButtons";
 
 interface Props {
 	file: FileDataWithSharedWith;
@@ -19,9 +21,9 @@ const FileListItem = memo(
 		(
 			{
 				file,
+				checked = false,
 				addFileToChecked,
 				removeFilefromChecked,
-				checked = false,
 				showCheckIndicator = false,
 			},
 			ref
@@ -29,6 +31,8 @@ const FileListItem = memo(
 			const fileUrl = `http://localhost:5000/uploads/${file.filename}`;
 			const fileExtesion = getFileExtension(file.filename);
 			const fileType = file.mimetype.split("/")[0];
+
+			const { handleContextMenu } = useContextMenuContext();
 
 			function CheckedChangeHandler() {
 				if (!checked) addFileToChecked(file);
@@ -39,6 +43,10 @@ const FileListItem = memo(
 				<ItemContainer
 					className="group/item"
 					checked={checked}
+					ref={ref}
+					onContextMenu={(e) =>
+						handleContextMenu(e, <FileContextMenu item={file} />)
+					}
 				>
 					<input
 						className={`absolute left-2 top-2 z-10 aspect-square h-4 cursor-pointer accent-rose-600 transition duration-[500ms] hover:opacity-100 focus-visible:opacity-100 group-hover/item:opacity-100
