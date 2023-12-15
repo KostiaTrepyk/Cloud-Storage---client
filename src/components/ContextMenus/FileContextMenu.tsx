@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { getFileExtension } from "helpers/getFileExtension";
 import { getCookieValue } from "helpers/cookie";
-import { cookieKeys } from "types/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
+import { FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button";
 import TrashIcon from "components/SvgIcons/TrashIcon";
@@ -10,6 +11,8 @@ import ContextMenuContainer from "./ContextMenuContainer";
 import BackIcon from "components/SvgIcons/BackIcon";
 import RenameIcon from "components/SvgIcons/RenameIcon";
 import IconButton from "components/UI/Buttons/IconButton";
+import DownloadIcon from "components/SvgIcons/DownloadIcon";
+import OpenFolderIcon from "components/SvgIcons/OpenFolder";
 
 interface FileContextMenuProps {
 	item: FileDataWithSharedWith;
@@ -24,8 +27,63 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ item }) => {
 	const [updateFile, updateFileData] = filesApi.useUpdateFileMutation();
 	const [deleteFile] = filesApi.useSoftDeleteFileMutation();
 
+	function downloadFile(item: FileDataWithSharedWith) {
+		fetch("http://localhost:5000/uploads/" + item.filename, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/pdf",
+			},
+		})
+			.then((response) => response.blob())
+			.then((blob) => {
+				const url = window.URL.createObjectURL(new Blob([blob]));
+
+				const link = document.createElement("a");
+				link.href = url;
+				link.download =
+					item.originalname + "." + getFileExtension(item.filename);
+
+				document.body.appendChild(link);
+
+				link.click();
+
+				link.parentNode?.removeChild(link);
+			});
+	}
+
 	return (
 		<ContextMenuContainer>
+			<li>
+				<Button
+					color="neutral"
+					variant="contained"
+					className="flex h-full w-full items-center gap-2"
+					onClick={() => {
+						close();
+					}}
+				>
+					<OpenFolderIcon className="h-5 w-5" />
+
+					<div>Open</div>
+				</Button>
+			</li>
+
+			<li>
+				<Button
+					color="neutral"
+					variant="contained"
+					className="flex h-full w-full items-center gap-2"
+					onClick={() => {
+						downloadFile(item);
+						close();
+					}}
+				>
+					<DownloadIcon className="h-5 w-5" />
+
+					<div>Download</div>
+				</Button>
+			</li>
+
 			<li className="h-8">
 				{mode === "rename" ? (
 					<form className="flex">

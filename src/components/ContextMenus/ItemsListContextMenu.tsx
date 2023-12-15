@@ -1,11 +1,11 @@
+import { useContextMenuContext } from "contexts/ContextMenuContext";
+import { getCookieValue } from "helpers/cookie";
+import { foldersApi } from "services/foldersApi";
+import { cookieKeys } from "types/cookie";
+
+import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
 import Button from "components/UI/Buttons/Button";
-
-import MenuIcon from "components/SvgIcons/MenuIcon";
-import { useContextMenuContext } from "contexts/ContextMenuContext";
-import { foldersApi } from "services/foldersApi";
-import { getCookieValue } from "helpers/cookie";
-import { cookieKeys } from "types/cookie";
 
 interface ItemsListContextMenuProps {
 	currentFolderId: number;
@@ -35,9 +35,9 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 						close();
 					}}
 				>
-					<MenuIcon className="h-5 w-5" />
+					<CraeteFolderIcon className="h-5 w-5" />
 
-					<span>Create Folder</span>
+					<span>Create&nbsp;folder</span>
 				</Button>
 			</li>
 		</ContextMenuContainer>
