@@ -1,12 +1,15 @@
-import { useEffect } from "react";
-import { useAppDispatch } from "./hooks/useAppDispatch";
-import { getMe } from "./store/authSlice/reducers/getMe";
-import { axiosConfig } from "./core/Configs/Axios";
-import setLocalStorage from "./core/setLocalStorage";
-
-import Router from "./core/Router/Router";
+import { Fragment, useEffect } from "react";
+import Router from "core/Router/Router";
+import setLocalStorage from "core/setLocalStorage";
+import { axiosConfig } from "core/Configs/Axios";
+import { getMe } from "store/authSlice/reducers/getMe";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { useAppSelector } from "hooks/useAppSelector";
+import { FoldersHistoryContextProvider } from "contexts/FoldersHistoryContext";
+import { ContextMenuContextProvider } from "contexts/ContextMenuContext/Provider";
 
 const App = () => {
+	const user = useAppSelector((state) => state.auth.userData?.user);
 	const dispatch = useAppDispatch();
 
 	setLocalStorage();
@@ -16,7 +19,15 @@ const App = () => {
 		dispatch(getMe());
 	}, [dispatch]);
 
-	return <Router />;
+	return (
+		<Fragment key={user?.email}>
+			<ContextMenuContextProvider>
+				<FoldersHistoryContextProvider>
+					<Router />
+				</FoldersHistoryContextProvider>
+			</ContextMenuContextProvider>
+		</Fragment>
+	);
 };
 
 export default App;
