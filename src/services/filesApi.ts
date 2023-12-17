@@ -56,6 +56,19 @@ export const filesApi = emptySplitApi.injectEndpoints({
 			invalidatesTags: ["Files", "FavouriteFiles", "SharedFiles"],
 		}),
 
+		updateFile: build.mutation<UpdateFileResponse, UpdateFileBody>({
+			query: ({ token, ...body }) => ({
+				url: "/files",
+				method: "PUT",
+				body,
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+				timeout: 1000 * 30, // 30sec,
+			}),
+			invalidatesTags: ["Files", "FavouriteFiles", "SharedFiles"],
+		}),
+
 		deleteFile: build.mutation<DeleteFileResponse, DeleteFileParams>({
 			query: ({ ids, token }) => ({
 				url: "/files/delete",
@@ -224,6 +237,16 @@ interface UploadFileResponse extends FileDataWithSharedWith {}
 interface UploadFileBody {
 	folderId: number;
 	file: File;
+	token: string | undefined;
+}
+
+/* UpdateFile */
+
+type UpdateFileResponse = boolean;
+
+interface UpdateFileBody {
+	id: number;
+	newOriginalName: string;
 	token: string | undefined;
 }
 

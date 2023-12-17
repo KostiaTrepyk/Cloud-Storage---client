@@ -6,7 +6,7 @@ export const usersApi = emptySplitApi.injectEndpoints({
 		/* USERS */
 		getAllUsers: build.query<GetAllUsersRepsonse, GetAllUsersParams>({
 			query: ({ token, ...params }) => ({
-				url: "/allUsers",
+				url: "/users/allUsers",
 				params,
 				headers: {
 					Authorization: "Bearer " + token,

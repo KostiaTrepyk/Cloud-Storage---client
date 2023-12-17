@@ -1,14 +1,13 @@
 import { forwardRef, memo } from "react";
 import { getFileExtension } from "helpers/getFileExtension";
 import { FileDataWithSharedWith } from "services/filesApi";
-import { useContextMenuContext } from "contexts/ContextMenuContext";
 
-import FileContextMenu from "components/ContextMenus/FileContextMenu";
 import ItemContainer from "components/Lists/ItemsList/ItemContainer";
 import Image from "components/UI/Image";
 import FileSideButtons from "./FileSideButtons";
+import { twMerge } from "tailwind-merge";
 
-interface Props {
+interface FileListItemProps extends React.HTMLAttributes<HTMLLIElement> {
 	file: FileDataWithSharedWith;
 	checked?: boolean;
 	removeFilefromChecked: (file: FileDataWithSharedWith) => void;
@@ -17,7 +16,7 @@ interface Props {
 }
 
 const FileListItem = memo(
-	forwardRef<HTMLLIElement, Props>(
+	forwardRef<HTMLLIElement, FileListItemProps>(
 		(
 			{
 				file,
@@ -25,14 +24,13 @@ const FileListItem = memo(
 				addFileToChecked,
 				removeFilefromChecked,
 				showCheckIndicator = false,
+				...liAttrs
 			},
 			ref
 		) => {
 			const fileUrl = `http://localhost:5000/uploads/${file.filename}`;
 			const fileExtesion = getFileExtension(file.filename);
 			const fileType = file.mimetype.split("/")[0];
-
-			const { handleContextMenu } = useContextMenuContext();
 
 			function CheckedChangeHandler() {
 				if (!checked) addFileToChecked(file);
@@ -41,12 +39,10 @@ const FileListItem = memo(
 
 			return (
 				<ItemContainer
-					className="group/item"
+					{...liAttrs}
+					className={twMerge("group/item", liAttrs.className)}
 					checked={checked}
 					ref={ref}
-					onContextMenu={(e) =>
-						handleContextMenu(e, <FileContextMenu item={file} />)
-					}
 				>
 					<input
 						className={`absolute left-2 top-2 z-10 aspect-square h-4 cursor-pointer accent-rose-600 transition duration-[500ms] hover:opacity-100 focus-visible:opacity-100 group-hover/item:opacity-100

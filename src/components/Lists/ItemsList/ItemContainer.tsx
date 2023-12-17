@@ -1,20 +1,16 @@
-import { forwardRef } from "react"
-import { HTMLMotionProps, motion } from "framer-motion"
+import { HTMLAttributes, forwardRef } from "react"
 import { twMerge } from "tailwind-merge";
 
-interface ItemContainerProps extends HTMLMotionProps<"li"> {
+interface ItemContainerProps
+	extends HTMLAttributes<HTMLLIElement>,
+		React.PropsWithChildren {
 	checked?: boolean;
 }
 
 const ItemContainer = forwardRef<HTMLLIElement, ItemContainerProps>(
 	({ checked, children, ...liAttrs }, ref) => {
 		return (
-			<motion.li
-				initial={{
-					opacity: 0,
-				}}
-				animate={{ opacity: 1 }}
-				layout="position"
+			<li
 				{...liAttrs}
 				ref={ref}
 				className={twMerge(
@@ -25,7 +21,7 @@ const ItemContainer = forwardRef<HTMLLIElement, ItemContainerProps>(
 				)}
 			>
 				{children}
-			</motion.li>
+			</li>
 		);
 	}
 );

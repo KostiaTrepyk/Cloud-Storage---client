@@ -1,11 +1,10 @@
+import { twMerge } from "tailwind-merge";
 import { Folder } from "services/foldersApi";
-import { useContextMenuContext } from "contexts/ContextMenuContext";
 
 import { FolderIcon } from "components/SvgIcons/FolderIcon";
 import ItemContainer from "../ItemContainer";
-import FolderContextMenu from "../../../ContextMenus/FolderContextMenu";
 
-interface FolderListItemProps {
+interface FolderListItemProps extends React.HTMLAttributes<HTMLLIElement> {
 	item: Folder;
 	changeFolderId: (id: number) => void;
 	onDoubleClick: () => void;
@@ -18,15 +17,13 @@ interface FolderListItemProps {
 
 const FolderListItem: React.FC<FolderListItemProps> = ({
 	item,
-	changeFolderId,
 	onDoubleClick,
 	checked,
 	removeItemfromChecked,
 	addItemToChecked,
 	showCheckIndicator,
+	...liAttrs
 }) => {
-	const { handleContextMenu } = useContextMenuContext();
-
 	function CheckedChangeHandler() {
 		if (!checked) addItemToChecked(item);
 		else removeItemfromChecked(item);
@@ -34,22 +31,13 @@ const FolderListItem: React.FC<FolderListItemProps> = ({
 
 	return (
 		<ItemContainer
-			className="group/item"
+			{...liAttrs}
+			className={twMerge("group/item", liAttrs.className)}
 			checked={checked}
-			onContextMenu={(e) =>
-				handleContextMenu(
-					e,
-					<FolderContextMenu
-						key={item.id}
-						item={item}
-						changeFolderId={changeFolderId}
-					/>
-				)
-			}
 		>
 			<input
 				className={`absolute left-2 top-2 z-10 aspect-square h-4 cursor-pointer accent-rose-600 transition duration-[500ms] focus-visible:opacity-100 group-hover/item:opacity-100
-				${showCheckIndicator ? "opacity-1000" : "opacity-0"}`}
+				${showCheckIndicator ? "opacity-100" : "opacity-0"}`}
 				type="checkbox"
 				onChange={CheckedChangeHandler}
 				checked={checked}
