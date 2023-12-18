@@ -1,11 +1,11 @@
 import { forwardRef, memo } from "react";
+import { twMerge } from "tailwind-merge";
 import { getFileExtension } from "helpers/getFileExtension";
 import { FileDataWithSharedWith } from "services/filesApi";
 
 import ItemContainer from "components/Lists/ItemsList/ItemContainer";
 import Image from "components/UI/Image";
 import FileSideButtons from "./FileSideButtons";
-import { twMerge } from "tailwind-merge";
 
 interface FileListItemProps extends React.HTMLAttributes<HTMLLIElement> {
 	file: FileDataWithSharedWith;
@@ -69,8 +69,8 @@ const FileListItem = memo(
 						)}
 					</label>
 
-					<div className="mt-auto flex w-full select-text items-center justify-between border-t px-2 py-[0.15rem]">
-						<span className="line-clamp-1 grow text-center">
+					<div className="mt-auto w-full select-text border-t px-2 py-[0.15rem]">
+						<span className="line-clamp-1 text-center">
 							{file.originalname}
 						</span>
 					</div>

@@ -6,7 +6,6 @@ import ItemContainer from "../ItemContainer";
 
 interface FolderListItemProps extends React.HTMLAttributes<HTMLLIElement> {
 	item: Folder;
-	changeFolderId: (id: number) => void;
 	onDoubleClick: () => void;
 
 	checked?: boolean;
@@ -49,10 +48,8 @@ const FolderListItem: React.FC<FolderListItemProps> = ({
 				<FolderIcon className="scale-[0.5] text-neutral-600" />
 			</div>
 
-			<div className="mt-auto flex w-full select-text items-center justify-between gap-2 border-t px-2 py-[0.15rem]">
-				<span className="line-clamp-1 grow text-center">
-					{item.name}
-				</span>
+			<div className="mt-auto w-full select-text border-t px-2 py-[0.15rem]">
+				<span className="line-clamp-1 text-center">{item.name}</span>
 			</div>
 		</ItemContainer>
 	);
