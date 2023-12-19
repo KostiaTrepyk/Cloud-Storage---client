@@ -1,222 +1,209 @@
-import { useState, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
-import { useThrottle } from "../../hooks/useThrottle";
-import { useCheckedItems } from "../../hooks/useCheckedItems";
-import { filesApi } from "../../services/filesApi";
-import {
-	SortValue,
-	FileType,
-	FileDataWithSharedWith,
-} from "../../types/fileData";
-import { getCookieValue } from "../../helpers/cookie";
-import { cookieKeys } from "../../types/cookie";
-import { getLocalStorageValue } from "../../helpers/getLocalStorageValue";
-import { getDevice } from "../../helpers/getDevice";
+import { useMemo, useState } from "react";
+import { getCookieValue } from "helpers/cookie";
+import { Folder, foldersApi } from "services/foldersApi";
+import { cookieKeys } from "types/cookie";
+import { FileData, FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { useCheckedItems } from "hooks/useCheckedItems";
+import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
+import { useContextMenuContext } from "contexts/ContextMenuContext";
 
-import Private from "../Wrappers/Private";
-import ToolBar from "./components/ToolBar";
-import FileListItem from "../../components/Lists/FilesList/FileLisetItem/FileListItem";
-import FlexList from "../../components/UI/List/FlexList";
-import IconButton from "../../components/UI/Buttons/IconButton";
+import Private from "pages/Wrappers/Private";
 
-import LoadIcon from "../../components/SvgIcons/LoadIcon";
-import BackIcon from "../../components/SvgIcons/BackIcon";
-import Select from "../../components/UI/Select";
-
-const MLoadIcon = motion(LoadIcon);
-
-let limitFromLocalStorage = Number(
-	getLocalStorageValue(
-		"STORAGEPAGE_filesLimit",
-		getDevice() === "mobile" ? 25 : 50
-	)
-);
+import ToolBar from "components/ToolsBar/ToolBar";
+import ItemsList from "components/Lists/ItemsList/ItemsList";
+import FolderListItem from "components/Lists/ItemsList/FolderListItem/FolderListItem";
+import FileListItem from "components/Lists/ItemsList/FileLisetItem/FileListItem";
+import ItemsListContextMenu from "components/ContextMenus/ItemsListContextMenu";
+import FolderContextMenu from "components/ContextMenus/FolderContextMenu";
+import FileContextMenu from "components/ContextMenus/FileContextMenu";
+import Button from "components/UI/Buttons/Button";
+import Fade from "components/UI/Animations/Fade";
 
 const StoragePage = () => {
-	const [limit, setLimit] = useState<number>(limitFromLocalStorage);
-	const [page, setPage] = useState<number>(1);
-	const [search, setSearch] = useState<string>("");
-	const throttledSearch = useThrottle<string>(search, 800);
-	const [sort, setSort] = useState<SortValue>("NO");
-	const [filesType, setFilesType] =
-		useState<Exclude<FileType, "trash">>("all");
+	const { currentFolderId, historyNext } = useFoldersHistoryContext();
 
-	const queryData = useMemo(
-		() => ({
-			filesType,
-			search: throttledSearch || undefined,
-			sort,
-		}),
-		[filesType, throttledSearch, sort, limit]
-	);
+	const { handleContextMenu } = useContextMenuContext();
 
-	const fetchFilesStatus = filesApi.useGetAllFilesQuery({
-		...queryData,
-		limit,
-		page,
+	const [createFolder, createFolderData] =
+		foldersApi.useCreateFolderMutation();
+
+	const getFolderResponse = foldersApi.useGetFolderQuery({
+		folderId: currentFolderId,
 		token: getCookieValue(cookieKeys.TOKEN),
 	});
 
-	const files = useMemo(
-		() => fetchFilesStatus.data?.files || [],
-		[fetchFilesStatus.data]
-	);
+	const items: (Folder | FileDataWithSharedWith)[] = useMemo(() => {
+		const result = [
+			...(getFolderResponse.data?.files ?? []),
+			...(getFolderResponse.data?.folders ?? []),
+		];
+		return result;
+	}, [getFolderResponse.data]);
 
 	const {
-		checkedItems: checkedFiles,
-		clearChecked,
-		removeFromChecked,
-		addToChecked,
-	} = useCheckedItems<FileDataWithSharedWith>(files || []);
+		checkedItems,
+		addItemToChecked,
+		removeItemFromChecked,
+		clearCheckedItems,
+	} = useCheckedItems<FileData | Folder>(items);
 
-	const [, uploadFileStatus] = filesApi.useUploadFileMutation({
-		fixedCacheKey: "1",
-	});
-	const [, deleteFilesStatus] = filesApi.useDeleteFileMutation({
-		fixedCacheKey: "1",
-	});
-
-	useEffect(() => {
-		localStorage.setItem("STORAGEPAGE_filesLimit", JSON.stringify(limit));
-	}, [limit]);
-
-	useEffect(() => {
-		setPage(1);
-	}, [queryData, limit]);
-
-	/* Upload handler */
-	useEffect(() => {
-		if (uploadFileStatus.fulfilledTimeStamp) fetchFilesStatus.refetch();
-	}, [uploadFileStatus.fulfilledTimeStamp]);
-
-	/* Delete handler */
-	useEffect(() => {
-		if (deleteFilesStatus.fulfilledTimeStamp) fetchFilesStatus.refetch();
-	}, [deleteFilesStatus.fulfilledTimeStamp]);
-
-	function changeFilesType(newType: Exclude<FileType, "trash">) {
-		setFilesType(newType);
+	function folderDoubleClickHandler(folderId: number) {
+		historyNext(folderId);
 	}
 
-	if (fetchFilesStatus.isError) {
-		return (
-			<main className="relative grow bg-inherit px-2 pb-2">
-				<span className="my-4 block text-center text-2xl font-semibold text-red-600">
-					Error
-				</span>
-			</main>
-		);
-	}
+	const [draggingElement, setDraggingElement] = useState<{
+		type: "folder" | "file";
+		item: Folder | FileData;
+	}>();
+	const [updateFolder, updateFolderData] =
+		foldersApi.useUpdateFolderMutation();
+	const [updateFile, updateFileData] = filesApi.useUpdateFileMutation();
 
 	return (
-		<main className="relative flex grow flex-col bg-inherit px-2 pb-2">
+		<main className="grow px-2">
 			<ToolBar
-				search={search}
-				setSearch={setSearch}
-				sort={sort}
-				setSort={setSort}
-				checkedFiles={checkedFiles}
-				filesType={filesType}
-				changeFilesType={changeFilesType}
-				clearCheckedFiles={clearChecked}
-				files={files || []}
-				disabled={fetchFilesStatus.isFetching}
+				checkedItems={checkedItems}
+				clearCheckedItems={clearCheckedItems}
 			/>
 
 			<div
-				className={`sticky top-16 z-50 mx-auto aspect-square h-12 rounded-b-full bg-white bg-opacity-75 transition-opacity duration-500 ${
-					fetchFilesStatus.isFetching
-						? "visible opacity-100"
-						: "invisible opacity-0"
-				}`}
-			>
-				{fetchFilesStatus.isFetching && (
-					<div className="mx-auto aspect-square h-full p-2 font-semibold text-rose-600">
-						<MLoadIcon
-							initial={{ opacity: 0, scale: 0.5 }}
-							animate={{ opacity: 1, scale: 1 }}
-							spin
+				className="h-full w-full"
+				onContextMenu={(e) => {
+					handleContextMenu(
+						e,
+						<ItemsListContextMenu
+							currentFolderId={currentFolderId}
 						/>
-					</div>
-				)}
-			</div>
+					);
+				}}
+			>
+				<ItemsList
+					className="w-full pt-16"
+					currentFolderId={currentFolderId}
+				>
+					{getFolderResponse.data?.folders.length === 0 &&
+						getFolderResponse.data.files.length === 0 && (
+							<div className="flex w-full flex-col items-center gap-6 p-2">
+								<span className="text-2xl font-semibold text-rose-600">
+									Empty
+								</span>
 
-			{files.length > 0 && (
-				<>
-					<FlexList
-						gap={3}
-						wrap
-					>
-						{files.map((file) => (
-							<FileListItem
-								key={file.id}
-								file={file}
-								addFileToChecked={addToChecked}
-								removeFilefromChecked={removeFromChecked}
-								showCheckIndicator={checkedFiles.length > 0}
-								checked={checkedFiles.includes(file)}
-							/>
-						))}
-					</FlexList>
-
-					{/* Pagination */}
-					<motion.div
-						className="p-4 text-center"
-						layout="position"
-					>
-						<div>
-							<span className="text-lg">
-								{`Items: ${(page - 1) * limit + 1} - ${
-									fetchFilesStatus.data?.count! > page * limit
-										? page * limit
-										: fetchFilesStatus.data?.count
-								}. Limit: `}
-								<Select
-									options={[
-										{ id: 0, label: "10", value: "10" },
-										{ id: 1, label: "25", value: "25" },
-										{ id: 2, label: "50", value: "50" },
-										{ id: 3, label: "75", value: "75" },
-										{ id: 4, label: "100", value: "100" },
-									]}
-									value={limit}
-									onChange={(option) => {
-										option &&
-											setLimit(Number(option.value));
+								<Button
+									className="w-fit"
+									variant="contained"
+									color="rose"
+									onClick={() => {
+										createFolder({
+											parrentFolderId: currentFolderId,
+											folderName: "New Folder",
+											token: getCookieValue(
+												cookieKeys.TOKEN
+											),
+										});
 									}}
-								></Select>
-							</span>
-						</div>
+								>
+									Create new folder
+								</Button>
+							</div>
+						)}
 
-						<div className="mx-auto mt-1 flex h-10 w-fit gap-2">
-							<IconButton
-								onClick={() => setPage((prev) => prev - 1)}
-								disabled={
-									fetchFilesStatus.isFetching || page === 1
+					{getFolderResponse.data?.folders.map((folder) => (
+						<Fade key={folder.id}>
+							<FolderListItem
+								item={folder}
+								showCheckIndicator={Boolean(
+									checkedItems.length
+								)}
+								onDoubleClick={() =>
+									folderDoubleClickHandler(folder.id)
 								}
-							>
-								<BackIcon className="relative right-0.5" />
-							</IconButton>
-
-							<IconButton
-								onClick={() => setPage((prev) => prev + 1)}
-								disabled={
-									fetchFilesStatus.isFetching ||
-									fetchFilesStatus.data?.isLastPage
+								checked={checkedItems.includes(folder)}
+								addItemToChecked={() =>
+									addItemToChecked(folder)
 								}
-							>
-								<BackIcon className="relative left-0.5 rotate-180" />
-							</IconButton>
-						</div>
-					</motion.div>
-				</>
-			)}
+								removeItemfromChecked={() =>
+									removeItemFromChecked(folder)
+								}
+								draggable
+								onDragStart={() =>
+									setDraggingElement({
+										item: folder,
+										type: "folder",
+									})
+								}
+								onDragOver={(e) => e.preventDefault()}
+								onDrop={() => {
+									if (!draggingElement) return;
 
-			{fetchFilesStatus.isSuccess && files.length === 0 && (
-				<span className="my-4 block text-center text-2xl font-semibold text-red-600">
-					Files not found
-				</span>
-			)}
+									if (
+										draggingElement.type === "folder" &&
+										draggingElement.item.id !== folder.id
+									) {
+										updateFolder({
+											token: getCookieValue(
+												cookieKeys.TOKEN
+											),
+											folderId: draggingElement.item.id,
+											newParrentFolderId: folder.id,
+										});
+										return;
+									}
+
+									if (draggingElement.type === "file") {
+										updateFile({
+											token: getCookieValue(
+												cookieKeys.TOKEN
+											),
+											id: draggingElement.item.id,
+											newFolderId: folder.id,
+										});
+										return;
+									}
+								}}
+								onContextMenu={(e) =>
+									handleContextMenu(
+										e,
+										<FolderContextMenu
+											key={folder.id}
+											item={folder}
+											changeFolderId={historyNext}
+										/>
+									)
+								}
+							/>
+						</Fade>
+					))}
+
+					{getFolderResponse.data?.files.map((file) => (
+						<Fade key={file.id}>
+							<FileListItem
+								file={file}
+								showCheckIndicator={Boolean(
+									checkedItems.length
+								)}
+								checked={checkedItems.includes(file)}
+								addFileToChecked={() => addItemToChecked(file)}
+								removeFilefromChecked={() =>
+									removeItemFromChecked(file)
+								}
+								draggable
+								onDragStart={() =>
+									setDraggingElement({
+										type: "file",
+										item: file,
+									})
+								}
+								onContextMenu={(e) =>
+									handleContextMenu(
+										e,
+										<FileContextMenu item={file} />
+									)
+								}
+							/>
+						</Fade>
+					))}
+				</ItemsList>
+			</div>
 		</main>
 	);
 };
