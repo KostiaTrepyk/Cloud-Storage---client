@@ -1,40 +1,50 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { filesApi } from "../../../../services/filesApi";
-import { useStatus } from "../../../../hooks/useStatus";
-import { FileData } from "../../../../types/fileData";
-import { getCookieValue } from "../../../../helpers/cookie";
-import { cookieKeys } from "../../../../types/cookie";
-import { buttonVariants } from "./animations";
+import { useStatus } from "hooks/useStatus";
+import { getCookieValue } from "helpers/cookie";
+import { getFileExtension } from "helpers/getFileExtension";
+import { FileData, filesApi } from "services/filesApi";
+import { Folder } from "services/foldersApi";
+import { cookieKeys } from "types/cookie";
 
-import IconButton from "../../../../components/UI/Buttons/IconButton";
-
-import DownloadIcon from "../../../../components/SvgIcons/DownloadIcon";
-import ShareIcon from "../../../../components/SvgIcons/ShareIcon";
-import TrashIcon from "../../../../components/SvgIcons/TrashIcon";
-import CloseIcon from "../../../../components/SvgIcons/CloseIcon";
+import { buttonVariants } from "components/ToolsBar/animations";
+import CloseIcon from "components/SvgIcons/CloseIcon";
+import DownloadIcon from "components/SvgIcons/DownloadIcon";
+import ShareIcon from "components/SvgIcons/ShareIcon";
+import TrashIcon from "components/SvgIcons/TrashIcon";
+import IconButton from "components/UI/Buttons/IconButton";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
 
-interface Props {
-	files: FileData[] | undefined;
-	checkedFiles: FileData[];
-	clearCheckedFiles: () => void;
-
-	disabled?: boolean
+interface ToolBarActionProps {
+	checkedItems: (FileData | Folder)[];
+	clearCheckedItems: () => void;
+	disabled?: boolean;
 }
 
-const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabled }) => {
-	const [deleteFiles, __deleteStatus] = filesApi.useDeleteFileMutation(
-		{ fixedCacheKey: "1" }
-	);
+function isFile(item: FileData | Folder): item is FileData {
+	if ((item as FileData).filename === undefined) return false;
+
+	return true;
+}
+
+const ToolBarAction: FC<ToolBarActionProps> = ({
+	checkedItems,
+	clearCheckedItems,
+	disabled,
+}) => {
+	const [deleteFiles, __deleteStatus] = filesApi.useSoftDeleteFileMutation({
+		fixedCacheKey: "1",
+	});
 
 	const [deleteFilesStatus] = useStatus(__deleteStatus.status);
 
 	function downloadCheckedFiles() {
-		checkedFiles.forEach((file) => {
-			fetch("http://localhost:5000/uploads/" + file.filename, {
+		checkedItems.forEach((item) => {
+			if (!isFile(item)) return;
+
+			fetch("http://localhost:5000/uploads/" + item.filename, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/pdf",
@@ -46,7 +56,10 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabl
 
 					const link = document.createElement("a");
 					link.href = url;
-					link.download = file.originalname;
+					link.download =
+						item.originalname +
+						"." +
+						getFileExtension(item.filename);
 
 					document.body.appendChild(link);
 
@@ -56,13 +69,13 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabl
 				});
 		});
 
-		clearCheckedFiles();
+		clearCheckedItems();
 	}
 
 	function deleteCheckedFiles() {
 		let checkedFilesIds: number[] = [];
 
-		checkedFiles.forEach((file) => {
+		checkedItems.forEach((file) => {
 			checkedFilesIds.push(file.id);
 		});
 
@@ -70,6 +83,8 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabl
 			ids: checkedFilesIds,
 			token: getCookieValue(cookieKeys.TOKEN),
 		});
+
+		clearCheckedItems();
 	}
 
 	return (
@@ -80,7 +95,7 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabl
 				variants={buttonVariants}
 				custom={0}
 				title="Uncheck"
-				onClick={clearCheckedFiles}
+				onClick={clearCheckedItems}
 				disabled={disabled}
 			>
 				<CloseIcon />
@@ -128,4 +143,4 @@ const FileActions: FC<Props> = ({ files, checkedFiles, clearCheckedFiles, disabl
 	);
 };
 
-export default FileActions;
+export default ToolBarAction;

@@ -246,8 +246,9 @@ type UpdateFileResponse = boolean;
 
 interface UpdateFileBody {
 	id: number;
-	newOriginalName: string;
+	newOriginalName?: string;
 	token: string | undefined;
+	newFolderId?: number;
 }
 
 /* SoftDeleteFile */
