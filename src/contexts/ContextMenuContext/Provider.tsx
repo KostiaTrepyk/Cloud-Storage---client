@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import useKeyPress from "hooks/useKeyPress";
 import ContextMenuContext from ".";
 
 export const ContextMenuContextProvider: React.FC<React.PropsWithChildren> = ({
@@ -15,6 +16,11 @@ export const ContextMenuContextProvider: React.FC<React.PropsWithChildren> = ({
 		y: coords.y,
 	});
 	const [contextMenuElement, setContextMenuElement] = useState<JSX.Element>();
+	const isEscPressed = useKeyPress("Escape");
+
+	useEffect(() => {
+		if (isEscPressed && showMenu) setShowMenu(false);
+	}, [isEscPressed, showMenu]);
 
 	const ref = useRef<any>(null);
 

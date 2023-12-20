@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from "react";
-import { FileDataWithSharedWith } from "../types/fileData";
-import { getCookieValue } from "../helpers/cookie";
-import { usersApi } from "../services/usersApi";
-import { filesApi } from "../services/filesApi";
-import { cookieKeys } from "../types/cookie";
-import { UserDataWithSharedFiles } from "../types/user";
+import { getCookieValue } from "helpers/cookie";
+import { usersApi } from "services/usersApi";
+import { FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { cookieKeys } from "types/cookie";
+import { UserDataWithSharedFiles } from "types/user";
 
 import Modal from "./UI/Modal";
 import Image from "./UI/Image";
@@ -69,7 +68,7 @@ const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 							className="flex h-10"
 							key={user.id}
 						>
-							<div className="flex h-full w-full items-center gap-2 rounded-l bg-neutral-100 transition hover:bg-neutral-200">
+							<div className="flex w-full items-center gap-2 rounded-l bg-neutral-100 transition hover:bg-neutral-200">
 								<Image imgAttrs={{ src: "./fake.jpg" }} />
 								<span>{user.fullName}</span>
 							</div>
