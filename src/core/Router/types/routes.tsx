@@ -2,12 +2,12 @@ import { RouteObject } from "react-router-dom";
 import { generateId } from "../helpers/generateId";
 
 // pages
-import HomePage from "../../../pages/HomePage/HomePage";
-import StoragePage from "../../../pages/StoragePage/StoragePage";
-import ProfilePage from "../../../pages/ProfilePage/ProfilePage";
-import AuthPage from "../../../pages/AuthPage/AuthPage";
-import PageNotFound from "../../../pages/PageNotFound/PageNotFound";
-import TrashPage from "../../../pages/TrashPage/TrashPage";
+import HomePage from "pages/HomePage/HomePage";
+import StoragePage from "pages/StoragePage/StoragePage";
+import ProfilePage from "pages/ProfilePage/ProfilePage";
+import AuthPage from "pages/AuthPage/AuthPage";
+import PageNotFound from "pages/PageNotFound/PageNotFound";
+import TrashPage from "pages/TrashPage/TrashPage";
 
 export const RootPathnames = {
 	HOME: "/",

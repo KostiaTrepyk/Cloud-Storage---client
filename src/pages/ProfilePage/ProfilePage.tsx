@@ -19,7 +19,8 @@ const ProfilePage = () => {
 
 	const userData = useAppSelector((state) => state.auth.userData);
 
-	const userTotalFileSize = userData?.statistic.totalFileSize! / 1024 / 1024; /* MB */
+	const userTotalFileSize =
+		userData?.statistic.totalFileSize! / 1024 / 1024; /* MB */
 	const maxTotalFileSize = 100; /* MB */
 	const totalSizePercentage = Number(
 		((userTotalFileSize / maxTotalFileSize) * 100).toFixed(1)
@@ -94,6 +95,7 @@ const ProfilePage = () => {
 				<div className="flex h-10 justify-end gap-2">
 					<IconButton
 						onClick={switchAccountBtnHandler}
+						variant="outlined"
 						title="Switch account"
 					>
 						<SwitchAccountIcon />
@@ -101,6 +103,7 @@ const ProfilePage = () => {
 
 					<IconButton
 						onClick={logoutBtnHandler}
+						variant="outlined"
 						title="Log out"
 					>
 						<LogoutIcon />

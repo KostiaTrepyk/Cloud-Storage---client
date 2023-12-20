@@ -1,4 +1,4 @@
-import { SearchParamsEnum } from "../types/searchParamsEnum";
+import { SearchParamsEnum } from "types/searchParamsEnum";
 import { searchParamsFromObj } from "./searchParamsFromObj";
 import { searchParamsToObj } from "./searchParamsToObj";
 

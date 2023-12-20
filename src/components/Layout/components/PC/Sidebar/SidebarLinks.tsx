@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, RouteObject } from "react-router-dom";
-import { usePathname } from "../../../../../hooks/usePathname";
+import { usePathname } from "hooks/usePathname";
 
 interface Props {
 	routes: (RouteObject & { label: string; icon: JSX.Element })[];

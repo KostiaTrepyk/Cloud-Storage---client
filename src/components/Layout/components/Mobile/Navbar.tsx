@@ -4,13 +4,13 @@ import {
 	HOMEROUTE,
 	STORAGEROUTE,
 	PROFILEROUTE,
-} from "../../../../core/Router/types/routes";
-import { usePathname } from "../../../../hooks/usePathname";
+} from "core/Router/types/routes";
+import { usePathname } from "hooks/usePathname";
 
 // Icons
-import HomeIcon from "../../../SvgIcons/HomeIcon";
-import StorageIcon from "../../../SvgIcons/StorageIcon";
-import ProfileIcon from "../../../SvgIcons/Dynamic/ProfileIcon";
+import HomeIcon from "components/SvgIcons/HomeIcon";
+import StorageIcon from "components/SvgIcons/StorageIcon";
+import ProfileIcon from "components/SvgIcons/Dynamic/ProfileIcon";
 
 const routes = [
 	{

@@ -4,7 +4,7 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 // Reducers
 import AuthReducer from "./authSlice/authSlice";
 
-import { emptySplitApi } from "../services/emptySplitApi";
+import { emptySplitApi } from "services/emptySplitApi";
 
 export const store = configureStore({
 	reducer: {

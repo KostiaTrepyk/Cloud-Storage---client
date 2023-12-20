@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Folder, foldersApi } from "services/foldersApi";
+import { foldersApi } from "services/foldersApi";
 import { getCookieValue } from "helpers/cookie";
-import { cookieKeys } from "types/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
+import { Folder } from "services/types";
+import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button";
 

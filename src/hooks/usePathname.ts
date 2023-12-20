@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { searchParamsToObj } from "../helpers/searchParamsToObj";
-import { SearchParamsEnum } from "../types/searchParamsEnum";
-import { RootPathnames, RoutesPathnames } from "../core/Router/types/routes";
+import { searchParamsToObj } from "helpers/searchParamsToObj";
+import { SearchParamsEnum } from "types/searchParamsEnum";
+import { RootPathnames, RoutesPathnames } from "core/Router/types/routes";
 
 export function usePathname() {
 	const location = useLocation();

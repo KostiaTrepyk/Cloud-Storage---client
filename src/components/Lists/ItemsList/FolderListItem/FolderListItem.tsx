@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { Folder } from "services/foldersApi";
+import { Folder } from "services/types";
 
 import { FolderIcon } from "components/SvgIcons/FolderIcon";
 import ItemContainer from "../ItemContainer";

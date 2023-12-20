@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { HOMEROUTE } from "../../../../../core/Router/types/routes";
+import { HOMEROUTE } from "core/Router/types/routes";
 
 // Icons
-import Logo from "../../../../../assets/Logo.webp";
+import Logo from "assets/Logo.webp";
 
 const Header = () => {
 	return (

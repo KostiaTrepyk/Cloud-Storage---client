@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
-import { FileDataWithSharedWith, filesApi } from "services/filesApi";
 import { getCookieValue } from "helpers/cookie";
+import { filesApi } from "services/filesApi";
+import { FileDataWithSharedWith } from "services/types";
 import { cookieKeys } from "types/cookie";
 
 import IconButton from "components/UI/Buttons/IconButton";

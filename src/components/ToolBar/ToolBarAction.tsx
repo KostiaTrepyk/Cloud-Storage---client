@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import { useStatus } from "hooks/useStatus";
 import { getCookieValue } from "helpers/cookie";
 import { getFileExtension } from "helpers/getFileExtension";
-import { FileData, filesApi } from "services/filesApi";
-import { Folder } from "services/foldersApi";
 import { cookieKeys } from "types/cookie";
+import { filesApi } from "services/filesApi";
+import { FileData, Folder } from "services/types";
 
-import { buttonVariants } from "components/ToolsBar/animations";
+import { buttonVariants } from "components/ToolBar/animations";
 import CloseIcon from "components/SvgIcons/CloseIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";

@@ -1,9 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import { getCookieValue } from "helpers/cookie";
 import { usersApi } from "services/usersApi";
-import { FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { filesApi } from "services/filesApi";
+import {
+	FileDataWithSharedWith,
+	UserDataWithSharedFiles,
+} from "services/types";
 import { cookieKeys } from "types/cookie";
-import { UserDataWithSharedFiles } from "types/user";
 
 import Modal from "./UI/Modal";
 import Image from "./UI/Image";

@@ -1,4 +1,4 @@
-import { cookieKeys } from "../types/cookie";
+import { cookieKeys } from "types/cookie";
 
 /**
  * @returns Returns the cookie in the object.

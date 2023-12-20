@@ -3,15 +3,15 @@ import {
 	HOMEROUTE,
 	PROFILEROUTE,
 	STORAGEROUTE,
-} from "../../../../../core/Router/types/routes";
+} from "core/Router/types/routes";
 import { Link } from "react-router-dom";
 
 import SidebarLinks from "./SidebarLinks";
 
-import Logo from "../../../../../assets/Logo.webp";
-import HomeIcon from "../../../../SvgIcons/HomeIcon";
-import StorageIcon from "../../../../SvgIcons/StorageIcon";
-import ProfileIcon from "../../../../SvgIcons/Dynamic/ProfileIcon";
+import Logo from "assets/Logo.webp";
+import HomeIcon from "components/SvgIcons/HomeIcon";
+import StorageIcon from "components/SvgIcons/StorageIcon";
+import ProfileIcon from "components/SvgIcons/Dynamic/ProfileIcon";
 
 const Sidebar: FC = () => {
 	const routes = [

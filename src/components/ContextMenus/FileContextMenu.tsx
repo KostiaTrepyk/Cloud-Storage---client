@@ -2,7 +2,8 @@ import { useState } from "react";
 import { getFileExtension } from "helpers/getFileExtension";
 import { getCookieValue } from "helpers/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
-import { FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { filesApi } from "services/filesApi";
+import { FileDataWithSharedWith } from "services/types";
 import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button";

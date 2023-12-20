@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 import { signIn } from "./reducers/signIn";
-import { UserStatistic } from "../../types/user";
 import { getMe } from "./reducers/getMe";
 import { signUp } from "./reducers/signUp";
-import { deleteCookieByName } from "../../helpers/cookie";
-import { cookieKeys } from "../../types/cookie";
+import { deleteCookieByName } from "helpers/cookie";
+import { UserStatistic } from "services/types";
+import { cookieKeys } from "types/cookie";
 
 interface InitialState {
 	userData: UserStatistic | null;

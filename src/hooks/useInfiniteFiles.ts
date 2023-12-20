@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SortValue } from "types/fileData";
-import { cookieKeys } from "types/cookie";
-import { FileDataWithSharedWith, filesApi } from "services/filesApi";
 import { getCookieValue } from "helpers/cookie";
+import { filesApi } from "services/filesApi";
+import { FileDataWithSharedWith, SortValue } from "services/types";
+import { cookieKeys } from "types/cookie";
 
 export interface GetFilesQuery {
 	filesType: "all" | "photos" | "applications";

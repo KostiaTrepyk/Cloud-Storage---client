@@ -1,7 +1,7 @@
 import { forwardRef, memo } from "react";
 import { twMerge } from "tailwind-merge";
 import { getFileExtension } from "helpers/getFileExtension";
-import { FileDataWithSharedWith } from "services/filesApi";
+import { FileDataWithSharedWith } from "services/types";
 
 import ItemContainer from "components/Lists/ItemsList/ItemContainer";
 import Image from "components/UI/Image";

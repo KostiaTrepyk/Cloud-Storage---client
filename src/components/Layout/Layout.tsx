@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { getDevice } from "../../helpers/getDevice";
+import { getDevice } from "helpers/getDevice";
 
 import LayoutMobile from "./LayoutMobile";
 import LayoutPC from "./LayoutPC";

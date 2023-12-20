@@ -1,6 +1,5 @@
-import { UserData } from "types/user";
 import { emptySplitApi } from "./emptySplitApi";
-import { FileType, SortValue } from "types/fileData";
+import { FileDataWithSharedWith, FileType, SortValue } from "./types";
 
 export const filesApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -194,22 +193,6 @@ export const filesApi = emptySplitApi.injectEndpoints({
 	}),
 	overrideExisting: false,
 });
-
-export interface FileData {
-	id: number;
-	filename: string;
-	originalname: string;
-	size: number;
-	mimetype: string;
-	isFavourite: boolean;
-	deletedAt: Date | null;
-	createdAt: Date;
-	owner: UserData;
-}
-
-export interface FileDataWithSharedWith extends FileData {
-	sharedWith: UserData[];
-}
 
 /* GetAllFiles */
 

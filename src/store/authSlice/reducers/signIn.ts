@@ -1,9 +1,9 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { setCookie } from "../../../helpers/cookie";
+import { setCookie } from "helpers/cookie";
 import { getMe } from "./getMe";
-import { RootState } from "../../store";
-import { cookieKeys } from "../../../types/cookie";
+import { RootState } from "store/store";
+import { cookieKeys } from "types/cookie";
 
 export interface SignInArg {
 	email: string;

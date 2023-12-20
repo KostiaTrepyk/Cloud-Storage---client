@@ -1,15 +1,16 @@
 import { useMemo, useState } from "react";
 import { getCookieValue } from "helpers/cookie";
-import { Folder, foldersApi } from "services/foldersApi";
+import { foldersApi } from "services/foldersApi";
 import { cookieKeys } from "types/cookie";
-import { FileData, FileDataWithSharedWith, filesApi } from "services/filesApi";
+import { filesApi } from "services/filesApi";
 import { useCheckedItems } from "hooks/useCheckedItems";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
+import { Folder, FileDataWithSharedWith, FileData } from "services/types";
 
 import Private from "pages/Wrappers/Private";
 
-import ToolBar from "components/ToolsBar/ToolBar";
+import ToolBar from "components/ToolBar/ToolBar";
 import ItemsList from "components/Lists/ItemsList/ItemsList";
 import FolderListItem from "components/Lists/ItemsList/FolderListItem/FolderListItem";
 import FileListItem from "components/Lists/ItemsList/FileLisetItem/FileListItem";

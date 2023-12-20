@@ -1,4 +1,4 @@
-import { Device } from "../types/localStorage";
+import { Device } from "types/localStorage";
 
 export function getDevice(): Device {
 	const toMatch = [

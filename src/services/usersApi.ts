@@ -1,5 +1,5 @@
 import { emptySplitApi } from "./emptySplitApi";
-import { UserDataWithSharedFiles } from "types/user";
+import { UserDataWithSharedFiles } from "./types";
 
 export const usersApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({

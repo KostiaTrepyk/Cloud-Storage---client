@@ -8,7 +8,7 @@ import { cookieKeys } from "types/cookie";
 import IconButton from "components/UI/Buttons/IconButton";
 import UploadButton from "components/UploadButton";
 import BackIcon from "components/SvgIcons/BackIcon";
-import { buttonVariants } from "components/ToolsBar/animations";
+import { buttonVariants } from "components/ToolBar/animations";
 
 const MIconButton = motion(IconButton);
 const MUploadButton = motion(UploadButton);
