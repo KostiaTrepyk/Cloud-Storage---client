@@ -196,14 +196,14 @@ export const filesApi = emptySplitApi.injectEndpoints({
 
 /* GetAllFiles */
 
-interface GetAllFilesResponse {
+export interface GetAllFilesResponse {
 	files: FileDataWithSharedWith[];
 	count: number;
 	isLastPage: boolean;
 	page: number;
 }
 
-interface GetAllFilesParams {
+export interface GetAllFilesParams {
 	filesType?: FileType;
 	page?: number;
 	limit?: number;
@@ -215,9 +215,9 @@ interface GetAllFilesParams {
 
 /* UploadFile */
 
-interface UploadFileResponse extends FileDataWithSharedWith {}
+export interface UploadFileResponse extends FileDataWithSharedWith {}
 
-interface UploadFileBody {
+export interface UploadFileBody {
 	folderId: number;
 	file: File;
 	token: string | undefined;
@@ -225,9 +225,9 @@ interface UploadFileBody {
 
 /* UpdateFile */
 
-type UpdateFileResponse = boolean;
+export type UpdateFileResponse = boolean;
 
-interface UpdateFileBody {
+export interface UpdateFileBody {
 	id: number;
 	newOriginalName?: string;
 	token: string | undefined;
@@ -236,18 +236,18 @@ interface UpdateFileBody {
 
 /* SoftDeleteFile */
 
-type SoftDeleteFileResponse = boolean;
+export type SoftDeleteFileResponse = boolean;
 
-interface SoftDeleteFileBody {
+export interface SoftDeleteFileBody {
 	ids: number[];
 	token: string | undefined;
 }
 
 /* deleteFile */
 
-type DeleteFileResponse = boolean;
+export type DeleteFileResponse = boolean;
 
-interface DeleteFileParams {
+export interface DeleteFileParams {
 	ids: number[];
 	token: string | undefined;
 }

@@ -15,7 +15,7 @@ const ItemsList: React.FC<ItemsListProps> = ({
 		<ul
 			{...ulAttrs}
 			className={twMerge(
-				"flex flex-wrap justify-center gap-2 sm:justify-normal",
+				"flex flex-wrap gap-2 p-2",
 				ulAttrs.className
 			)}
 		>

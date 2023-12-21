@@ -20,14 +20,14 @@ export const usersApi = emptySplitApi.injectEndpoints({
 
 /* getAllUsers */
 
-interface GetAllUsersRepsonse {
+export interface GetAllUsersRepsonse {
 	page: number;
 	count: number;
 	isLastPage: boolean;
 	users: UserDataWithSharedFiles[];
 }
 
-interface GetAllUsersParams {
+export interface GetAllUsersParams {
 	orderBy?: "SharedWith" | "Creation";
 	orderValue?: "ASC" | "DESC";
 	page?: number;

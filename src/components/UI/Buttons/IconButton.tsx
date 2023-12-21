@@ -48,7 +48,9 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					`relative aspect-square h-full overflow-hidden rounded-full border duration-300 ${colorVariants[variant][color]}`,
+					`relative aspect-square h-full overflow-hidden rounded-full duration-300 ${colorVariants[variant][color]}`,
+
+					variant === "outlined" ? "border" : "",
 
 					buttonAtributes.disabled && "contrast-75",
 					buttonAtributes.className

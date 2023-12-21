@@ -6,6 +6,7 @@ import styles from "./Ripple.module.css";
 type RippleColor = Color | "white";
 
 const Colors: Record<RippleColor, string> = {
+	light: "bg-neutral-400",
 	white: "bg-white",
 	amber: "bg-amber-600",
 	lime: "bg-lime-600",

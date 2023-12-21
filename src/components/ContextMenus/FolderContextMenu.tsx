@@ -27,9 +27,9 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 	const [itemName, setItemName] = useState<string>(item.name);
 	const { close } = useContextMenuContext();
 
-	const [updateFolder, updateFolderData] =
+	const [updateFolder, updateFolderResponse] =
 		foldersApi.useUpdateFolderMutation();
-	const [deleteFolder, deleteFolderData] =
+	const [deleteFolder, deleteFolderResponse] =
 		foldersApi.useDeleteFolderMutation();
 
 	return (

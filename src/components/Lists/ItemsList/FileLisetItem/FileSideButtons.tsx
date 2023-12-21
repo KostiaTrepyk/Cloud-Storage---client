@@ -52,6 +52,8 @@ const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 						? "visible opacity-100"
 						: "invisible opacity-0"
 				}`}
+				color="light"
+				variant="contained"
 				status={
 					addToFavoriteStatus.status === "pending" ||
 					removeFromFavoriteStatus.status === "pending"
@@ -71,6 +73,8 @@ const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 						? "visible opacity-100"
 						: "invisible opacity-0"
 				}`}
+				color="light"
+				variant="contained"
 				onClick={openModal}
 			>
 				<ShareIcon filled={file.sharedWith.length > 0} />

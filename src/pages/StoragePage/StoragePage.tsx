@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { getCookieValue } from "helpers/cookie";
-import { foldersApi } from "services/foldersApi";
-import { cookieKeys } from "types/cookie";
-import { filesApi } from "services/filesApi";
 import { useCheckedItems } from "hooks/useCheckedItems";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
+import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
+import { foldersApi } from "services/foldersApi";
+import { filesApi } from "services/filesApi";
 import { Folder, FileDataWithSharedWith, FileData } from "services/types";
+import { cookieKeys } from "types/cookie";
 
 import Private from "pages/Wrappers/Private";
 
@@ -19,19 +21,32 @@ import FolderContextMenu from "components/ContextMenus/FolderContextMenu";
 import FileContextMenu from "components/ContextMenus/FileContextMenu";
 import Button from "components/UI/Buttons/Button";
 import Fade from "components/UI/Animations/Fade";
+import LoadIcon from "components/SvgIcons/LoadIcon";
+import IconButton from "components/UI/Buttons/IconButton";
+import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
+import AddFileIcon from "components/SvgIcons/AddFileIcon";
+import AddItem from "components/Lists/ItemsList/AddItem";
 
 const StoragePage = () => {
+	const [draggingElement, setDraggingElement] = useState<{
+		type: "folder" | "file";
+		item: Folder | FileData;
+	}>();
+
 	const { currentFolderId, historyNext } = useFoldersHistoryContext();
-
 	const { handleContextMenu } = useContextMenuContext();
-
-	const [createFolder, createFolderData] =
-		foldersApi.useCreateFolderMutation();
 
 	const getFolderResponse = foldersApi.useGetFolderQuery({
 		folderId: currentFolderId,
 		token: getCookieValue(cookieKeys.TOKEN),
 	});
+
+	const [createFolder, createFolderResponse] =
+		foldersApi.useCreateFolderMutation();
+	const [uploadFile, uploadFileResponse] = filesApi.useUploadFileMutation();
+	const [updateFolder, updateFolderResponse] =
+		foldersApi.useUpdateFolderMutation();
+	const [updateFile, updateFileResponse] = filesApi.useUpdateFileMutation();
 
 	const items: (Folder | FileDataWithSharedWith)[] = useMemo(() => {
 		const result = [
@@ -40,6 +55,21 @@ const StoragePage = () => {
 		];
 		return result;
 	}, [getFolderResponse.data]);
+
+	const isLoading: boolean = useMemo(() => {
+		return (
+			getFolderResponse.isFetching ||
+			createFolderResponse.isLoading ||
+			uploadFileResponse.isLoading ||
+			updateFolderResponse.isLoading ||
+			updateFileResponse.isLoading
+		);
+	}, [
+		getFolderResponse,
+		createFolderResponse,
+		updateFolderResponse,
+		updateFileResponse,
+	]);
 
 	const {
 		checkedItems,
@@ -52,23 +82,15 @@ const StoragePage = () => {
 		historyNext(folderId);
 	}
 
-	const [draggingElement, setDraggingElement] = useState<{
-		type: "folder" | "file";
-		item: Folder | FileData;
-	}>();
-	const [updateFolder, updateFolderData] =
-		foldersApi.useUpdateFolderMutation();
-	const [updateFile, updateFileData] = filesApi.useUpdateFileMutation();
-
 	return (
-		<main className="grow px-2">
+		<main className="relative grow px-2">
 			<ToolBar
 				checkedItems={checkedItems}
 				clearCheckedItems={clearCheckedItems}
 			/>
 
 			<div
-				className="h-full w-full"
+				className="h-full w-full pt-4 sm:pt-16"
 				onContextMenu={(e) => {
 					handleContextMenu(
 						e,
@@ -79,7 +101,7 @@ const StoragePage = () => {
 				}}
 			>
 				<ItemsList
-					className="w-full pt-16"
+					className="w-full"
 					currentFolderId={currentFolderId}
 				>
 					{getFolderResponse.data?.folders.length === 0 &&
@@ -203,8 +225,30 @@ const StoragePage = () => {
 							/>
 						</Fade>
 					))}
+
+					{Boolean(items.length) && (
+						<AddItem
+							createFolder={createFolder}
+							uploadFile={uploadFile}
+							folderId={currentFolderId}
+						/>
+					)}
 				</ItemsList>
 			</div>
+
+			{/* Loader */}
+			{isLoading && (
+				<motion.div
+					className="absolute left-[50%] top-16 z-10 aspect-square h-10 -translate-x-1/2 rounded-full bg-white p-1.5"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+				>
+					<LoadIcon
+						className="h-full"
+						spin
+					/>
+				</motion.div>
+			)}
 		</main>
 	);
 };
