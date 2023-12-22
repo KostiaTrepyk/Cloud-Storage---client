@@ -54,7 +54,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 				{mode === "rename" ? (
 					<form className="flex">
 						<IconButton
-							className="h-8 w-8 rounded-none rounded-l border-r-0"
+							className="h-8 w-8 rounded-none rounded-l border border-r-0"
 							variant="contained"
 							color="neutral"
 							type="button"
@@ -74,7 +74,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 						/>
 
 						<IconButton
-							className="h-8 w-8 rounded-none rounded-r border-l-0"
+							className="h-8 w-8 rounded-none rounded-r border border-l-0"
 							variant="contained"
 							color="neutral"
 							type="submit"

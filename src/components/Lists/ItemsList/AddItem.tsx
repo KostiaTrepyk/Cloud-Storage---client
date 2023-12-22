@@ -21,7 +21,7 @@ const AddItem: React.FC<AddItemProps> = ({
 	return (
 		<div className="group/item flex flex-col items-center justify-center gap-2 px-8 py-2">
 			<IconButton
-				className="h-9 opacity-0 duration-100 group-hover/item:opacity-100 group-hover/item:transition group-hover/item:duration-500"
+				className="h-9 opacity-0 duration-100 group-focus-within/item:opacity-100 group-hover/item:opacity-100 group-hover/item:transition group-hover/item:duration-500"
 				variant="contained"
 				color="rose"
 				onClick={() => {
@@ -36,7 +36,7 @@ const AddItem: React.FC<AddItemProps> = ({
 			</IconButton>
 
 			<IconButton
-				className="h-9 opacity-0 duration-200 group-hover/item:opacity-100 group-hover/item:transition group-hover/item:duration-500"
+				className="h-9 opacity-0 duration-200 group-focus-within/item:opacity-100 group-hover/item:opacity-100 group-hover/item:transition group-hover/item:duration-500"
 				variant="contained"
 				color="rose"
 				onClick={() => {
