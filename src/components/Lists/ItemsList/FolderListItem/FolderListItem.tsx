@@ -3,6 +3,7 @@ import { Folder } from "services/types";
 
 import { FolderIcon } from "components/SvgIcons/FolderIcon";
 import ItemContainer from "../ItemContainer";
+import FolderSideButtons from "./FolderSideButtons";
 
 interface FolderListItemProps extends React.HTMLAttributes<HTMLLIElement> {
 	item: Folder;
@@ -51,6 +52,8 @@ const FolderListItem: React.FC<FolderListItemProps> = ({
 			<div className="mt-auto w-full select-text border-t px-2 py-[0.15rem]">
 				<span className="line-clamp-1 text-center">{item.name}</span>
 			</div>
+
+			<FolderSideButtons folderId={item.id} />
 		</ItemContainer>
 	);
 };
