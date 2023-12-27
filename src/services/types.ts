@@ -8,11 +8,7 @@ export interface UserData {
 	createdAt: string;
 }
 
-export interface UserDataWithSharedFiles {
-	id: number;
-	fullName: string;
-	email: string;
-	createdAt: string;
+export interface UserDataWithSharedFiles extends UserData {
 	sharedFiles: FileData[];
 }
 
@@ -25,7 +21,14 @@ export interface UserStatistic {
 	};
 }
 
-export interface Folder {
+export interface StorageData {
+	id: number;
+	name: string;
+	createdAt: string;
+	size: number;
+}
+
+export interface FolderData {
 	id: number;
 	name: string;
 	createdAt: string;
@@ -41,7 +44,6 @@ export interface FileData {
 	isFavourite: boolean;
 	deletedAt: Date | null;
 	createdAt: Date;
-	owner: UserData;
 }
 
 export interface FileDataWithSharedWith extends FileData {

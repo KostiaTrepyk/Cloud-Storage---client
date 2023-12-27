@@ -21,6 +21,7 @@ export const filesApi = emptySplitApi.injectEndpoints({
 
 				const formData = new FormData();
 				formData.append("file", body.file);
+				formData.append("storageId", String(body.storageId));
 				formData.append("folderId", String(body.folderId));
 
 				return {
@@ -218,7 +219,8 @@ export interface GetAllFilesParams {
 export interface UploadFileResponse extends FileDataWithSharedWith {}
 
 export interface UploadFileBody {
-	folderId: number;
+	storageId: number;
+	folderId?: number;
 	file: File;
 	token: string | undefined;
 }

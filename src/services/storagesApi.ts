@@ -3,7 +3,7 @@ import { StorageData } from "./types";
 
 export const storagesApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
-		getFolder: build.query<getStoragesAllResponse, getStoragesAllBody>({
+		getStorages: build.query<getStoragesAllResponse, getStoragesAllBody>({
 			query: ({ token, ...params }) => ({
 				url: "/storages/all",
 				method: "GET",
@@ -16,7 +16,7 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 			providesTags: ["Storages"],
 		}),
 
-		createFolder: build.mutation<createStorageResponse, createStorageBody>({
+		createStorage: build.mutation<createStorageResponse, createStorageBody>({
 			query: ({ token, ...body }) => ({
 				url: "/storages/create",
 				method: "POST",
@@ -29,7 +29,7 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 			invalidatesTags: ["Storages"],
 		}),
 
-		updateFolder: build.mutation<updateFolderResponse, updateStorageBody>({
+		updateStorage: build.mutation<updateFolderResponse, updateStorageBody>({
 			query: ({ token, ...body }) => ({
 				url: "/storages/update",
 				method: "PUT",
@@ -42,7 +42,7 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 			invalidatesTags: ["Storages"],
 		}),
 
-		deleteFolder: build.mutation<deleteStorageResponse, deleteStorageBody>({
+		deleteStorage: build.mutation<deleteStorageResponse, deleteStorageBody>({
 			query: ({ token, ...body }) => ({
 				url: "/storages/delete",
 				method: "DELETE",

@@ -6,6 +6,13 @@ export const emptySplitApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:5000",
 	}),
-	tagTypes: ["Files", "FavouriteFiles", "SharedFiles", "Users", "Folders"],
+	tagTypes: [
+		"Storages",
+		"Files",
+		"FavouriteFiles",
+		"SharedFiles",
+		"Users",
+		"Folders",
+	],
 	endpoints: () => ({}),
 });
