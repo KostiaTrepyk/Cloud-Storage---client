@@ -16,9 +16,6 @@ export const filesApi = emptySplitApi.injectEndpoints({
 
 		uploadFile: build.mutation<UploadFileResponse, UploadFileBody>({
 			query: ({ token, ...body }) => {
-				if (!body.file || body.file.size > 5242880)
-					throw new Error("error"); /* 5MB */
-
 				const formData = new FormData();
 				formData.append("file", body.file);
 				formData.append("storageId", String(body.storageId));

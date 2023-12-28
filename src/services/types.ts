@@ -28,6 +28,10 @@ export interface StorageData {
 	size: number;
 }
 
+export interface StorageDataWithRemainingSpace extends StorageData {
+	remainingSpace: number;
+}
+
 export interface FolderData {
 	id: number;
 	name: string;
