@@ -1,36 +1,20 @@
 import AddFileIcon from "components/SvgIcons/AddFileIcon";
 import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import IconButton from "components/UI/Buttons/IconButton";
-import { getCookieValue } from "helpers/cookie";
-import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
-import { UploadFileBody } from "services/filesApi";
-import { createFolderBody } from "services/foldersApi";
-import { cookieKeys } from "types/cookie";
 
 interface AddItemProps {
-	createFolder: (data: createFolderBody) => void;
-	uploadFile: (data: UploadFileBody) => void;
-	folderId: number;
+	createFolder: () => void;
+	uploadFile: () => void;
 }
 
-const AddItem: React.FC<AddItemProps> = ({
-	createFolder,
-	uploadFile,
-	folderId,
-}) => {
+const AddItem: React.FC<AddItemProps> = ({ createFolder, uploadFile }) => {
 	return (
 		<div className="group/item flex flex-col items-center justify-center gap-2 px-8 py-2">
 			<IconButton
 				className="h-9 opacity-0 duration-100 group-focus-within/item:opacity-100 group-hover/item:opacity-100 group-hover/item:transition group-hover/item:duration-500"
 				variant="contained"
 				color="rose"
-				onClick={() => {
-					createFolder({
-						parrentFolderId: folderId,
-						folderName: "New Folder",
-						token: getCookieValue(cookieKeys.TOKEN),
-					});
-				}}
+				onClick={createFolder}
 			>
 				<CraeteFolderIcon />
 			</IconButton>
@@ -39,12 +23,7 @@ const AddItem: React.FC<AddItemProps> = ({
 				className="h-9 opacity-0 duration-200 group-focus-within/item:opacity-100 group-hover/item:opacity-100 group-hover/item:transition group-hover/item:duration-500"
 				variant="contained"
 				color="rose"
-				onClick={() => {
-					uploadFileHelper({
-						uploadFile,
-						currentFolderId: folderId,
-					});
-				}}
+				onClick={uploadFile}
 			>
 				<AddFileIcon />
 			</IconButton>
