@@ -1,5 +1,5 @@
-import { PropsWithChildren, useState } from "react";
-import FoldersHistoryContext from "."
+import { PropsWithChildren, useCallback, useState } from "react";
+import FoldersHistoryContext from ".";
 
 export const FoldersHistoryContextProvider: React.FC<PropsWithChildren> = ({
 	children,
@@ -7,12 +7,12 @@ export const FoldersHistoryContextProvider: React.FC<PropsWithChildren> = ({
 	const [currentFolderId, setCurrentFolderId] = useState<number>(0);
 	const [history, setHistory] = useState<number[]>([]);
 
-	function historyNext(folderId: number) {
+	const historyNext = useCallback((folderId: number) => {
 		setCurrentFolderId(folderId);
 		setHistory((prev) => [...prev, folderId]);
-	}
+	}, []);
 
-	function historyBack() {
+	const historyBack = useCallback(() => {
 		if (history.length === 0) {
 			setCurrentFolderId(0);
 			return;
@@ -24,13 +24,19 @@ export const FoldersHistoryContextProvider: React.FC<PropsWithChildren> = ({
 			return prev;
 		});
 		setCurrentFolderId(history.at(history.length - 1) ?? 0);
-	}
+	}, [history]);
+
+	const clearHistory = useCallback(() => {
+		setCurrentFolderId(0);
+		setHistory([]);
+	}, []);
 
 	const value = {
 		currentFolderId,
 		history,
 		historyNext,
 		historyBack,
+		clearHistory,
 	};
 
 	return (

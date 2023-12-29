@@ -7,12 +7,12 @@ interface FoldersHistoryContextType {
 	history: number[];
 	historyNext: (folderId: number) => void;
 	historyBack: () => void;
+	clearHistory: () => void;
 }
 
-const FoldersHistoryContext = createContext<FoldersHistoryContextType | null>(null);
+const FoldersHistoryContext = createContext<FoldersHistoryContextType | null>(
+	null
+);
 
-export default FoldersHistoryContext
-export {
-	useFoldersHistoryContext,
-	FoldersHistoryContextProvider,
-};
+export default FoldersHistoryContext;
+export { useFoldersHistoryContext, FoldersHistoryContextProvider };
