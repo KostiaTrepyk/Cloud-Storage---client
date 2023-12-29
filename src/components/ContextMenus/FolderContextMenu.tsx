@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { foldersApi } from "services/foldersApi";
+import { downloadFolder } from "helpers/downloadFolder";
 import { getCookieValue } from "helpers/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
-import { Folder } from "services/types";
+import { FolderData } from "services/types";
 import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button";
@@ -13,13 +14,16 @@ import RenameIcon from "components/SvgIcons/RenameIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import BackIcon from "components/SvgIcons/BackIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
+import DownloadIcon from "components/SvgIcons/DownloadIcon";
 
 interface FolderContextMenuProps {
-	item: Folder;
+	currentStorageId: number;
+	item: FolderData;
 	changeFolderId: (id: number) => void;
 }
 
 const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
+	currentStorageId,
 	item,
 	changeFolderId,
 }) => {
@@ -47,6 +51,25 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 					<OpenFolderIcon className="h-5 w-5" />
 
 					<div>Open</div>
+				</Button>
+			</li>
+
+			<li className="h-8">
+				<Button
+					color="neutral"
+					variant="contained"
+					className="flex h-full w-full items-center gap-2"
+					onClick={() => {
+						downloadFolder({
+							storageId: currentStorageId,
+							folderId: item.id,
+						});
+						close();
+					}}
+				>
+					<DownloadIcon className="h-5 w-5" />
+
+					<div>Download</div>
 				</Button>
 			</li>
 
