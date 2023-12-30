@@ -34,13 +34,13 @@ Cloud Storage is a full-stack application that allows users to create disks, fol
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/KostiaTrepyk/Cloud-Storage---client.git
+   git clone https://github.com/KostiaTrepyk/Cloud-Storage--client.git
 2. Navigate to the project directory:
    ```bash
-   cd Cloud-Storage---client
+   cd Cloud-Storage--client
 3. Install dependencies:
    ```bash
-   cd Cloud-Storage---client
+   cd Cloud-Storage--client
    npm install
 
 ## Preview
