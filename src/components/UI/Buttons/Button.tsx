@@ -93,10 +93,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 					children
 				)}
 
-				<Ripple
-					color={variant === "contained" ? "white" : color}
-					duration={10000000}
-				/>
+				<Ripple color={variant === "contained" ? "white" : color} />
 			</button>
 		);
 	}

@@ -1,4 +1,4 @@
-import { Variants, motion } from "framer-motion";
+import { type HTMLMotionProps, type Variants, motion } from "framer-motion";
 
 const fadeAnimation: Variants = {
 	initial: {
@@ -9,14 +9,15 @@ const fadeAnimation: Variants = {
 	},
 };
 
-interface FadeProps extends React.PropsWithChildren {}
+interface FadeProps extends HTMLMotionProps<"div"> {}
 
-const Fade: React.FC<FadeProps> = ({ children }) => {
+const Fade: React.FC<FadeProps> = ({ children, ...motionDivAttrs }) => {
 	return (
 		<motion.div
 			initial={"initial"}
 			animate={"animate"}
 			variants={fadeAnimation}
+			{...motionDivAttrs}
 		>
 			{children}
 		</motion.div>
