@@ -1,20 +1,15 @@
 import { ButtonHTMLAttributes, PropsWithChildren, forwardRef } from "react";
-import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
-import { Color, Variants, colorVariants } from "../types";
+import { Color, Variants, colorVariants } from "../../types";
 
-import Ripple from "../Ripple/Ripple";
+import Ripple from "../../Ripple/Ripple";
 
 /* Icons */
-import LoadIcon from "../../SvgIcons/LoadIcon";
-import SuccessIcon from "../../SvgIcons/SuccessIcon";
-import ErrorIcon from "../../SvgIcons/CloseIcon";
-
-/* Framer */
-const MSuccessIcon = motion(SuccessIcon);
-const MLoadIcon = motion(LoadIcon);
-const MErrorIcon = motion(ErrorIcon);
+import LoadIcon from "../../../SvgIcons/LoadIcon";
+import SuccessIcon from "../../../SvgIcons/SuccessIcon";
+import ErrorIcon from "../../../SvgIcons/CloseIcon";
+import Fade from "components/UI/Animations/Fade";
 
 interface Props
 	extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -35,7 +30,7 @@ interface Props
 const Button = forwardRef<HTMLButtonElement, Props>(
 	(
 		{
-			color = "neutral",
+			color = "light",
 			status = "uninitialized",
 			size = "medium",
 			variant = "contained",
@@ -49,7 +44,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					"relative min-w-[4rem] select-none overflow-hidden rounded text-center font-semibold uppercase text-white transition duration-200",
+					"relative min-w-[4rem] select-none overflow-hidden rounded text-center font-semibold uppercase text-white transition duration-300",
 
 					colorVariants[variant][color],
 
@@ -67,30 +62,27 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 				)}
 				ref={ref}
 			>
-				{status === "pending" ? (
-					<MLoadIcon
-						className="mx-auto aspect-square h-full"
-						initial={{ opacity: 0, scale: 0.5 }}
-						animate={{ opacity: 1, scale: 1 }}
-						transition={{ duration: 0.3 }}
-						spin
-					/>
-				) : status === "fulfilled" ? (
-					<MSuccessIcon
-						className="mx-auto aspect-square h-full text-green-600"
-						initial={{ opacity: 0, scale: 0.5 }}
-						animate={{ opacity: 1, scale: 1 }}
-						transition={{ duration: 0.3 }}
-					/>
-				) : status === "rejected" ? (
-					<MErrorIcon
-						className="mx-auto h-full animate-pulse text-red-600"
-						initial={{ opacity: 0, scale: 0.5 }}
-						animate={{ opacity: 1, scale: 1 }}
-						transition={{ duration: 0.3 }}
-					/>
-				) : (
-					children
+				{children}
+
+				{status !== "uninitialized" && (
+					<Fade
+						className={`absolute left-0 top-0 flex h-full w-full items-center justify-center bg-inherit transition duration-300`}
+					>
+						<div className="h-full scale-75">
+							{status === "pending" ? (
+								<LoadIcon
+									className="aspect-square h-full"
+									spin
+								/>
+							) : status === "fulfilled" ? (
+								<SuccessIcon className="aspect-square h-full text-green-600" />
+							) : (
+								status === "rejected" && (
+									<ErrorIcon className="aspect-square h-full animate-pulse text-red-600" />
+								)
+							)}
+						</div>
+					</Fade>
 				)}
 
 				<Ripple color={variant === "contained" ? "white" : color} />
