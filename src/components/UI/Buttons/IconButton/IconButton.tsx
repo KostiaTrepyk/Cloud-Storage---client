@@ -6,14 +6,15 @@ import {
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { Color, Variants, colorVariants } from "../types";
+import { Color, Variants, colorVariants } from "../../types";
 
-import Ripple from "../Ripple/Ripple";
+import Ripple from "../../Ripple/Ripple";
 
 /* Icons */
-import LoadIcon from "../../SvgIcons/LoadIcon";
-import SuccessIcon from "../../SvgIcons/SuccessIcon";
-import ErrorIcon from "../../SvgIcons/CloseIcon";
+import LoadIcon from "../../../SvgIcons/LoadIcon";
+import SuccessIcon from "../../../SvgIcons/SuccessIcon";
+import ErrorIcon from "../../../SvgIcons/CloseIcon";
+import Fade from "components/UI/Animations/Fade";
 
 /* Framer */
 const MSuccessIcon = motion(SuccessIcon);
@@ -57,29 +58,25 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 				)}
 				ref={ref}
 			>
-				<span className="block scale-[.55]">
-					{status === "pending" ? (
-						<MLoadIcon
-							className="animate-[spin_2s_linear_infinite]"
-							initial={{ opacity: 0, scale: 0.5 }}
-							animate={{ opacity: 1, scale: 1 }}
-							transition={{ duration: 0.3 }}
-						/>
-					) : status === "fulfilled" ? (
-						<MSuccessIcon
-							initial={{ opacity: 0, scale: 0.5 }}
-							animate={{ opacity: 1, scale: 1 }}
-							transition={{ duration: 0.3 }}
-						/>
-					) : status === "rejected" ? (
-						<MErrorIcon
-							className="ping-[spin_2s_linear_infinite]"
-							initial={{ opacity: 0, scale: 0.5 }}
-							animate={{ opacity: 1, scale: 1 }}
-							transition={{ duration: 0.3 }}
-						/>
-					) : (
-						<>{children}</>
+				<span className="block scale-[.55] bg-inherit">
+					{children}
+					{status !== "uninitialized" && (
+						<Fade
+							className={`absolute left-0 top-0 flex h-full w-full items-center justify-center bg-inherit transition duration-300`}
+						>
+							{status === "pending" ? (
+								<LoadIcon
+									className="aspect-square h-full"
+									spin
+								/>
+							) : status === "fulfilled" ? (
+								<SuccessIcon className="aspect-square h-full text-green-600" />
+							) : (
+								status === "rejected" && (
+									<ErrorIcon className="aspect-square h-full animate-pulse text-red-600" />
+								)
+							)}
+						</Fade>
 					)}
 				</span>
 
