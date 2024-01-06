@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import { Color } from "../types";
+import { Color } from "../../types";
 
 import styles from "./Ripple.module.css";
 
@@ -18,11 +18,15 @@ const Colors: Record<RippleColor, string> = {
 interface RippleProps {
 	duration?: number;
 	color?: RippleColor;
+
+	/* It is important to hide content overflow! */
+	borderRadius: string | number;
 }
 
 const Ripple: React.FC<RippleProps> = ({
 	duration = 850,
 	color = "neutral",
+	borderRadius,
 }) => {
 	const [rippleArray, setRippleArray] = useState<
 		{ y: number; x: number; size: number }[]
@@ -54,6 +58,7 @@ const Ripple: React.FC<RippleProps> = ({
 			style={
 				{
 					"--duration": duration + "ms",
+					borderRadius,
 				} as any
 			}
 			className={`${styles.ripple}`}
