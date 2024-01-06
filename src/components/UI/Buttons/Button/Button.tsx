@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 import { Color, Variants, colorVariants } from "../../types";
 
-import Ripple from "../../Ripple/Ripple";
+import Ripple from "../../Animations/Ripple/Ripple";
 
 /* Icons */
 import LoadIcon from "../../../SvgIcons/LoadIcon";
@@ -44,20 +44,21 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					"relative min-w-[4rem] select-none overflow-hidden rounded text-center font-semibold uppercase text-white transition duration-300",
+					"relative min-w-[4rem] select-none rounded text-center font-semibold uppercase text-white transition duration-300",
 
 					colorVariants[variant][color],
 
-					size === "small" && "px-2 py-1.5 text-[0.8125rem]",
+					size === "small" && "px-2.5 py-1.5 text-[0.8125rem]",
 					size === "medium" && "px-3 py-2 text-[0.875rem]",
-					size === "large" && "px-4 py-3 text-[0.9375rem]",
+					size === "large" && "px-4 py-2.5 text-[0.9375rem]",
 
 					variant === "contained" && "",
 					variant === "outlined" && "border",
 					variant === "text" && "",
 
-					buttonAtributes.disabled && "contrast-75",
-					!status && "border-neutral-900 disabled:bg-neutral-600",
+					buttonAtributes.disabled &&
+						"cursor-not-allowed contrast-50",
+
 					buttonAtributes.className
 				)}
 				ref={ref}
@@ -66,9 +67,9 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 
 				{status !== "uninitialized" && (
 					<Fade
-						className={`absolute left-0 top-0 flex h-full w-full items-center justify-center bg-inherit transition duration-300`}
+						className={`absolute left-0 top-0 flex h-full w-full items-center justify-center rounded transition duration-300`}
 					>
-						<div className="h-full scale-75">
+						<div className="h-full scale-75 rounded-full bg-neutral-300 bg-opacity-[0.5] p-1">
 							{status === "pending" ? (
 								<LoadIcon
 									className="aspect-square h-full"
@@ -85,7 +86,10 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 					</Fade>
 				)}
 
-				<Ripple color={variant === "contained" ? "white" : color} />
+				<Ripple
+					color={variant === "contained" ? "white" : color}
+					borderRadius="4px"
+				/>
 			</button>
 		);
 	}

@@ -19,4 +19,26 @@ export const WithStatus: Story = {
 	args: { children: <Icon />, className: "h-10", status: "pending" },
 };
 
+export const Outlined: Story = {
+	args: { children: <Icon />, className: "h-10" },
+};
+
+export const WithChangedColor: Story = {
+	args: {
+		children: <Icon />,
+		className: "h-10",
+		color: "lime",
+		variant: "outlined",
+	},
+};
+
+export const Disabled: Story = {
+	args: {
+		children: <Icon />,
+		className: "h-10",
+		color: "lime",
+		disabled: true,
+	},
+};
+
 type Story = StoryObj<typeof meta>;
