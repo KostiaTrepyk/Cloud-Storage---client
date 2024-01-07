@@ -1,7 +1,7 @@
 import { HTMLMotionProps, motion } from "framer-motion";
 import { HTMLAttributes, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import NoImageIcon from "../SvgIcons/NoImageIcon";
+import NoImageIcon from "../../SvgIcons/NoImageIcon";
 
 interface ImageProps {
 	containerAttrs?: HTMLAttributes<HTMLDivElement>;
@@ -35,7 +35,12 @@ const Image: React.FC<ImageProps> = ({ imgAttrs, containerAttrs }) => {
 
 	if (isImageError)
 		return (
-			<div className="aspect-square h-full">
+			<div
+				className={twMerge(
+					"aspect-square h-full",
+					containerAttrs?.className
+				)}
+			>
 				<NoImageIcon className="scale-50" />
 			</div>
 		);
