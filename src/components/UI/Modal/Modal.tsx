@@ -2,20 +2,16 @@ import { FC, PropsWithChildren } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 
-import IconButton from "./Buttons/IconButton";
+import IconButton from "../Buttons/IconButton/IconButton";
 
-import CloseIcon from "../SvgIcons/CloseIcon";
+import CloseIcon from "../../SvgIcons/CloseIcon";
 
-interface ModalProps {
+interface ModalProps extends PropsWithChildren {
 	open?: boolean;
 	close?: () => void;
 }
 
-const Modal: FC<PropsWithChildren<ModalProps>> = ({
-	open = false,
-	close,
-	children,
-}) => {
+const Modal: FC<ModalProps> = ({ open = false, close, children }) => {
 	const portalContainer = document.getElementById("modal");
 
 	if (!portalContainer) {
@@ -32,9 +28,7 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
 			onClick={close}
 		>
 			<div
-				onClick={(e) => {
-					e.stopPropagation();
-				}}
+				onClick={(e) => e.stopPropagation()}
 				className="relative w-5/6 max-w-sm rounded-md bg-white p-7 shadow-lg sm:w-2/3 sm:max-w-xl sm:p-8"
 			>
 				<IconButton
