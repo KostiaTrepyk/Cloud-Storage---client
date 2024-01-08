@@ -22,7 +22,7 @@ export const ContextMenuContextProvider: React.FC<React.PropsWithChildren> = ({
 		if (isEscPressed && showMenu) setShowMenu(false);
 	}, [isEscPressed, showMenu]);
 
-	const ref = useRef<any>(null);
+	const ref = useRef<HTMLDivElement>(null);
 
 	const validateCoords = useCallback(
 		(coords: {
