@@ -2,6 +2,7 @@ import { forwardRef, useId } from "react";
 import { twMerge } from 'tailwind-merge'
 
 interface InputProps {
+	/** @default false */
 	fullWidth?: boolean;
 
 	wrapper?: {

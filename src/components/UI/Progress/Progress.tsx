@@ -1,4 +1,4 @@
-import { forwardRef, memo } from "react";
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 
 interface ProgressProps {

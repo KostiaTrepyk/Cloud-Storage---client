@@ -7,7 +7,7 @@ const meta: Meta<typeof Input> = {
 	component: Input,
 	parameters: {},
 	tags: ["autodocs"],
-};
+} satisfies Meta<typeof Input>;
 
 export default meta;
 

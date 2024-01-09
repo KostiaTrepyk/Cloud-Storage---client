@@ -38,7 +38,7 @@ export const Text: Story = {
 };
 
 export const Disabled: Story = {
-	args: { children: "Button", variant: "text", disabled: true },
+	args: { children: "Button", disabled: true },
 };
 
 type Story = StoryObj<typeof meta>;
