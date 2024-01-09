@@ -16,13 +16,16 @@ const Colors: Record<RippleColor, string> = {
 };
 
 interface RippleProps {
+	/** @default 850 */
 	duration?: number;
+	/** @default "neutral" */
 	color?: RippleColor;
 
-	/* It is important to hide content overflow! */
+	/** It is important to hide content overflow! */
 	borderRadius: string | number;
 }
 
+/** The parent component must have `position: relative`. */
 const Ripple: React.FC<RippleProps> = ({
 	duration = 850,
 	color = "neutral",
