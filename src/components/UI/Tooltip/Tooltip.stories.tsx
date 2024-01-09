@@ -30,5 +30,19 @@ export const WithChangedPosition: Story = {
 	},
 };
 
+export const Outlined: Story = {
+	args: {
+		title: "Tooltip",
+		variant: "outlined",
+	},
+};
+
+export const WithDisabledArrow: Story = {
+	args: {
+		title: "Tooltip",
+		disableArrow: true,
+	},
+};
+
 type Story = StoryObj<typeof meta>;
 
