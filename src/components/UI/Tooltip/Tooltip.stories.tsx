@@ -3,7 +3,7 @@ import Tooltip from "./Tooltip";
 import Button from "../Buttons/Button/Button";
 
 const meta: Meta<typeof Tooltip> = {
-	title: "Tooltip",
+	title: "UI/Components/Tooltip",
 	component: Tooltip,
 	tags: ["autodocs"],
 	render: (props) => {

@@ -4,7 +4,7 @@ import Image from "./Image";
 import Img from "assets/Logo.webp";
 
 const meta: Meta<typeof Image> = {
-	title: "Image",
+	title: "UI/Components/Image",
 	component: Image,
 } satisfies Meta<typeof Image>;
 

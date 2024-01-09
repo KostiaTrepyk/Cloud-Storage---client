@@ -51,7 +51,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 					className={twMerge(
 						"w-full rounded border border-neutral-300 px-2 py-1 outline-none transition duration-500 hover:bg-neutral-100 focus:border-neutral-500 focus:bg-neutral-200",
 						input?.value && "invalid:border-red-600",
-						input?.disabled && "contrast-75",
+						input?.disabled && "cursor-not-allowed contrast-75",
 						input?.className
 					)}
 					ref={ref}

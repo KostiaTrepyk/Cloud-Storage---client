@@ -9,7 +9,7 @@ import Ripple from "../../Animations/Ripple/Ripple";
 import LoadIcon from "../../../SvgIcons/LoadIcon";
 import SuccessIcon from "../../../SvgIcons/SuccessIcon";
 import ErrorIcon from "../../../SvgIcons/CloseIcon";
-import Fade from "components/UI/Animations/Fade";
+import Fade from "components/UI/Animations/Fade/Fade";
 
 interface Props
 	extends ButtonHTMLAttributes<HTMLButtonElement>,

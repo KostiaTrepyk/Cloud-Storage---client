@@ -4,7 +4,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import Icon from "components/SvgIcons/CopyIcon";
 
 const meta: Meta<typeof IconButton> = {
-	title: "IconButton",
+	title: "UI/Components/IconButton",
 	component: IconButton,
 	tags: ["autodocs"],
 } satisfies Meta<typeof IconButton>;
