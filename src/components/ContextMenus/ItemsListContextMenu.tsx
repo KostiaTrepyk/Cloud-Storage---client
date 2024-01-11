@@ -6,7 +6,7 @@ import { cookieKeys } from "types/cookie";
 
 import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
-import Button from "components/UI/Buttons/Button";
+import Button from "components/UI/Buttons/Button/Button";
 import AddFileIcon from "components/SvgIcons/AddFileIcon";
 import BackIcon from "components/SvgIcons/BackIcon";
 import { filesApi } from "services/filesApi";

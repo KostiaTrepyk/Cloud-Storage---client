@@ -6,12 +6,12 @@ import { filesApi } from "services/filesApi";
 import { FileDataWithSharedWith } from "services/types";
 import { cookieKeys } from "types/cookie";
 
-import Button from "components/UI/Buttons/Button";
+import Button from "components/UI/Buttons/Button/Button";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
 import BackIcon from "components/SvgIcons/BackIcon";
 import RenameIcon from "components/SvgIcons/RenameIcon";
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import OpenFolderIcon from "components/SvgIcons/OpenFolder";
 

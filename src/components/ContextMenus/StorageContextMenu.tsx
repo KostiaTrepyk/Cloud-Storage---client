@@ -5,11 +5,11 @@ import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { StorageData } from "services/types";
 import { cookieKeys } from "types/cookie";
 
-import Button from "components/UI/Buttons/Button";
+import Button from "components/UI/Buttons/Button/Button";
 
 import ContextMenuContainer from "./ContextMenuContainer";
 import OpenFolderIcon from "components/SvgIcons/OpenFolder";
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import RenameIcon from "components/SvgIcons/RenameIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import BackIcon from "components/SvgIcons/BackIcon";

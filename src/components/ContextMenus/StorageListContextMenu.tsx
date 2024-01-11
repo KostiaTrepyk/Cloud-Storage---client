@@ -5,7 +5,7 @@ import { cookieKeys } from "types/cookie";
 
 import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
-import Button from "components/UI/Buttons/Button";
+import Button from "components/UI/Buttons/Button/Button";
 
 interface StorageListContextMenuProps {}
 
