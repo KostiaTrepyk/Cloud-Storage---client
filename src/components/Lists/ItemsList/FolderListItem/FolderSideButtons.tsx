@@ -4,15 +4,17 @@ import { downloadFolder } from "helpers/downloadFolder";
 import { foldersApi } from "services/foldersApi";
 import { cookieKeys } from "types/cookie";
 
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 
 interface SideButtonsProps {
 	folderId: number;
+	storageId: number;
 }
 
-const FolderSideButtons: FC<SideButtonsProps> = ({ folderId }) => {
+const FolderSideButtons: FC<SideButtonsProps> = ({ folderId, storageId }) => {
 	const { data } = foldersApi.useGetFolderQuery({
+		storageId,
 		folderId,
 		token: getCookieValue(cookieKeys.TOKEN),
 	});
@@ -25,10 +27,7 @@ const FolderSideButtons: FC<SideButtonsProps> = ({ folderId }) => {
 					color="light"
 					variant="contained"
 					onClick={() => {
-						downloadFolder(
-							data.currentFolder?.name ?? "Folder",
-							data.files
-						);
+						downloadFolder({ storageId, folderId });
 					}}
 				>
 					<DownloadIcon />

@@ -1,21 +1,23 @@
 import { twMerge } from "tailwind-merge";
-import { Folder } from "services/types";
+import { FolderData } from "services/types";
 
 import { FolderIcon } from "components/SvgIcons/FolderIcon";
 import ItemContainer from "../ItemContainer";
 import FolderSideButtons from "./FolderSideButtons";
 
 interface FolderListItemProps extends React.HTMLAttributes<HTMLLIElement> {
-	item: Folder;
+	currentStorageId: number
+	item: FolderData;
 	onDoubleClick: () => void;
 
 	checked?: boolean;
-	removeItemfromChecked: (item: Folder) => void;
-	addItemToChecked: (item: Folder) => void;
+	removeItemfromChecked: (item: FolderData) => void;
+	addItemToChecked: (item: FolderData) => void;
 	showCheckIndicator?: boolean;
 }
 
 const FolderListItem: React.FC<FolderListItemProps> = ({
+	currentStorageId,
 	item,
 	onDoubleClick,
 	checked,
@@ -53,7 +55,7 @@ const FolderListItem: React.FC<FolderListItemProps> = ({
 				<span className="line-clamp-1 text-center">{item.name}</span>
 			</div>
 
-			<FolderSideButtons folderId={item.id} />
+			<FolderSideButtons storageId={currentStorageId} folderId={item.id} />
 		</ItemContainer>
 	);
 };

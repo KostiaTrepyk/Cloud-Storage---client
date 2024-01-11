@@ -1,6 +1,6 @@
 import AddFileIcon from "components/SvgIcons/AddFileIcon";
 import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 
 interface AddItemProps {
 	createFolder: () => void;

@@ -4,7 +4,7 @@ import { getFileExtension } from "helpers/getFileExtension";
 import { FileDataWithSharedWith } from "services/types";
 
 import ItemContainer from "components/Lists/ItemsList/ItemContainer";
-import Image from "components/UI/Image";
+import Image from "components/UI/Image/Image";
 import FileSideButtons from "./FileSideButtons";
 
 interface FileListItemProps extends React.HTMLAttributes<HTMLLIElement> {

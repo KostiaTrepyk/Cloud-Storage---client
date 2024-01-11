@@ -4,7 +4,7 @@ import { filesApi } from "services/filesApi";
 import { FileDataWithSharedWith } from "services/types";
 import { cookieKeys } from "types/cookie";
 
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import ShareUsersModal from "components/ShareUsersModal";
 
 import FavouriteIcon from "components/SvgIcons/FavouriteIcon";
