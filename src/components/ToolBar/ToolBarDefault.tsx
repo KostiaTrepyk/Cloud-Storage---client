@@ -5,7 +5,7 @@ import { getCookieValue } from "helpers/cookie";
 import { filesApi } from "services/filesApi";
 import { cookieKeys } from "types/cookie";
 
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import UploadButton from "components/UploadButton";
 import BackIcon from "components/SvgIcons/BackIcon";
 import { buttonVariants } from "components/ToolBar/animations";
@@ -13,9 +13,11 @@ import { buttonVariants } from "components/ToolBar/animations";
 const MIconButton = motion(IconButton);
 const MUploadButton = motion(UploadButton);
 
-interface ToolBarDefaultProps {}
+interface ToolBarDefaultProps {
+	currentStorageId: number;
+}
 
-const ToolBarDefault: FC<ToolBarDefaultProps> = ({}) => {
+const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 	const { currentFolderId, history, historyBack } =
 		useFoldersHistoryContext();
 
@@ -27,6 +29,7 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({}) => {
 
 		uploadFile({
 			file,
+			storageId: currentStorageId,
 			folderId: currentFolderId,
 			token: getCookieValue(cookieKeys.TOKEN),
 		});
@@ -39,7 +42,7 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({}) => {
 				animate="reveal"
 				variants={buttonVariants}
 				custom={0}
-				className="h-10"
+				color="light"
 				title="Back"
 				onClick={historyBack}
 				disabled={history.length === 0}
@@ -52,7 +55,7 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({}) => {
 				animate="reveal"
 				variants={buttonVariants}
 				custom={0}
-				disabled={uploadFileResponse.isLoading || currentFolderId === 0}
+				disabled={uploadFileResponse.isLoading}
 				isLoading={uploadFileResponse.isLoading}
 				onUpload={uploadFileHandler}
 			/>

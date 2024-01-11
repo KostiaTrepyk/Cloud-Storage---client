@@ -5,31 +5,34 @@ import { getCookieValue } from "helpers/cookie";
 import { getFileExtension } from "helpers/getFileExtension";
 import { cookieKeys } from "types/cookie";
 import { filesApi } from "services/filesApi";
-import { FileData, Folder } from "services/types";
+import { FileData, FolderData } from "services/types";
 
 import { buttonVariants } from "components/ToolBar/animations";
 import CloseIcon from "components/SvgIcons/CloseIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
+import { downloadFolder } from "helpers/downloadFolder";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
 
 interface ToolBarActionProps {
-	checkedItems: (FileData | Folder)[];
+	currentStorageId: number;
+	checkedItems: (FileData | FolderData)[];
 	clearCheckedItems: () => void;
 	disabled?: boolean;
 }
 
-function isFile(item: FileData | Folder): item is FileData {
+function isFile(item: FileData | FolderData): item is FileData {
 	if ((item as FileData).filename === undefined) return false;
 
 	return true;
 }
 
 const ToolBarAction: FC<ToolBarActionProps> = ({
+	currentStorageId,
 	checkedItems,
 	clearCheckedItems,
 	disabled,
@@ -42,31 +45,38 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 
 	function downloadCheckedFiles() {
 		checkedItems.forEach((item) => {
-			if (!isFile(item)) return;
+			if (isFile(item)) {
+				fetch("http://localhost:5000/uploads/" + item.filename, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/pdf",
+					},
+				})
+					.then((response) => response.blob())
+					.then((blob) => {
+						const url = window.URL.createObjectURL(
+							new Blob([blob])
+						);
 
-			fetch("http://localhost:5000/uploads/" + item.filename, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/pdf",
-				},
-			})
-				.then((response) => response.blob())
-				.then((blob) => {
-					const url = window.URL.createObjectURL(new Blob([blob]));
+						const link = document.createElement("a");
+						link.href = url;
+						link.download =
+							item.originalname +
+							"." +
+							getFileExtension(item.filename);
 
-					const link = document.createElement("a");
-					link.href = url;
-					link.download =
-						item.originalname +
-						"." +
-						getFileExtension(item.filename);
+						document.body.appendChild(link);
 
-					document.body.appendChild(link);
+						link.click();
 
-					link.click();
-
-					link.parentNode?.removeChild(link);
+						link.parentNode?.removeChild(link);
+					});
+			} else {
+				downloadFolder({
+					storageId: currentStorageId,
+					folderId: item.id,
 				});
+			}
 		});
 
 		clearCheckedItems();
