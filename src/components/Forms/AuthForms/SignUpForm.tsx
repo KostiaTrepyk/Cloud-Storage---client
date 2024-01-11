@@ -4,8 +4,8 @@ import { SIGNINROUTE } from "core/Router/types/routes";
 import { useAppSelector } from "hooks/useAppSelector";
 import { SignUpArg } from "store/authSlice/reducers/signUp";
 
-import Input from "components/UI/Input";
-import Button from "components/UI/Buttons/Button";
+import Input from "components/UI/Input/Input";
+import Button from "components/UI/Buttons/Button/Button";
 import LoadIcon from "components/SvgIcons/LoadIcon";
 
 interface Props {
@@ -21,6 +21,8 @@ const SignUpForm: FC<Props> = ({ onSubmit }) => {
 
 	const status = useAppSelector((state) => state.auth.status);
 
+	const isDisabled = Boolean(status === "pending");
+
 	return (
 		<form
 			className="relative mx-auto flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[1px_2px_4px_0px_#bbb]"
@@ -33,37 +35,44 @@ const SignUpForm: FC<Props> = ({ onSubmit }) => {
 			</div>
 
 			<Input
-				label="Full name"
-				value={fullName}
-				onChange={(e) => setFullName(e.target.value)}
-				type="text"
-				disabled={status === "pending"}
-				pattern="^([A-Z][a-z]+)\s(\w+)$"
-				autoComplete="name"
-				required
+				label={{ text: "Full name" }}
+				input={{
+					value: fullName,
+					onChange: (e) => setFullName(e.target.value),
+					type: "text",
+					autoComplete: "name",
+					disabled: isDisabled,
+					pattern: "^[A-Za-z]{2,}(?: [A-Za-z]{2,})*$",
+					required: true,
+				}}
+				fullWidth
 			/>
 
 			<Input
-				label="Email"
-				value={email}
-				onChange={(e) => setEmail(e.target.value)}
-				type="email"
-				autoComplete="email"
-				disabled={status === "pending"}
-				pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-				required
+				label={{ text: "Email" }}
+				input={{
+					value: email,
+					onChange: (e) => setEmail(e.target.value),
+					type: "email",
+					autoComplete: "email",
+					disabled: isDisabled,
+					required: true,
+				}}
+				fullWidth
 			/>
 
 			<Input
-				label="Password"
-				value={password}
-				type="password"
-				onChange={(e) => setPassword(e.target.value)}
-				disabled={status === "pending"}
-				pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-				title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-				autoComplete="new-password"
-				required
+				label={{ text: "Password" }}
+				input={{
+					value: password,
+					type: "password",
+					onChange: (e) => setPassword(e.target.value),
+					disabled: isDisabled,
+					pattern: "(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+					title: "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+					required: true,
+				}}
+				fullWidth
 			/>
 
 			<div className="mt-4 flex items-center justify-between">
@@ -76,7 +85,7 @@ const SignUpForm: FC<Props> = ({ onSubmit }) => {
 
 				<Button
 					type="submit"
-					disabled={status === "pending"}
+					disabled={isDisabled}
 					title="Sign up"
 					color="rose"
 				>

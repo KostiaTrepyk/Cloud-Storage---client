@@ -4,8 +4,8 @@ import { SIGNUPROUTE } from "core/Router/types/routes";
 import { useAppSelector } from "hooks/useAppSelector";
 import { SignInArg } from "store/authSlice/reducers/signIn";
 
-import Input from "components/UI/Input";
-import Button from "components/UI/Buttons/Button";
+import Input from "components/UI/Input/Input";
+import Button from "components/UI/Buttons/Button/Button";
 import LoadIcon from "components/SvgIcons/LoadIcon";
 
 interface Props {
@@ -20,6 +20,8 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 
 	const status = useAppSelector((state) => state.auth.status);
 
+	const isDisabled = status === "pending";
+
 	return (
 		<form
 			className="relative mx-auto flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[1px_2px_4px_0px_#bbb]"
@@ -32,26 +34,31 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 			</div>
 
 			<Input
-				label="Email"
-				value={email}
-				onChange={(e) => setEmail(e.target.value)}
-				type="email"
-				disabled={status === "pending"}
-				pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-				autoComplete="email"
-				required
+				label={{ text: "Email" }}
+				input={{
+					value: email,
+					onChange: (e) => setEmail(e.target.value),
+					type: "email",
+					disabled: isDisabled,
+					autoComplete: "email",
+					required: true,
+				}}
+				fullWidth
 			/>
 
 			<Input
-				label="Password"
-				value={password}
-				type="password"
-				onChange={(e) => setPassword(e.target.value)}
-				disabled={status === "pending"}
-				pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-				title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-				autoComplete="current-password"
-				required
+				label={{ text: "Password" }}
+				input={{
+					value: password,
+					type: "password",
+					onChange: (e) => setPassword(e.target.value),
+					disabled: isDisabled,
+					pattern: "(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+					title: "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+					autoComplete: "current-password",
+					required: true,
+				}}
+				fullWidth
 			/>
 
 			<div className="mt-4 flex h-10 items-center justify-between">
@@ -64,7 +71,7 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 
 				<Button
 					type="submit"
-					disabled={status === "pending"}
+					disabled={isDisabled}
 					title="Sign in"
 					color="rose"
 				>
