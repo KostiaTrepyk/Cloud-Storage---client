@@ -16,6 +16,7 @@ Cloud Storage is a full-stack application that allows users to create disks, fol
   - RTK Query
   - Tailwind CSS
   - TypeScript
+  - Storybook
 
 - **Backend**:
   - NestJS
@@ -42,7 +43,8 @@ Cloud Storage is a full-stack application that allows users to create disks, fol
    ```bash
    cd Cloud-Storage--client
    npm install
-
+ 
+     
 ## Preview
 ![image](https://github.com/KostiaTrepyk/Cloud-Storage---client/assets/137499840/1579c3bd-40ac-41ac-b080-ab6b02bbdf40)
 
