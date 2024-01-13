@@ -1,7 +1,7 @@
 import { forwardRef, memo } from "react";
 import { UserDataWithSharedFiles } from "services/types";
 
-import Image from "components/UI/Image";
+import Image from "components/UI/Image/Image";
 
 interface UsersListItemProps {
 	user: UserDataWithSharedFiles;

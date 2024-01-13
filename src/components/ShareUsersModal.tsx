@@ -8,11 +8,11 @@ import {
 } from "services/types";
 import { cookieKeys } from "types/cookie";
 
-import Modal from "./UI/Modal";
-import Image from "./UI/Image";
+import Modal from "components/UI/Modal/Modal";
+import Image from "components/UI/Image/Image";
 
-import LoadIcon from "./SvgIcons/LoadIcon";
-import Button from "./UI/Buttons/Button";
+import LoadIcon from "components/SvgIcons/LoadIcon";
+import Button from "components/UI/Buttons/Button/Button";
 
 interface ShareUsersModalProps {
 	open: boolean;

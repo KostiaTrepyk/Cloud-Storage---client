@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import ArrowRightIcon from "components/SvgIcons/ArrowRightIcon";
-import IconButton from "components/UI/Buttons/IconButton";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 
 interface ScrollTopProps {
 	size?: number;
