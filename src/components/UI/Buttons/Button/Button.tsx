@@ -56,9 +56,10 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 					variant === "outlined" && "border",
 					variant === "text" && "",
 
+					buttonAtributes.disabled && "cursor-not-allowed",
 					buttonAtributes.disabled &&
-						"cursor-not-allowed contrast-50",
-
+						status === "uninitialized" &&
+						"contrast-50",
 					buttonAtributes.className
 				)}
 				ref={ref}
