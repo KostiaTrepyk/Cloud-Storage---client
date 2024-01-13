@@ -1,17 +1,17 @@
 import { FormEvent, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { SIGNUPROUTE } from "../../core/Router/types/routes";
-import { useAppSelector } from "../../hooks/useAppSelector";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { SearchParamsEnum } from "../../types/searchParamsEnum";
-import { SignInArg, signIn } from "../../store/authSlice/reducers/signIn";
-import { SignUpArg, signUp } from "../../store/authSlice/reducers/signUp";
-import { searchParamsToObj } from "../../helpers/searchParamsToObj";
+import { SIGNUPROUTE } from "core/Router/types/routes";
+import { useAppSelector } from "hooks/useAppSelector";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { SearchParamsEnum } from "types/searchParamsEnum";
+import { SignInArg, signIn } from "store/authSlice/reducers/signIn";
+import { SignUpArg, signUp } from "store/authSlice/reducers/signUp";
+import { searchParamsToObj } from "helpers/searchParamsToObj";
 
-import SignInForm from "../../components/Forms/AuthForms/SignInForm";
-import SignUpForm from "../../components/Forms/AuthForms/SignUpForm";
+import SignInForm from "components/Forms/AuthForms/SignInForm";
+import SignUpForm from "components/Forms/AuthForms/SignUpForm";
 import PageConfig from "../Wrappers/PageConfig";
-import LoadIcon from "../../components/SvgIcons/LoadIcon";
+import LoadIcon from "components/SvgIcons/LoadIcon";
 
 const AuthPage = () => {
 	const dispatch = useAppDispatch();

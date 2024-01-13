@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react";
-import { SIGNINROUTE } from "../../core/Router/types/routes";
-import { useAppSelector } from "../../hooks/useAppSelector";
+import { SIGNINROUTE } from "core/Router/types/routes";
+import { useAppSelector } from "hooks/useAppSelector";
 
 import PageConfig from "./PageConfig";
 

@@ -1,9 +1,9 @@
 import { FC, PropsWithChildren } from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { SIGNINROUTE } from "../../core/Router/types/routes";
-import { createRedirectQuery } from "../../helpers/createRedirectQuery";
-import { searchParamsToObj } from "../../helpers/searchParamsToObj";
-import { SearchParamsEnum } from "../../types/searchParamsEnum";
+import { SIGNINROUTE } from "core/Router/types/routes";
+import { createRedirectQuery } from "helpers/createRedirectQuery";
+import { searchParamsToObj } from "helpers/searchParamsToObj";
+import { SearchParamsEnum } from "types/searchParamsEnum";
 
 import Redirect from "./Components/Redirect";
 

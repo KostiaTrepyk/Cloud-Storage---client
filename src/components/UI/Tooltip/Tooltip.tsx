@@ -150,30 +150,28 @@ const Tooltip: React.FC<TooltipProps> = ({
 			{children}
 
 			{!hidden && (
-				<>
-					<motion.div
-						className={twMerge(
-							"absolute z-50 h-fit w-max max-w-xs rounded border border-neutral-200 bg-neutral-200 px-2 py-1.5",
-							variant === "outlined" && "border-neutral-400",
-							positionClass
-						)}
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						role="tooltip"
-					>
-						{title}
-						{!disableArrow && (
-							<div
-								className={twMerge(
-									"absolute h-2.5 w-2.5 rotate-45 border border-neutral-200 bg-neutral-200",
-									variant === "outlined" &&
-										"border-0 border-neutral-400",
-									arrowPositionClass
-								)}
-							></div>
-						)}
-					</motion.div>
-				</>
+				<motion.div
+					className={twMerge(
+						"absolute z-50 h-fit w-max max-w-xs rounded border border-neutral-200 bg-neutral-200 px-2 py-1.5",
+						variant === "outlined" && "border-neutral-400",
+						positionClass
+					)}
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					role="tooltip"
+				>
+					{title}
+					{!disableArrow && (
+						<div
+							className={twMerge(
+								"absolute h-2.5 w-2.5 rotate-45 border border-neutral-200 bg-neutral-200",
+								variant === "outlined" &&
+									"border-0 border-neutral-400",
+								arrowPositionClass
+							)}
+						></div>
+					)}
+				</motion.div>
 			)}
 		</div>
 	);
