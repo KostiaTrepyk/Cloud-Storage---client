@@ -22,7 +22,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
 		checkedItems.length > 0 ? "action" : "default";
 
 	return (
-		<div className="fixed top-0 z-50 mb-2 flex h-16 w-full items-center gap-2 overflow-x-auto bg-white py-2.5 sm:gap-3">
+		<div className="sticky top-0 z-50 mb-2 flex h-16 w-full items-center gap-2 bg-white py-2.5 sm:gap-3">
 			{currentToolBar === "default" ? (
 				<ToolBarDefault currentStorageId={currentStorageId} />
 			) : (
