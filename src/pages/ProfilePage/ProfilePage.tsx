@@ -5,8 +5,7 @@ import { useAppSelector } from "../../hooks/useAppSelector";
 import { AuthActions } from "../../store/authSlice/authSlice";
 import { createRedirectQuery } from "../../helpers/createRedirectQuery";
 
-import IconButton from "../../components/UI/Buttons/IconButton";
-import Progress from "../../components/UI/Progress";
+import IconButton from "../../components/UI/Buttons/IconButton/IconButton";
 
 import LogoutIcon from "../../components/SvgIcons/LogoutIcon";
 import SwitchAccountIcon from "../../components/SvgIcons/SwitchAccountIcon";
@@ -18,13 +17,6 @@ const ProfilePage = () => {
 	const location = useLocation();
 
 	const userData = useAppSelector((state) => state.auth.userData);
-
-	const userTotalFileSize =
-		userData?.statistic.totalFileSize! / 1024 / 1024; /* MB */
-	const maxTotalFileSize = 100; /* MB */
-	const totalSizePercentage = Number(
-		((userTotalFileSize / maxTotalFileSize) * 100).toFixed(1)
-	);
 
 	function switchAccountBtnHandler() {
 		navigate(
@@ -68,15 +60,6 @@ const ProfilePage = () => {
 							<td>{userData?.statistic.filesCount}</td>
 						</tr>
 						<tr>
-							<td className="pr-4 text-left">Memory remaining</td>
-							<td>
-								<Progress
-									value={totalSizePercentage}
-									size={4}
-								/>
-							</td>
-						</tr>
-						<tr>
 							<td className="pr-4 text-left">
 								Average file size
 							</td>
@@ -85,7 +68,7 @@ const ProfilePage = () => {
 									userData?.statistic.averageFileSize! /
 									1024 /
 									1024
-								).toFixed(1)}{" "}
+								).toFixed(1)}
 								MB
 							</td>
 						</tr>

@@ -3,7 +3,7 @@ import { HOMEROUTE } from "core/Router/types/routes";
 
 // Icons
 import Logo from "assets/Logo.webp";
-import Image from "components/UI/Image";
+import Image from "components/UI/Image/Image";
 
 const Header = () => {
 	return (
@@ -20,7 +20,7 @@ const Header = () => {
 					}}
 				/>
 				<span className="text-lg font-bold text-neutral-900">
-					FileVault
+					Cloud Storage
 				</span>
 			</Link>
 		</header>

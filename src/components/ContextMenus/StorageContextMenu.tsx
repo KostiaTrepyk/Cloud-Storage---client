@@ -18,13 +18,13 @@ import LoadIcon from "components/SvgIcons/LoadIcon";
 interface StorageContextMenuProps {
 	item: StorageData;
 	changeStorage: (id: number) => void;
-	refetchStorage: () => void;
+	refetchStorages: () => void;
 }
 
 const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 	item,
 	changeStorage,
-	refetchStorage,
+	refetchStorages,
 }) => {
 	const [mode, setMode] = useState<"default" | "rename">("default");
 	const [itemName, setItemName] = useState<string>(item.name);
@@ -59,7 +59,7 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 					variant="contained"
 					className="flex h-full w-full items-center gap-2"
 					onClick={() => {
-						refetchStorage();
+						refetchStorages();
 						close();
 					}}
 				>

@@ -207,7 +207,7 @@ export interface GetAllFilesParams {
 	limit?: number;
 	sort?: SortValue;
 	search?: string;
-	createdAy?: string;
+	createdAt?: string;
 	token: string | undefined;
 }
 
