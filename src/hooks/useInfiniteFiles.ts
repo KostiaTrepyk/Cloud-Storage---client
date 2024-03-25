@@ -1,19 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getCookieValue } from "helpers/cookie";
-import { filesApi } from "services/filesApi";
+import { GetAllFilesParams, filesApi } from "services/filesApi";
 import { FileDataWithSharedWith, SortValue } from "services/types";
 import { cookieKeys } from "types/cookie";
 
-export interface GetFilesQuery {
-	filesType: "all" | "photos" | "applications";
-	search: string | undefined;
-	sort: SortValue;
-	limit: number;
-}
-
-/** FIX typization (options) */
 export function useInfiniteFiles(
-	query: GetFilesQuery,
+	query: GetAllFilesParams,
 	options: { marginBottom: number } = { marginBottom: 300 }
 ) {
 	const [files, setFiles] = useState<FileDataWithSharedWith[]>([]);
@@ -47,14 +39,17 @@ export function useInfiniteFiles(
 		]
 	);
 
-	/* Restore */
+	// Restore
 	useEffect(() => {
 		restorePagination();
 	}, [query]);
 
-	/* setData */
+	// setData
 	useEffect(() => {
-		fetchFiles({ ...query, page, token: getCookieValue(cookieKeys.TOKEN) })
+		fetchFiles({
+			...query,
+			token: getCookieValue(cookieKeys.TOKEN),
+		})
 			.unwrap()
 			.then((res) => {
 				if (res.page === 1) {

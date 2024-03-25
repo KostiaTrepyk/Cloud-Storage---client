@@ -14,6 +14,20 @@ export const filesApi = emptySplitApi.injectEndpoints({
 			providesTags: ["Files"],
 		}),
 
+		getFolderFiles: build.query<
+			GetFolderFilesResponse,
+			GetFolderFilesParams
+		>({
+			query: ({ token, ...params }) => ({
+				url: "/files/folderFiles",
+				method: "GET",
+				params,
+				headers: { Authorization: "Bearer " + token },
+				timeout: 1000 * 30, // 30sec,
+			}),
+			providesTags: ["Files"],
+		}),
+
 		uploadFile: build.mutation<UploadFileResponse, UploadFileBody>({
 			query: ({ token, ...body }) => {
 				const formData = new FormData();
@@ -99,6 +113,15 @@ export interface GetAllFilesParams {
 	sort?: SortValue;
 	search?: string;
 	createdAt?: string;
+	token: string | undefined;
+}
+
+/* GetFolderFiles */
+export type GetFolderFilesResponse = FileDataWithSharedWith[];
+
+export interface GetFolderFilesParams {
+	folderId?: number;
+	storageId: number;
 	token: string | undefined;
 }
 
