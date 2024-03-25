@@ -3,12 +3,13 @@ import { QueryStatus } from "@reduxjs/toolkit/dist/query";
 
 export function useStatus(
 	initialStatus: keyof typeof QueryStatus,
-	statusDuration: number = 1
+	statusDuration: number = 3_000
 ) {
 	const [status, setStatus] =
 		useState<keyof typeof QueryStatus>(initialStatus);
 
 	const timeout = useRef<NodeJS.Timeout>();
+	console.log(initialStatus);
 
 	useEffect(() => {
 		if (status === "fulfilled" || status === "rejected") {
@@ -17,10 +18,7 @@ export function useStatus(
 			}, statusDuration);
 		}
 
-		return () => {
-			clearTimeout(timeout.current);
-			
-		};
+		return () => clearTimeout(timeout.current);
 	}, [status, statusDuration]);
 
 	useEffect(() => {

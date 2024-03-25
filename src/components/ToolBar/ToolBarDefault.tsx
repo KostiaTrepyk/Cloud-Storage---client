@@ -44,7 +44,7 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 	return (
 		<>
 			<Tooltip
-				title="Upload file"
+				title="Back"
 				className="aspect-square h-full"
 				position="bottom-start"
 			>

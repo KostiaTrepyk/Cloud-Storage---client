@@ -88,10 +88,14 @@ export const useStoragePageHooks = () => {
 	} = useCheckedItems<FileData | FolderData>(items);
 
 	useEffect(() => {
-		if (currentStorageId === 0 && getStoragesResponse.data) {
-			setCurrentStorageId(getStoragesResponse.data[0].id);
+		if (
+			(getStoragesResponse.data?.length ?? 0 > 0) &&
+			currentStorageId === 0 &&
+			getStoragesResponse.data
+		) {
+			setCurrentStorageId(getStoragesResponse.data[0]?.id);
 		}
-	}, [currentStorageId, getStoragesResponse]);
+	}, [getStoragesResponse.data, currentStorageId, getStoragesResponse]);
 
 	function folderDoubleClickHandler(folderId: number): void {
 		historyNext(folderId);

@@ -11,7 +11,7 @@ export const filesApi = emptySplitApi.injectEndpoints({
 				headers: { Authorization: "Bearer " + token },
 				timeout: 1000 * 30, // 30sec,
 			}),
-			providesTags: ["Files", "SharedFiles", "FavouriteFiles"],
+			providesTags: ["Files"],
 		}),
 
 		uploadFile: build.mutation<UploadFileResponse, UploadFileBody>({
@@ -35,6 +35,19 @@ export const filesApi = emptySplitApi.injectEndpoints({
 			invalidatesTags: ["Files"],
 		}),
 
+		updateFile: build.mutation<UpdateFileResponse, UpdateFileBody>({
+			query: ({ token, ...body }) => ({
+				url: "/files/one",
+				method: "PUT",
+				body,
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+				timeout: 1000 * 30, // 30sec,
+			}),
+			invalidatesTags: ["Files"],
+		}),
+
 		softDeleteFile: build.mutation<
 			SoftDeleteFileResponse,
 			SoftDeleteFileBody
@@ -50,20 +63,7 @@ export const filesApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
-			invalidatesTags: ["Files", "FavouriteFiles", "SharedFiles"],
-		}),
-
-		updateFile: build.mutation<UpdateFileResponse, UpdateFileBody>({
-			query: ({ token, ...body }) => ({
-				url: "/files",
-				method: "PUT",
-				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			invalidatesTags: ["Files", "FavouriteFiles", "SharedFiles"],
+			invalidatesTags: ["Files"],
 		}),
 
 		deleteFile: build.mutation<DeleteFileResponse, DeleteFileParams>({
@@ -78,122 +78,13 @@ export const filesApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
-			invalidatesTags: ["Files", "FavouriteFiles", "SharedFiles"],
-		}),
-
-		/* Favourite */
-		getFavouriteFiles: build.query<
-			FileDataWithSharedWith[],
-			{ token: string | undefined }
-		>({
-			query: ({ token }) => ({
-				url: "/files/favourite",
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			providesTags: ["FavouriteFiles"],
-		}),
-
-		addToFavourite: build.mutation<
-			FileDataWithSharedWith,
-			{ fileId: number; token: string | undefined }
-		>({
-			query: ({ fileId, token }) => ({
-				url: "/files/favourite/add",
-				method: "PUT",
-				body: {
-					fileId,
-				},
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			invalidatesTags: ["FavouriteFiles", "Files" /*  "SharedFiles" */],
-		}),
-
-		removeFromFavourite: build.mutation<
-			FileDataWithSharedWith,
-			{ fileId: number; token: string | undefined }
-		>({
-			query: ({ fileId, token }) => ({
-				url: "/files/favourite/remove",
-				method: "PUT",
-				body: {
-					fileId,
-				},
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			invalidatesTags: ["FavouriteFiles", "Files" /* "SharedFiles" */],
-		}),
-
-		/* Share */
-		getSharedFiles: build.query<
-			FileDataWithSharedWith[],
-			{ token: string | undefined }
-		>({
-			query: ({ token }) => ({
-				url: "/files/share",
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			providesTags: ["SharedFiles"],
-		}),
-
-		share: build.mutation<
-			FileDataWithSharedWith,
-			{ fileId: number; shareWith: number[]; token: string | undefined }
-		>({
-			query: ({ fileId, shareWith, token }) => ({
-				url: "/files/share/add",
-				method: "PUT",
-				body: {
-					fileId,
-					shareWith,
-				},
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			invalidatesTags: [/* "FavouriteFiles", */ "Files", "SharedFiles"],
-		}),
-
-		removeFromShared: build.mutation<
-			FileDataWithSharedWith,
-			{
-				fileId: number;
-				userIdsToRemove: number[];
-				token: string | undefined;
-			}
-		>({
-			query: ({ fileId, userIdsToRemove, token }) => ({
-				url: "/files/share/remove",
-				method: "PUT",
-				body: {
-					fileId,
-					userIdsToRemove,
-				},
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 30, // 30sec,
-			}),
-			invalidatesTags: [/* "FavouriteFiles",  */ "Files", "SharedFiles"],
+			invalidatesTags: ["Files"],
 		}),
 	}),
 	overrideExisting: false,
 });
 
 /* GetAllFiles */
-
 export interface GetAllFilesResponse {
 	files: FileDataWithSharedWith[];
 	count: number;
@@ -203,7 +94,7 @@ export interface GetAllFilesResponse {
 
 export interface GetAllFilesParams {
 	filesType?: FileType;
-	page?: number;
+	offset?: number;
 	limit?: number;
 	sort?: SortValue;
 	search?: string;
@@ -212,7 +103,6 @@ export interface GetAllFilesParams {
 }
 
 /* UploadFile */
-
 export interface UploadFileResponse extends FileDataWithSharedWith {}
 
 export interface UploadFileBody {
@@ -223,18 +113,17 @@ export interface UploadFileBody {
 }
 
 /* UpdateFile */
-
 export type UpdateFileResponse = boolean;
 
 export interface UpdateFileBody {
 	id: number;
 	newOriginalName?: string;
-	token: string | undefined;
 	newFolderId?: number;
+	isFavourite?: boolean;
+	token: string | undefined;
 }
 
 /* SoftDeleteFile */
-
 export type SoftDeleteFileResponse = boolean;
 
 export interface SoftDeleteFileBody {
@@ -243,7 +132,6 @@ export interface SoftDeleteFileBody {
 }
 
 /* deleteFile */
-
 export type DeleteFileResponse = boolean;
 
 export interface DeleteFileParams {

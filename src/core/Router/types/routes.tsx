@@ -9,54 +9,54 @@ import AuthPage from "pages/AuthPage/AuthPage";
 import PageNotFound from "pages/PageNotFound/PageNotFound";
 import TrashPage from "pages/TrashPage/TrashPage";
 
-export const RootPathnames = {
+export const RootPaths = {
 	HOME: "/",
 	STORAGE: "/storage",
 	PROFILE: "/profile",
 };
 
-export const RoutesPathnames = {
-	HOME: RootPathnames.HOME,
-	STORAGE: RootPathnames.STORAGE,
-	TRASH: RootPathnames.STORAGE + "/trash",
-	PROFILE: RootPathnames.PROFILE,
+export const RoutePaths = {
+	HOME: RootPaths.HOME,
+	STORAGE: RootPaths.STORAGE,
+	TRASH: RootPaths.STORAGE + "/trash",
+	PROFILE: RootPaths.PROFILE,
 	SIGNIN: "/auth/signin",
 	SIGNUP: "/auth/signup",
 };
 
 export const HOMEROUTE: RouteObject = {
 	id: generateId(),
-	path: RoutesPathnames.HOME,
+	path: RoutePaths.HOME,
 	element: <HomePage />,
 };
 
 export const STORAGEROUTE: RouteObject = {
 	id: generateId(),
-	path: RoutesPathnames.STORAGE,
+	path: RoutePaths.STORAGE,
 	element: <StoragePage />,
 };
 
 export const TRASHROUTE: RouteObject = {
 	id: generateId(),
-	path: RoutesPathnames.TRASH,
+	path: RoutePaths.TRASH,
 	element: <TrashPage />,
 };
 
 export const PROFILEROUTE: RouteObject = {
 	id: generateId(),
-	path: RoutesPathnames.PROFILE,
+	path: RoutePaths.PROFILE,
 	element: <ProfilePage />,
 };
 
 export const SIGNINROUTE: RouteObject = {
 	id: generateId(),
-	path: RoutesPathnames.SIGNIN,
+	path: RoutePaths.SIGNIN,
 	element: <AuthPage />,
 };
 
 export const SIGNUPROUTE: RouteObject = {
 	id: generateId(),
-	path: RoutesPathnames.SIGNUP,
+	path: RoutePaths.SIGNUP,
 	element: <AuthPage />,
 };
 

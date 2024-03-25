@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { searchParamsToObj } from "helpers/searchParamsToObj";
 import { SearchParamsEnum } from "types/searchParamsEnum";
-import { RootPathnames, RoutesPathnames } from "core/Router/types/routes";
+import { RootPaths, RoutePaths } from "core/Router/types/routes";
 
 export function usePathname() {
 	const location = useLocation();
@@ -12,15 +12,15 @@ export function usePathname() {
 
 	const currentRootPathname: string =
 		verifyPathname(currentPathname) &&
-		Object.values(RootPathnames).includes(getRootPathname(currentPathname))
+		Object.values(RootPaths).includes(getRootPathname(currentPathname))
 			? getRootPathname(currentPathname)
-			: RoutesPathnames.HOME;
+			: RoutePaths.HOME;
 
 	const redirectPathname = verifyPathname(redirectTo) ? redirectTo : null;
 
 	const redirectRootPathname =
 		verifyPathname(redirectTo) &&
-		Object.values(RootPathnames).includes(getRootPathname(redirectTo))
+		Object.values(RootPaths).includes(getRootPathname(redirectTo))
 			? getRootPathname(redirectTo)
 			: null;
 
@@ -32,7 +32,7 @@ export function usePathname() {
 			path = path.slice(0, path.length - 1);
 		}
 
-		const availableRoutes = Object.values(RoutesPathnames).map((route) =>
+		const availableRoutes = Object.values(RoutePaths).map((route) =>
 			route
 				.split("/")
 				.slice(1)

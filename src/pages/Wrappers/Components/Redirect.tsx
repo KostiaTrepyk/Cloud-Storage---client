@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { RoutesPathnames, HOMEROUTE } from "core/Router/types/routes";
+import { RoutePaths, HOMEROUTE } from "core/Router/types/routes";
 import { searchParamsFromObj } from "helpers/searchParamsFromObj";
 import { SearchParamsEnum } from "types/searchParamsEnum";
 import { searchParamsToObj } from "helpers/searchParamsToObj";
@@ -33,7 +33,7 @@ export function getRedirectUrl(
 		redirectUrl = redirectUrl.slice(0, redirectUrl.length - 1);
 	}
 
-	if (Object.values(RoutesPathnames).includes(redirectUrl)) {
+	if (Object.values(RoutePaths).includes(redirectUrl)) {
 		return redirectUrl;
 	}
 

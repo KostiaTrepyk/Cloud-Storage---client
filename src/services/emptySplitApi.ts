@@ -9,8 +9,6 @@ export const emptySplitApi = createApi({
 	tagTypes: [
 		"Storages",
 		"Files",
-		"FavouriteFiles",
-		"SharedFiles",
 		"Users",
 		"Folders",
 	],
