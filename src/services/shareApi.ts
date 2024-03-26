@@ -2,9 +2,9 @@ import { emptySplitApi } from "./emptySplitApi";
 
 export const shareApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
-		shareFiles: build.mutation<ShareFilesResponse, ShareFilesBody>({
+		share: build.mutation<ShareResponse, ShareBody>({
 			query: ({ token, ...body }) => ({
-				url: "/share/shareFiles",
+				url: "/share/share",
 				method: "PUT",
 				body,
 				headers: {
@@ -12,12 +12,15 @@ export const shareApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 120, // 2min
 			}),
-			invalidatesTags: ["Files"],
+			invalidatesTags: (a, b, c, d) => {
+				console.log(a, b, c, d);
+				return ["Files", "Folders"];
+			},
 		}),
 
-		unshareFiles: build.mutation<UnshareFilesResponse, UnshareFilesBody>({
+		unshare: build.mutation<UnshareResponse, UnshareBody>({
 			query: ({ token, ...body }) => ({
-				url: "/share/unshareFiles",
+				url: "/share/unshare",
 				method: "PUT",
 				body,
 				headers: {
@@ -25,80 +28,38 @@ export const shareApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 60, // 1min
 			}),
-			invalidatesTags: ["Files"],
-		}),
-
-		shareFolders: build.mutation<ShareFoldersResponse, ShareFoldersBody>({
-			query: ({ token, ...body }) => ({
-				url: "/share/shareFolders",
-				method: "PUT",
-				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 60, // 1min
-			}),
-			invalidatesTags: ["Folders"],
-		}),
-
-		unshareFolders: build.mutation<
-			UnshareFoldersResponse,
-			UnshareFoldersBody
-		>({
-			query: ({ token, ...body }) => ({
-				url: "/share/unshareFolders",
-				method: "PUT",
-				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-				timeout: 1000 * 60, // 1min
-			}),
-			invalidatesTags: ["Folders"],
+			invalidatesTags: (a, b, c, d) => {
+				console.log(a, b, c, d);
+				return ["Files", "Folders"];
+			},
 		}),
 	}),
 });
 
-/* ShareFiles */
+/* Share */
 
-export interface ShareFilesBody {
+export interface ShareBody {
+	folderIds: number[];
 	fileIds: number[];
 	userIdsToShareWith: number[];
 	token: string | undefined;
 }
 
-export type ShareFilesResponse = {
-	sharedWith: number[];
+export type ShareResponse = {
+	sharedFiles: number[];
+	sharedFolders: number[];
 };
 
-/* UnshareFiles */
+/* Unshare */
 
-export interface UnshareFilesBody {
+export interface UnshareBody {
+	userIdsToRemove: number[];
+	folderIds: number[];
 	fileIds: number[];
-	userIdsToRemove: number[];
 	token: string | undefined;
 }
 
-export type UnshareFilesResponse = boolean;
-
-/* Upload */
-
-export interface ShareFoldersBody {
-	folderIds: number[];
-	userIdsToShareWith: number[];
-	token: string | undefined;
+export interface UnshareResponse {
+	unsharedFiles: number[];
+	unsharedFolders: number[];
 }
-
-export interface ShareFoldersResponse {
-	sharedWith: number[];
-}
-
-/* Delete */
-
-export interface UnshareFoldersBody {
-	folderIds: number[];
-	userIdsToRemove: number[];
-	token: string | undefined;
-}
-
-export type UnshareFoldersResponse = boolean;
