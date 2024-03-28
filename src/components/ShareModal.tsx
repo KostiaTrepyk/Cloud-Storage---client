@@ -1,9 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { getCookieValue } from "helpers/cookie";
 import { usersApi } from "services/usersApi";
-import { filesApi } from "services/filesApi";
+import { shareApi } from "services/shareApi";
 import {
-	FileDataWithSharedWith,
+	FileData,
+	FolderData,
+	UserData,
 	UserDataWithSharedFiles,
 } from "services/types";
 import { cookieKeys } from "types/cookie";
@@ -14,13 +16,19 @@ import Image from "components/UI/Image/Image";
 import LoadIcon from "components/SvgIcons/LoadIcon";
 import Button from "components/UI/Buttons/Button/Button";
 
-interface ShareUsersModalProps {
+interface ShareModalProps {
 	open: boolean;
 	close: () => void;
-	file: FileDataWithSharedWith;
+	files?: FileData[];
+	folders?: FolderData[];
 }
 
-const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
+const ShareModal: FC<ShareModalProps> = ({
+	open,
+	close,
+	files = [],
+	folders = [],
+}) => {
 	const [users, setUsers] = useState<UserDataWithSharedFiles[]>([]);
 
 	const getAllUsers = usersApi.useGetAllUsersQuery(
@@ -32,28 +40,41 @@ const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 		{ skip: !open }
 	);
 
-	const [share, shareStatus] = filesApi.useShareMutation();
-	const [unshare, unshareStatus] = filesApi.useRemoveFromSharedMutation();
+	const [share, shareStatus] = shareApi.useShareMutation();
+	const [unshare, unshareStatus] = shareApi.useUnshareMutation();
 
 	useEffect(() => {
 		setUsers(getAllUsers.data?.users || []);
 	}, [getAllUsers.data]);
 
-	function handleShare(userId: number) {
-		if (
-			file.sharedWith.filter(
-				(sharedWithUser) => sharedWithUser.id === userId
-			).length > 0
-		) {
-			unshare({
-				fileId: file.id,
-				userIdsToRemove: [userId],
+	async function handleShare(user: UserData) {
+		let isShared: boolean = false;
+
+		for (const file of files) {
+			if (file.sharedWith.some((u) => u.id === user.id)) {
+				isShared = true;
+			}
+			if (isShared) break;
+		}
+		for (const folder of folders) {
+			if (folder.sharedWith.some((u) => u.id === user.id)) {
+				isShared = true;
+			}
+			if (isShared) break;
+		}
+
+		if (isShared) {
+			await unshare({
+				fileIds: files.map((file) => file.id),
+				folderIds: folders.map((folder) => folder.id),
+				userIdsToRemove: [user.id],
 				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		} else {
-			share({
-				fileId: file.id,
-				shareWith: [userId],
+			await share({
+				fileIds: files.map((file) => file.id),
+				folderIds: folders.map((folder) => folder.id),
+				userIdsToShareWith: [user.id],
 				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		}
@@ -78,11 +99,11 @@ const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 
 							<Button
 								className="w-24 rounded-none rounded-r"
-								onClick={() => handleShare(user.id)}
+								onClick={() => handleShare(user)}
 								color="amber"
 								status={
-									(shareStatus.originalArgs?.shareWith[0] ===
-										user.id &&
+									(shareStatus.originalArgs
+										?.userIdsToShareWith[0] === user.id &&
 										shareStatus.isLoading) ||
 									(unshareStatus.originalArgs
 										?.userIdsToRemove[0] === user.id &&
@@ -91,10 +112,11 @@ const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 										: "uninitialized"
 								}
 							>
-								{file.sharedWith.filter(
-									(sharedWithuser) =>
-										user.id === sharedWithuser.id
-								).length > 0
+								{[...files, ...folders].some((item) =>
+									item.sharedWith.some(
+										(u) => u.id === user.id
+									)
+								)
 									? "Shared"
 									: "Share"}
 							</Button>
@@ -113,4 +135,4 @@ const ShareUsersModal: FC<ShareUsersModalProps> = ({ open, close, file }) => {
 	);
 };
 
-export default ShareUsersModal;
+export default ShareModal;
