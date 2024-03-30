@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import Button from "./Button";
+import CopyIcon from "components/SvgIcons/CopyIcon";
 
 const meta: Meta<typeof Button> = {
 	title: "UI/Components/Button",
@@ -39,6 +40,10 @@ export const Text: Story = {
 
 export const Disabled: Story = {
 	args: { children: "Button", disabled: true },
+};
+
+export const WithIcon: Story = {
+	args: { children: "Button", startIcon: <CopyIcon /> },
 };
 
 type Story = StoryObj<typeof meta>;

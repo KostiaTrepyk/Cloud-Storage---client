@@ -9,7 +9,7 @@ import { filesApi } from "services/filesApi";
 import { FileData, FolderData } from "services/types";
 
 import { buttonVariants } from "components/ToolBar/animations";
-import ShareModal from "components/ShareModal";
+import ShareModal from "components/Modals/ShareModal";
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import CloseIcon from "components/SvgIcons/CloseIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
@@ -94,6 +94,14 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 		clearCheckedItems();
 	}
 
+	function openShareModal() {
+		setShareModalOpened(true);
+	}
+
+	function closeShareModal() {
+		setShareModalOpened(false);
+	}
+
 	return (
 		<>
 			<MIconButton
@@ -128,7 +136,7 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 				custom={2}
 				color="amber"
 				title="Share"
-				onClick={() => setShareModalOpened(true)}
+				onClick={openShareModal}
 				disabled={disabled}
 			>
 				<ShareIcon filled />
@@ -150,7 +158,7 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 
 			<ShareModal
 				open={isShareModalOpened}
-				close={() => setShareModalOpened(false)}
+				close={closeShareModal}
 				items={checkedItems}
 			/>
 		</>

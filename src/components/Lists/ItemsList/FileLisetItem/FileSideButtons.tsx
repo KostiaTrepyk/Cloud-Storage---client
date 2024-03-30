@@ -3,7 +3,7 @@ import { filesApi } from "services/filesApi";
 import { FileData } from "services/types";
 
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
-import ShareModal from "components/ShareModal";
+import ShareModal from "components/Modals/ShareModal";
 
 import FavouriteIcon from "components/SvgIcons/FavouriteIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";

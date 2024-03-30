@@ -30,7 +30,7 @@ const StoragePage = () => {
 		updateFile,
 		updateFolder,
 
-		refetchStorages: refreshStorages,
+		refetchStorages,
 
 		storages,
 		folders,
@@ -66,7 +66,7 @@ const StoragePage = () => {
 								handleContextMenu(
 									e,
 									<StorageContextMenu
-										refetchStorages={refreshStorages}
+										refetchStorages={refetchStorages}
 										item={storage}
 										changeStorage={changeStorage}
 									/>

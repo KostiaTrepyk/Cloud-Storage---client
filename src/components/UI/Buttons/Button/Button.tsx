@@ -24,6 +24,10 @@ interface Props
 
 	/**  @default "contained" */
 	variant?: Variants;
+
+	startIcon?: JSX.Element;
+
+	endIcon?: JSX.Element;
 }
 
 /** Fix click animation */
@@ -34,7 +38,8 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 			status = "uninitialized",
 			size = "medium",
 			variant = "contained",
-
+			startIcon,
+			endIcon,
 			children,
 			...buttonAtributes
 		},
@@ -44,13 +49,13 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					"relative min-w-[4rem] select-none rounded text-center font-semibold uppercase text-white transition duration-300",
+					"relative flex min-w-[4rem] select-none items-center rounded text-center font-semibold uppercase text-white transition duration-300",
 
 					colorVariants[variant][color],
 
-					size === "small" && "px-2.5 py-1.5 text-[0.8125rem]",
-					size === "medium" && "px-3 py-2 text-[0.875rem]",
-					size === "large" && "px-4 py-2.5 text-[0.9375rem]",
+					size === "small" && "h-8 px-2.5 py-1.5 text-[0.8125rem]",
+					size === "medium" && "h-9 px-3 py-2 text-[0.875rem]",
+					size === "large" && "h-10 px-4 py-2.5 text-[0.9375rem]",
 
 					variant === "contained" && "",
 					variant === "outlined" && "border",
@@ -64,7 +69,15 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 				)}
 				ref={ref}
 			>
+				{startIcon && (
+					<div className="mr-2 aspect-square h-full">{startIcon}</div>
+				)}
+
 				{children}
+
+				{endIcon && (
+					<div className="ml-2 aspect-square h-full">{endIcon}</div>
+				)}
 
 				{status !== "uninitialized" && (
 					<Fade

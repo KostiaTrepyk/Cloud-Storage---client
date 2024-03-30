@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { isFile } from "helpers/isFile";
 import { usersApi } from "services/usersApi";
 import { shareApi } from "services/shareApi";
 import {
@@ -13,7 +14,6 @@ import Image from "components/UI/Image/Image";
 
 import LoadIcon from "components/SvgIcons/LoadIcon";
 import Button from "components/UI/Buttons/Button/Button";
-import { isFile } from "helpers/isFile";
 
 interface ShareModalProps {
 	open: boolean;

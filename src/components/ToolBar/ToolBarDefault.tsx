@@ -1,19 +1,22 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
+import { uploadFile } from "helpers/uploadFile";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
 import { filesApi } from "services/filesApi";
 
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
-import UploadButton from "components/UploadButton";
 import BackIcon from "components/SvgIcons/BackIcon";
 import { buttonVariants } from "components/ToolBar/animations";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import Tooltip from "components/UI/Tooltip/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TRASHROUTE } from "core/Router/routes";
+import Button from "components/UI/Buttons/Button/Button";
+import UploadIcon from "components/SvgIcons/UploadIcon";
+import { useStatus } from "hooks/useStatus";
 
 const MIconButton = motion(IconButton);
-const MUploadButton = motion(UploadButton);
+const MButton = motion(Button);
 
 interface ToolBarDefaultProps {
 	currentStorageId: number;
@@ -25,14 +28,13 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 	const { currentFolderId, history, historyBack } =
 		useFoldersHistoryContext();
 
-	const [uploadFile, uploadFileResponse] = filesApi.useUploadFileMutation();
+	const [uploadFileMutation, uploadFileResponse] =
+		filesApi.useUploadFileMutation();
+	const [uploadFileStatus] = useStatus(uploadFileResponse.status);
 
-	function uploadFileHandler(e: React.ChangeEvent<HTMLInputElement>) {
-		if (!e.target.files || uploadFileResponse.isLoading) return;
-		const file = e.target.files[0];
-
+	function uploadFileHandler() {
 		uploadFile({
-			file,
+			uploadFile: uploadFileMutation,
 			storageId: currentStorageId,
 			folderId: currentFolderId,
 		});
@@ -64,15 +66,21 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 				className="h-full"
 				position="bottom-center"
 			>
-				<MUploadButton
+				<MButton
+					className="capitalize"
+					startIcon={<UploadIcon />}
+					color="amber"
+					size="large"
+					onClick={uploadFileHandler}
 					initial="initial"
 					animate="reveal"
 					variants={buttonVariants}
 					custom={0}
 					disabled={uploadFileResponse.isLoading}
-					isLoading={uploadFileResponse.isLoading}
-					onUpload={uploadFileHandler}
-				/>
+					status={uploadFileStatus}
+				>
+					Upload
+				</MButton>
 			</Tooltip>
 
 			<Tooltip
