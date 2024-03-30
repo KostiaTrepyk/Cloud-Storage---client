@@ -1,8 +1,6 @@
 import { FC, useState } from "react";
-import { getCookieValue } from "helpers/cookie";
 import { filesApi } from "services/filesApi";
 import { FileData } from "services/types";
-import { cookieKeys } from "types/cookie";
 
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import ShareModal from "components/ShareModal";
@@ -24,13 +22,11 @@ const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 			await updateFile({
 				id: file.id,
 				isFavourite: false,
-				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		} else {
 			await updateFile({
 				id: file.id,
 				isFavourite: true,
-				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		}
 	}

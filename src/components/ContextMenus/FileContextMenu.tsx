@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { getFileExtension } from "helpers/getFileExtension";
-import { getCookieValue } from "helpers/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { filesApi } from "services/filesApi";
 import { FileData } from "services/types";
-import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button/Button";
 import TrashIcon from "components/SvgIcons/TrashIcon";
@@ -118,7 +116,6 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ item }) => {
 									updateFile({
 										id: item.id,
 										newOriginalName: itemName,
-										token: getCookieValue(cookieKeys.TOKEN),
 									});
 								close();
 							}}
@@ -146,10 +143,7 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ item }) => {
 					variant="contained"
 					className="flex h-full w-full items-center gap-2"
 					onClick={() => {
-						deleteFile({
-							ids: [item.id],
-							token: getCookieValue(cookieKeys.TOKEN),
-						});
+						deleteFile({ ids: [item.id] });
 						close();
 					}}
 				>

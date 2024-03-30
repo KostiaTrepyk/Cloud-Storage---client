@@ -3,13 +3,10 @@ import { emptySplitApi } from "./emptySplitApi";
 export const shareApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
 		share: build.mutation<ShareResponse, ShareBody>({
-			query: ({ token, ...body }) => ({
+			query: ({ ...body }) => ({
 				url: "/share/share",
 				method: "PUT",
 				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
 				timeout: 1000 * 120, // 2min
 			}),
 			invalidatesTags: (res) => {
@@ -18,13 +15,10 @@ export const shareApi = emptySplitApi.injectEndpoints({
 		}),
 
 		unshare: build.mutation<UnshareResponse, UnshareBody>({
-			query: ({ token, ...body }) => ({
+			query: ({ ...body }) => ({
 				url: "/share/unshare",
 				method: "PUT",
 				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
 				timeout: 1000 * 60, // 1min
 			}),
 			invalidatesTags: (res) => {
@@ -40,7 +34,6 @@ export interface ShareBody {
 	userIdsToShareWith: number[];
 	folderIds?: number[];
 	fileIds?: number[];
-	token: string | undefined;
 }
 
 export type ShareResponse = {
@@ -54,7 +47,6 @@ export interface UnshareBody {
 	userIdsToRemove: number[];
 	folderIds?: number[];
 	fileIds?: number[];
-	token: string | undefined;
 }
 
 export interface UnshareResponse {

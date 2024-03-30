@@ -4,11 +4,10 @@ import { FileData, FileType, SortValue } from "./types";
 export const filesApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAllFiles: build.query<GetAllFilesResponse, GetAllFilesParams>({
-			query: ({ token, ...params }) => ({
+			query: (params) => ({
 				url: "/files/all",
 				method: "GET",
 				params,
-				headers: { Authorization: "Bearer " + token },
 				timeout: 1000 * 30, // 30sec,
 			}),
 			providesTags: ["Files"],
@@ -18,18 +17,17 @@ export const filesApi = emptySplitApi.injectEndpoints({
 			GetFolderFilesResponse,
 			GetFolderFilesParams
 		>({
-			query: ({ token, ...params }) => ({
+			query: (params) => ({
 				url: "/files/folderFiles",
 				method: "GET",
 				params,
-				headers: { Authorization: "Bearer " + token },
 				timeout: 1000 * 30, // 30sec,
 			}),
 			providesTags: ["Files"],
 		}),
 
 		uploadFile: build.mutation<UploadFileResponse, UploadFileBody>({
-			query: ({ token, ...body }) => {
+			query: (body) => {
 				const formData = new FormData();
 				formData.append("file", body.file);
 				formData.append("storageId", String(body.storageId));
@@ -38,11 +36,7 @@ export const filesApi = emptySplitApi.injectEndpoints({
 				return {
 					url: "/files/save",
 					method: "POST",
-
 					body: formData,
-					headers: {
-						Authorization: "Bearer " + token,
-					},
 					timeout: 1000 * 60, // 1min,
 				};
 			},
@@ -50,13 +44,10 @@ export const filesApi = emptySplitApi.injectEndpoints({
 		}),
 
 		updateFile: build.mutation<UpdateFileResponse, UpdateFileBody>({
-			query: ({ token, ...body }) => ({
+			query: (body) => ({
 				url: "/files/one",
 				method: "PUT",
 				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
 				timeout: 1000 * 30, // 30sec,
 			}),
 			invalidatesTags: ["Files"],
@@ -66,14 +57,11 @@ export const filesApi = emptySplitApi.injectEndpoints({
 			SoftDeleteFileResponse,
 			SoftDeleteFileBody
 		>({
-			query: ({ ids, token }) => ({
+			query: ({ ids }) => ({
 				url: "/files/softDelete",
 				method: "DELETE",
 				params: {
 					ids: ids.join(", "),
-				},
-				headers: {
-					Authorization: "Bearer " + token,
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
@@ -81,14 +69,11 @@ export const filesApi = emptySplitApi.injectEndpoints({
 		}),
 
 		deleteFile: build.mutation<DeleteFileResponse, DeleteFileParams>({
-			query: ({ ids, token }) => ({
+			query: ({ ids }) => ({
 				url: "/files/delete",
 				method: "DELETE",
 				params: {
 					ids: ids.join(", "),
-				},
-				headers: {
-					Authorization: "Bearer " + token,
 				},
 				timeout: 1000 * 30, // 30sec,
 			}),
@@ -113,7 +98,6 @@ export interface GetAllFilesParams {
 	sort?: SortValue;
 	search?: string;
 	createdAt?: string;
-	token: string | undefined;
 }
 
 /* GetFolderFiles */
@@ -122,7 +106,6 @@ export type GetFolderFilesResponse = FileData[];
 export interface GetFolderFilesParams {
 	folderId?: number;
 	storageId: number;
-	token: string | undefined;
 }
 
 /* UploadFile */
@@ -132,7 +115,6 @@ export interface UploadFileBody {
 	storageId: number;
 	folderId?: number;
 	file: File;
-	token: string | undefined;
 }
 
 /* UpdateFile */
@@ -143,7 +125,6 @@ export interface UpdateFileBody {
 	newOriginalName?: string;
 	newFolderId?: number;
 	isFavourite?: boolean;
-	token: string | undefined;
 }
 
 /* SoftDeleteFile */
@@ -151,7 +132,6 @@ export type SoftDeleteFileResponse = boolean;
 
 export interface SoftDeleteFileBody {
 	ids: number[];
-	token: string | undefined;
 }
 
 /* deleteFile */
@@ -159,5 +139,4 @@ export type DeleteFileResponse = boolean;
 
 export interface DeleteFileParams {
 	ids: number[];
-	token: string | undefined;
 }

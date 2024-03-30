@@ -1,7 +1,5 @@
 import { useContextMenuContext } from "contexts/ContextMenuContext";
-import { getCookieValue } from "helpers/cookie";
 import { storagesApi } from "services/storagesApi";
-import { cookieKeys } from "types/cookie";
 
 import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
@@ -23,10 +21,7 @@ const StorageListContextMenu: React.FC<StorageListContextMenuProps> = () => {
 					variant="contained"
 					className="flex h-full w-full items-center gap-2"
 					onClick={() => {
-						createStorage({
-							name: "New Storage",
-							token: getCookieValue(cookieKeys.TOKEN),
-						});
+						createStorage({ name: "New Storage" });
 						close();
 					}}
 				>

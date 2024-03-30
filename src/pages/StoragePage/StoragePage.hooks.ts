@@ -23,7 +23,6 @@ export const useStoragePageHooks = () => {
 		{
 			storageId: currentStorageId,
 			folderId: currentFolderId,
-			token: getCookieValue(cookieKeys.TOKEN),
 		},
 		{ skip: currentStorageId === 0 }
 	);
@@ -117,7 +116,6 @@ export const useStoragePageHooks = () => {
 			storageId: currentStorageId,
 			parentFolderId: currentFolderId,
 			folderName: folderName ?? "New Folder",
-			token: getCookieValue(cookieKeys.TOKEN),
 		});
 	}
 
@@ -131,7 +129,6 @@ export const useStoragePageHooks = () => {
 		newParentFolderId?: number;
 	}): void {
 		updateFolderMutation({
-			token: getCookieValue(cookieKeys.TOKEN),
 			newFolderName: newName,
 			newParentFolderId,
 			folderId: id,
@@ -150,7 +147,6 @@ export const useStoragePageHooks = () => {
 		updateFileMutation({
 			id,
 			newFolderId,
-			token: getCookieValue(cookieKeys.TOKEN),
 			newOriginalName: newName,
 		});
 	}

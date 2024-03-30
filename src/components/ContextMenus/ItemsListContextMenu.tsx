@@ -1,15 +1,13 @@
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
-import { getCookieValue } from "helpers/cookie";
 import { foldersApi } from "services/foldersApi";
-import { cookieKeys } from "types/cookie";
+import { filesApi } from "services/filesApi";
 
 import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import ContextMenuContainer from "./ContextMenuContainer";
 import Button from "components/UI/Buttons/Button/Button";
 import AddFileIcon from "components/SvgIcons/AddFileIcon";
 import BackIcon from "components/SvgIcons/BackIcon";
-import { filesApi } from "services/filesApi";
 
 interface ItemsListContextMenuProps {
 	currentFolderId: number;
@@ -59,7 +57,6 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 							parentFolderId: currentFolderId,
 							storageId: currentStoreId,
 							folderName: "New Folder",
-							token: getCookieValue(cookieKeys.TOKEN),
 						});
 						close();
 					}}

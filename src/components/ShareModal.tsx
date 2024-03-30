@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { getCookieValue } from "helpers/cookie";
 import { usersApi } from "services/usersApi";
 import { shareApi } from "services/shareApi";
 import {
@@ -8,7 +7,6 @@ import {
 	UserData,
 	UserDataWithSharedFiles,
 } from "services/types";
-import { cookieKeys } from "types/cookie";
 
 import Modal from "components/UI/Modal/Modal";
 import Image from "components/UI/Image/Image";
@@ -28,7 +26,6 @@ const ShareModal: FC<ShareModalProps> = ({ open, close, items }) => {
 
 	const getAllUsers = usersApi.useGetAllUsersQuery(
 		{
-			token: getCookieValue(cookieKeys.TOKEN),
 			orderBy: "SharedWith",
 			orderValue: "DESC",
 		},
@@ -61,14 +58,12 @@ const ShareModal: FC<ShareModalProps> = ({ open, close, items }) => {
 				fileIds,
 				folderIds,
 				userIdsToRemove: [user.id],
-				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		} else {
 			await share({
 				fileIds,
 				folderIds,
 				userIdsToShareWith: [user.id],
-				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		}
 	}

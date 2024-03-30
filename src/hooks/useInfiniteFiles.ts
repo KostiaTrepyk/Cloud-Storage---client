@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getCookieValue } from "helpers/cookie";
 import { GetAllFilesParams, filesApi } from "services/filesApi";
 import { FileData } from "services/types";
-import { cookieKeys } from "types/cookie";
 
 export function useInfiniteFiles(
 	query: GetAllFilesParams,
@@ -46,10 +44,7 @@ export function useInfiniteFiles(
 
 	// setData
 	useEffect(() => {
-		fetchFiles({
-			...query,
-			token: getCookieValue(cookieKeys.TOKEN),
-		})
+		fetchFiles(query)
 			.unwrap()
 			.then((res) => {
 				if (res.page === 1) {

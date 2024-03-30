@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
 import { motion } from "framer-motion";
 import { useStatus } from "hooks/useStatus";
-import { getCookieValue } from "helpers/cookie";
 import { getFileExtension } from "helpers/getFileExtension";
 import { downloadFolder } from "helpers/downloadFolder";
-import { cookieKeys } from "types/cookie";
+import { isFile } from "helpers/isFile";
+import { foldersApi } from "services/foldersApi";
 import { filesApi } from "services/filesApi";
 import { FileData, FolderData } from "services/types";
 
@@ -15,7 +15,6 @@ import CloseIcon from "components/SvgIcons/CloseIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
-import { isFile } from "helpers/isFile";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
@@ -35,8 +34,11 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 }) => {
 	const [isShareModalOpened, setShareModalOpened] = useState<boolean>(false);
 
-	const [deleteFiles, __deleteStatus] = filesApi.useSoftDeleteFileMutation();
-	const [deleteFilesStatus] = useStatus(__deleteStatus.status);
+	const [deleteFolders, __deleteFoldersStatus] =
+		foldersApi.useDeleteFolderMutation();
+	const [deleteFiles, __deleteFilesStatus] =
+		filesApi.useSoftDeleteFileMutation();
+	const [deleteFilesStatus] = useStatus(__deleteFilesStatus.status);
 
 	function downloadCheckedFiles() {
 		for (const item of checkedItems) {
@@ -78,12 +80,16 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 	}
 
 	function deleteCheckedFiles() {
-		deleteFiles({
-			ids: checkedItems
-				.map((item) => (isFile(item) ? item.id : undefined))
-				.filter((item) => item === undefined) as any,
-			token: getCookieValue(cookieKeys.TOKEN),
+		const folderIds: number[] = [];
+		let fileIds: number[] = [];
+
+		checkedItems.forEach((item) => {
+			if (isFile(item)) fileIds.push(item.id);
+			else folderIds.push(item.id);
 		});
+
+		deleteFiles({ ids: fileIds });
+		deleteFolders({ foldersIds: folderIds });
 
 		clearCheckedItems();
 	}

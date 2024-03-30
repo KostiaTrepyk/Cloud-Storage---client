@@ -1,8 +1,6 @@
 import { FC } from "react";
-import { getCookieValue } from "helpers/cookie";
 import { downloadFolder } from "helpers/downloadFolder";
 import { foldersApi } from "services/foldersApi";
-import { cookieKeys } from "types/cookie";
 
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
@@ -13,11 +11,7 @@ interface SideButtonsProps {
 }
 
 const FolderSideButtons: FC<SideButtonsProps> = ({ folderId, storageId }) => {
-	const { data } = foldersApi.useGetFolderQuery({
-		storageId,
-		folderId,
-		token: getCookieValue(cookieKeys.TOKEN),
-	});
+	const { data } = foldersApi.useGetFolderQuery({ storageId, folderId });
 
 	return (
 		<div className="absolute right-1 top-1 flex w-9 flex-col gap-1">

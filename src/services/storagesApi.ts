@@ -4,13 +4,10 @@ import { StorageData, StorageDataWithRemainingSpace } from "./types";
 export const storagesApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
 		getStorages: build.query<getStoragesAllResponse, getStoragesAllBody>({
-			query: ({ token, ...params }) => ({
+			query: (params) => ({
 				url: "/storages/all",
 				method: "GET",
 				params,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
 				timeout: 1000 * 120, // 2min
 			}),
 			providesTags: ["Storages"],
@@ -18,13 +15,10 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 
 		createStorage: build.mutation<createStorageResponse, createStorageBody>(
 			{
-				query: ({ token, ...body }) => ({
+				query: (body) => ({
 					url: "/storages/create",
 					method: "POST",
 					body: { ...body, storageId: 1 },
-					headers: {
-						Authorization: "Bearer " + token,
-					},
 					timeout: 1000 * 60, // 1min
 				}),
 				invalidatesTags: ["Storages"],
@@ -32,13 +26,10 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 		),
 
 		updateStorage: build.mutation<updateFolderResponse, updateStorageBody>({
-			query: ({ token, ...body }) => ({
+			query: (body) => ({
 				url: "/storages/update",
 				method: "PUT",
 				body,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
 				timeout: 1000 * 60, // 1min
 			}),
 			invalidatesTags: ["Storages"],
@@ -46,13 +37,10 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 
 		deleteStorage: build.mutation<deleteStorageResponse, deleteStorageBody>(
 			{
-				query: ({ token, ...body }) => ({
+				query: (body) => ({
 					url: "/storages/delete",
 					method: "DELETE",
 					body,
-					headers: {
-						Authorization: "Bearer " + token,
-					},
 					timeout: 1000 * 60, // 1min
 				}),
 				invalidatesTags: ["Storages"],
@@ -63,9 +51,7 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 
 /* Get */
 
-export interface getStoragesAllBody {
-	token: string | undefined;
-}
+export interface getStoragesAllBody {}
 
 export type getStoragesAllResponse = StorageDataWithRemainingSpace[];
 
@@ -73,7 +59,6 @@ export type getStoragesAllResponse = StorageDataWithRemainingSpace[];
 
 export interface createStorageBody {
 	name: string;
-	token: string | undefined;
 }
 
 export type createStorageResponse = StorageData;
@@ -83,7 +68,6 @@ export type createStorageResponse = StorageData;
 export interface updateStorageBody {
 	newName: string;
 	storageId: number;
-	token: string | undefined;
 }
 
 export type updateFolderResponse = boolean;
@@ -92,7 +76,6 @@ export type updateFolderResponse = boolean;
 
 export interface deleteStorageBody {
 	storageId: number;
-	token: string | undefined;
 }
 
 export type deleteStorageResponse = boolean;

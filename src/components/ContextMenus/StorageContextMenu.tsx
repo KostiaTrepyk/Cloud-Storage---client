@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { getCookieValue } from "helpers/cookie";
 import { storagesApi } from "services/storagesApi";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { StorageData } from "services/types";
-import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button/Button";
 
@@ -102,7 +100,6 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 									updateStorage({
 										newName: itemName,
 										storageId: item.id,
-										token: getCookieValue(cookieKeys.TOKEN),
 									});
 								close();
 							}}
@@ -130,10 +127,7 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 					variant="contained"
 					className="flex h-full w-full items-center gap-2"
 					onClick={() => {
-						deleteStorage({
-							storageId: item.id,
-							token: getCookieValue(cookieKeys.TOKEN),
-						});
+						deleteStorage({ storageId: item.id });
 						close();
 					}}
 				>

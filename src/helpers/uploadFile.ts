@@ -1,5 +1,3 @@
-import { cookieKeys } from "types/cookie";
-import { getCookieValue } from "./cookie";
 import { type UploadFileBody } from "services/filesApi";
 
 /**
@@ -34,7 +32,6 @@ export function uploadFile({
 
 		// Retrieve the selected file and initiate the file upload
 		uploadFile({
-			token: getCookieValue(cookieKeys.TOKEN), // Get authentication token from cookies
 			folderId,
 			storageId,
 			file: input.files[0],

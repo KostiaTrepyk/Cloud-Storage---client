@@ -1,9 +1,7 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
-import { getCookieValue } from "helpers/cookie";
 import { filesApi } from "services/filesApi";
-import { cookieKeys } from "types/cookie";
 
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import UploadButton from "components/UploadButton";
@@ -37,7 +35,6 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 			file,
 			storageId: currentStorageId,
 			folderId: currentFolderId,
-			token: getCookieValue(cookieKeys.TOKEN),
 		});
 	}
 

@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { foldersApi } from "services/foldersApi";
 import { downloadFolder } from "helpers/downloadFolder";
-import { getCookieValue } from "helpers/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { FolderData } from "services/types";
-import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button/Button";
 
@@ -106,7 +104,6 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 									updateFolder({
 										folderId: item.id,
 										newFolderName: itemName,
-										token: getCookieValue(cookieKeys.TOKEN),
 									});
 								close();
 							}}
@@ -134,10 +131,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 					variant="contained"
 					className="flex h-full w-full items-center gap-2"
 					onClick={() => {
-						deleteFolder({
-							foldersIds: [item.id],
-							token: getCookieValue(cookieKeys.TOKEN),
-						});
+						deleteFolder({ foldersIds: [item.id] });
 						close();
 					}}
 				>

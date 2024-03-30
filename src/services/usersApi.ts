@@ -5,12 +5,9 @@ export const usersApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
 		/* USERS */
 		getAllUsers: build.query<GetAllUsersRepsonse, GetAllUsersParams>({
-			query: ({ token, ...params }) => ({
+			query: (params) => ({
 				url: "/users/allUsers",
 				params,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
 				timeout: 1000 * 30, // 30sec
 			}),
 			providesTags: ["Users"],
@@ -33,5 +30,4 @@ export interface GetAllUsersParams {
 	page?: number;
 	limit?: number;
 	searchByEmail?: string;
-	token: string | undefined;
 }
