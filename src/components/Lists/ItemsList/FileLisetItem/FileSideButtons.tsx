@@ -1,36 +1,35 @@
 import { FC, useState } from "react";
 import { getCookieValue } from "helpers/cookie";
 import { filesApi } from "services/filesApi";
-import { FileDataWithSharedWith } from "services/types";
+import { FileData } from "services/types";
 import { cookieKeys } from "types/cookie";
 
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
-import ShareUsersModal from "components/ShareUsersModal";
+import ShareModal from "components/ShareModal";
 
 import FavouriteIcon from "components/SvgIcons/FavouriteIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
 
 interface SideButtonsProps {
-	file: FileDataWithSharedWith;
+	file: FileData;
 }
 
 const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
-	const [addToFavorite, addToFavoriteStatus] =
-		filesApi.useAddToFavouriteMutation();
-	const [removeFromFavorite, removeFromFavoriteStatus] =
-		filesApi.useRemoveFromFavouriteMutation();
+	const [updateFile, updateStatus] = filesApi.useUpdateFileMutation();
 
-	function toggleFavourite() {
+	async function toggleFavourite() {
 		if (file.isFavourite) {
-			removeFromFavorite({
-				fileId: file.id,
+			await updateFile({
+				id: file.id,
+				isFavourite: false,
 				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		} else {
-			addToFavorite({
-				fileId: file.id,
+			await updateFile({
+				id: file.id,
+				isFavourite: true,
 				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		}
@@ -48,22 +47,21 @@ const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 		<div className="absolute right-1 top-1 flex w-9 flex-col gap-1">
 			<IconButton
 				className={`scale-75 border-0 text-rose-600 transition-all duration-500 group-hover:visible group-hover:scale-100 group-hover:opacity-100 ${
-					file.isFavourite || addToFavoriteStatus.isLoading
+					file.isFavourite || updateStatus.isLoading
 						? "visible opacity-100"
 						: "invisible opacity-0"
 				}`}
 				color="light"
 				variant="contained"
 				status={
-					addToFavoriteStatus.status === "pending" ||
-					removeFromFavoriteStatus.status === "pending"
+					updateStatus.status === "pending"
 						? "pending"
 						: "uninitialized"
 				}
 				onClick={toggleFavourite}
 			>
 				<FavouriteIcon
-					filled={file.isFavourite || addToFavoriteStatus.isLoading}
+					filled={file.isFavourite || updateStatus.isLoading}
 				/>
 			</IconButton>
 
@@ -80,10 +78,10 @@ const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 				<ShareIcon filled={file.sharedWith.length > 0} />
 			</IconButton>
 
-			<ShareUsersModal
+			<ShareModal
 				open={isModalOpened}
 				close={closeModal}
-				file={file}
+				items={[file]}
 			/>
 		</div>
 	);

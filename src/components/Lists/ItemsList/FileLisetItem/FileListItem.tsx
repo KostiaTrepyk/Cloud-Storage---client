@@ -1,17 +1,17 @@
 import { forwardRef, memo } from "react";
 import { twMerge } from "tailwind-merge";
 import { getFileExtension } from "helpers/getFileExtension";
-import { FileDataWithSharedWith } from "services/types";
+import { FileData } from "services/types";
 
 import ItemContainer from "components/Lists/ItemsList/ItemContainer";
 import Image from "components/UI/Image/Image";
 import FileSideButtons from "./FileSideButtons";
 
 interface FileListItemProps extends React.HTMLAttributes<HTMLLIElement> {
-	file: FileDataWithSharedWith;
+	file: FileData;
 	checked?: boolean;
-	removeFilefromChecked: (file: FileDataWithSharedWith) => void;
-	addFileToChecked: (file: FileDataWithSharedWith) => void;
+	removeFilefromChecked: (file: FileData) => void;
+	addFileToChecked: (file: FileData) => void;
 	showCheckIndicator?: boolean;
 }
 
@@ -60,6 +60,7 @@ const FileListItem = memo(
 										"transition duration-500 hover:scale-90",
 									src: fileUrl,
 									alt: file.originalname,
+									draggable: false,
 								}}
 							/>
 						) : (

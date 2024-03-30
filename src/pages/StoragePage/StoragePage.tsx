@@ -30,7 +30,7 @@ const StoragePage = () => {
 		updateFile,
 		updateFolder,
 
-		refreshStorages,
+		refetchStorages: refreshStorages,
 
 		storages,
 		folders,

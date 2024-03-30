@@ -7,11 +7,6 @@ import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
 import { filesApi } from "services/filesApi";
 import { foldersApi } from "services/foldersApi";
 import { storagesApi } from "services/storagesApi";
-import {
-	FileDataWithSharedWith,
-	type FileData,
-	type FolderData,
-} from "services/types";
 import { cookieKeys } from "types/cookie";
 
 export const useStoragePageHooks = () => {
@@ -59,37 +54,41 @@ export const useStoragePageHooks = () => {
 		updateFolderResponse,
 		updateFileResponse,
 	]);
+
+	const storages = useMemo(
+		() => getStoragesResponse.data ?? [],
+		[getStoragesResponse.data]
+	);
+
+	const folders = useMemo(
+		() => getFolderResponse.data?.folders ?? [],
+		[getFolderResponse.data?.folders]
+	);
+
+	const files = useMemo(
+		() => getFolderResponse.data?.files ?? [],
+		[getFolderResponse.data?.files]
+	);
+
 	/** Folders + files */
-	const items: (FolderData | FileDataWithSharedWith)[] = useMemo(() => {
+	const items = useMemo(() => {
 		const result = [
 			...(getFolderResponse.data?.files ?? []),
 			...(getFolderResponse.data?.folders ?? []),
 		];
 		return result;
 	}, [getFolderResponse.data]);
-	const storages = useMemo(
-		() => getStoragesResponse.data ?? [],
-		[getStoragesResponse.data]
-	);
-	const folders = useMemo(
-		() => getFolderResponse.data?.folders ?? [],
-		[getFolderResponse.data?.folders]
-	);
-	const files = useMemo(
-		() => getFolderResponse.data?.files ?? [],
-		[getFolderResponse.data?.files]
-	);
 
 	const {
 		checkedItems,
 		addItemToChecked,
 		removeItemFromChecked,
 		clearCheckedItems,
-	} = useCheckedItems<FileData | FolderData>(items);
+	} = useCheckedItems(items);
 
 	useEffect(() => {
 		if (
-			(getStoragesResponse.data?.length ?? 0 > 0) &&
+			getStoragesResponse.data?.length &&
 			currentStorageId === 0 &&
 			getStoragesResponse.data
 		) {
@@ -156,7 +155,7 @@ export const useStoragePageHooks = () => {
 		});
 	}
 
-	function refreshStorages() {
+	function refetchStorages() {
 		getStoragesResponse.refetch();
 	}
 
@@ -179,7 +178,7 @@ export const useStoragePageHooks = () => {
 		updateFile,
 		updateFolder,
 
-		refreshStorages,
+		refetchStorages,
 
 		storages,
 		folders,

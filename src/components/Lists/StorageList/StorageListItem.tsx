@@ -24,7 +24,8 @@ const StorageListItem: React.FC<StorageListItemProps> = ({
 			<h2 className="text-lg font-semibold">{item.name}</h2>
 			<Progress value={100 - (item.remainingSpace / item.size) * 100} />
 			<span className="text-sm">
-				{Number(item.remainingSpace).toFixed(1)}MB / {item.size}MB
+				{Number(item.remainingSpace / 1024 / 1024).toFixed(1)}MB /{" "}
+				{item.size / 1024 / 1024}MB
 			</span>
 		</li>
 	);

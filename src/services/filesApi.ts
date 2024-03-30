@@ -1,5 +1,5 @@
 import { emptySplitApi } from "./emptySplitApi";
-import { FileDataWithSharedWith, FileType, SortValue } from "./types";
+import { FileData, FileType, SortValue } from "./types";
 
 export const filesApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -100,7 +100,7 @@ export const filesApi = emptySplitApi.injectEndpoints({
 
 /* GetAllFiles */
 export interface GetAllFilesResponse {
-	files: FileDataWithSharedWith[];
+	files: FileData[];
 	count: number;
 	isLastPage: boolean;
 	page: number;
@@ -117,7 +117,7 @@ export interface GetAllFilesParams {
 }
 
 /* GetFolderFiles */
-export type GetFolderFilesResponse = FileDataWithSharedWith[];
+export type GetFolderFilesResponse = FileData[];
 
 export interface GetFolderFilesParams {
 	folderId?: number;
@@ -126,7 +126,7 @@ export interface GetFolderFilesParams {
 }
 
 /* UploadFile */
-export interface UploadFileResponse extends FileDataWithSharedWith {}
+export interface UploadFileResponse extends FileData {}
 
 export interface UploadFileBody {
 	storageId: number;

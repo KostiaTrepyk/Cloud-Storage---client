@@ -3,7 +3,7 @@ import { getFileExtension } from "helpers/getFileExtension";
 import { getCookieValue } from "helpers/cookie";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { filesApi } from "services/filesApi";
-import { FileDataWithSharedWith } from "services/types";
+import { FileData } from "services/types";
 import { cookieKeys } from "types/cookie";
 
 import Button from "components/UI/Buttons/Button/Button";
@@ -16,7 +16,7 @@ import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import OpenFolderIcon from "components/SvgIcons/OpenFolder";
 
 interface FileContextMenuProps {
-	item: FileDataWithSharedWith;
+	item: FileData;
 }
 
 const FileContextMenu: React.FC<FileContextMenuProps> = ({ item }) => {
@@ -28,7 +28,7 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ item }) => {
 	const [updateFile, updateFileData] = filesApi.useUpdateFileMutation();
 	const [deleteFile] = filesApi.useSoftDeleteFileMutation();
 
-	function downloadFile(item: FileDataWithSharedWith) {
+	function downloadFile(item: FileData) {
 		fetch("http://localhost:5000/uploads/" + item.filename, {
 			method: "GET",
 			headers: {

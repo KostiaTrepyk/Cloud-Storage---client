@@ -37,6 +37,7 @@ export interface FolderData {
 	name: string;
 	createdAt: string;
 	parrentFolderId: number;
+	sharedWith: UserData[];
 }
 
 export interface FileData {
@@ -48,9 +49,6 @@ export interface FileData {
 	isFavourite: boolean;
 	deletedAt: Date | null;
 	createdAt: Date;
-}
-
-export interface FileDataWithSharedWith extends FileData {
 	sharedWith: UserData[];
 }
 

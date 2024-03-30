@@ -1,4 +1,4 @@
-import { FileData, FolderData } from "services/types";
+import { FileData, FolderData, } from "services/types";
 
 import ToolBarDefault from "./ToolBarDefault";
 import ToolBarAction from "./ToolBarAction";

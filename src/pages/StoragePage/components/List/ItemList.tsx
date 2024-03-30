@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
-import {
-	type FolderData,
-	type FileData,
-	FileDataWithSharedWith,
-} from "services/types";
+import { isFile } from "helpers/isFile";
+import { type FolderData, type FileData } from "services/types";
 
 import FileContextMenu from "components/ContextMenus/FileContextMenu";
 import FolderContextMenu from "components/ContextMenus/FolderContextMenu";
@@ -26,7 +23,7 @@ interface ItemListProps {
 
 	checkedItems: (FileData | FolderData)[];
 	folders: FolderData[];
-	files: FileDataWithSharedWith[];
+	files: FileData[];
 
 	changeFolderId: (id: number) => void;
 	addItemToChecked: (item: FileData | FolderData) => void;
@@ -99,11 +96,13 @@ const ItemList: React.FC<ItemListProps> = ({
 						<FolderListItem
 							currentStorageId={currentStorageId}
 							item={folder}
-							showCheckIndicator={Boolean(checkedItems.length)}
+							showCheckIndicator={checkedItems.length > 0}
 							onDoubleClick={() =>
 								folderDoubleClickHandler(folder.id)
 							}
-							checked={checkedItems.includes(folder)}
+							checked={checkedItems.some(
+								(f) => !isFile(f) && f.id === folder.id
+							)}
 							addItemToChecked={() => addItemToChecked(folder)}
 							removeItemfromChecked={() =>
 								removeItemFromChecked(folder)
@@ -157,8 +156,10 @@ const ItemList: React.FC<ItemListProps> = ({
 					<Fade key={file.id}>
 						<FileListItem
 							file={file}
-							showCheckIndicator={Boolean(checkedItems.length)}
-							checked={checkedItems.includes(file)}
+							showCheckIndicator={checkedItems.length > 0}
+							checked={checkedItems.some(
+								(f) => isFile(f) && f.id === file.id
+							)}
 							addFileToChecked={() => addItemToChecked(file)}
 							removeFilefromChecked={() =>
 								removeItemFromChecked(file)

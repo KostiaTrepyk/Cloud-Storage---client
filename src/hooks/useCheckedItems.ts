@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export function useCheckedItems<Item extends { id: number | string }>(
 	items: Item[]
@@ -6,25 +6,26 @@ export function useCheckedItems<Item extends { id: number | string }>(
 	const [checkedItems, setCheckedItems] = useState<Item[]>([]);
 
 	useEffect(() => {
-		if (checkedItems.length)
-			setCheckedItems((prev) =>
-				prev.filter((prevItem) => items.includes(prevItem))
-			);
+		setCheckedItems((prev) =>
+			items.filter((item) =>
+				prev.some((prevItem) => prevItem.id === item.id)
+			)
+		);
 	}, [items]);
 
-	function addItemToChecked(item: Item) {
-		if (!items.includes(item)) return;
-
+	const addItemToChecked = useCallback((item: Item) => {
 		setCheckedItems((prev) => [...prev, item]);
-	}
+	}, []);
 
-	function removeItemFromChecked(item: Item) {
-		setCheckedItems((prev) => prev.filter((prevItem) => prevItem !== item));
-	}
+	const removeItemFromChecked = useCallback((item: Item) => {
+		setCheckedItems((prev) =>
+			prev.filter((prevItem) => prevItem.id !== item.id)
+		);
+	}, []);
 
-	function clearCheckedItems() {
-		if (checkedItems.length) setCheckedItems([]);
-	}
+	const clearCheckedItems = useCallback(() => {
+		setCheckedItems([]);
+	}, []);
 
 	return {
 		checkedItems,

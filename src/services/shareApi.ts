@@ -12,8 +12,7 @@ export const shareApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 120, // 2min
 			}),
-			invalidatesTags: (a, b, c, d) => {
-				console.log(a, b, c, d);
+			invalidatesTags: (res) => {
 				return ["Files", "Folders"];
 			},
 		}),
@@ -28,8 +27,7 @@ export const shareApi = emptySplitApi.injectEndpoints({
 				},
 				timeout: 1000 * 60, // 1min
 			}),
-			invalidatesTags: (a, b, c, d) => {
-				console.log(a, b, c, d);
+			invalidatesTags: (res) => {
 				return ["Files", "Folders"];
 			},
 		}),
@@ -39,9 +37,9 @@ export const shareApi = emptySplitApi.injectEndpoints({
 /* Share */
 
 export interface ShareBody {
-	folderIds: number[];
-	fileIds: number[];
 	userIdsToShareWith: number[];
+	folderIds?: number[];
+	fileIds?: number[];
 	token: string | undefined;
 }
 
@@ -54,8 +52,8 @@ export type ShareResponse = {
 
 export interface UnshareBody {
 	userIdsToRemove: number[];
-	folderIds: number[];
-	fileIds: number[];
+	folderIds?: number[];
+	fileIds?: number[];
 	token: string | undefined;
 }
 

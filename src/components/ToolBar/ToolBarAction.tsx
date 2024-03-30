@@ -1,19 +1,21 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { motion } from "framer-motion";
 import { useStatus } from "hooks/useStatus";
 import { getCookieValue } from "helpers/cookie";
 import { getFileExtension } from "helpers/getFileExtension";
+import { downloadFolder } from "helpers/downloadFolder";
 import { cookieKeys } from "types/cookie";
 import { filesApi } from "services/filesApi";
 import { FileData, FolderData } from "services/types";
 
 import { buttonVariants } from "components/ToolBar/animations";
+import ShareModal from "components/ShareModal";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import CloseIcon from "components/SvgIcons/CloseIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
-import IconButton from "components/UI/Buttons/IconButton/IconButton";
-import { downloadFolder } from "helpers/downloadFolder";
+import { isFile } from "helpers/isFile";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
@@ -25,26 +27,19 @@ interface ToolBarActionProps {
 	disabled?: boolean;
 }
 
-function isFile(item: FileData | FolderData): item is FileData {
-	if ((item as FileData).filename === undefined) return false;
-
-	return true;
-}
-
 const ToolBarAction: FC<ToolBarActionProps> = ({
 	currentStorageId,
 	checkedItems,
 	clearCheckedItems,
 	disabled,
 }) => {
-	const [deleteFiles, __deleteStatus] = filesApi.useSoftDeleteFileMutation({
-		fixedCacheKey: "1",
-	});
+	const [isShareModalOpened, setShareModalOpened] = useState<boolean>(false);
 
+	const [deleteFiles, __deleteStatus] = filesApi.useSoftDeleteFileMutation();
 	const [deleteFilesStatus] = useStatus(__deleteStatus.status);
 
 	function downloadCheckedFiles() {
-		checkedItems.forEach((item) => {
+		for (const item of checkedItems) {
 			if (isFile(item)) {
 				fetch("http://localhost:5000/uploads/" + item.filename, {
 					method: "GET",
@@ -77,20 +72,16 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 					folderId: item.id,
 				});
 			}
-		});
+		}
 
 		clearCheckedItems();
 	}
 
 	function deleteCheckedFiles() {
-		let checkedFilesIds: number[] = [];
-
-		checkedItems.forEach((file) => {
-			checkedFilesIds.push(file.id);
-		});
-
 		deleteFiles({
-			ids: checkedFilesIds,
+			ids: checkedItems
+				.map((item) => (isFile(item) ? item.id : undefined))
+				.filter((item) => item === undefined) as any,
 			token: getCookieValue(cookieKeys.TOKEN),
 		});
 
@@ -131,6 +122,7 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 				custom={2}
 				color="amber"
 				title="Share"
+				onClick={() => setShareModalOpened(true)}
 				disabled={disabled}
 			>
 				<ShareIcon filled />
@@ -149,6 +141,12 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 			>
 				<TrashIcon />
 			</MIconButton>
+
+			<ShareModal
+				open={isShareModalOpened}
+				close={() => setShareModalOpened(false)}
+				items={checkedItems}
+			/>
 		</>
 	);
 };

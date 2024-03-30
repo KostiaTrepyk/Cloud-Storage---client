@@ -15,20 +15,15 @@ import Image from "components/UI/Image/Image";
 
 import LoadIcon from "components/SvgIcons/LoadIcon";
 import Button from "components/UI/Buttons/Button/Button";
+import { isFile } from "helpers/isFile";
 
 interface ShareModalProps {
 	open: boolean;
 	close: () => void;
-	files?: FileData[];
-	folders?: FolderData[];
+	items: (FileData | FolderData)[];
 }
 
-const ShareModal: FC<ShareModalProps> = ({
-	open,
-	close,
-	files = [],
-	folders = [],
-}) => {
+const ShareModal: FC<ShareModalProps> = ({ open, close, items }) => {
 	const [users, setUsers] = useState<UserDataWithSharedFiles[]>([]);
 
 	const getAllUsers = usersApi.useGetAllUsersQuery(
@@ -49,31 +44,29 @@ const ShareModal: FC<ShareModalProps> = ({
 
 	async function handleShare(user: UserData) {
 		let isShared: boolean = false;
+		const fileIds: number[] = [];
+		const folderIds: number[] = [];
 
-		for (const file of files) {
-			if (file.sharedWith.some((u) => u.id === user.id)) {
+		for (const item of items) {
+			if (item.sharedWith.some((u) => u.id === user.id)) {
 				isShared = true;
 			}
-			if (isShared) break;
-		}
-		for (const folder of folders) {
-			if (folder.sharedWith.some((u) => u.id === user.id)) {
-				isShared = true;
-			}
-			if (isShared) break;
+
+			if (isFile(item)) fileIds.push(item.id);
+			else folderIds.push(item.id);
 		}
 
 		if (isShared) {
 			await unshare({
-				fileIds: files.map((file) => file.id),
-				folderIds: folders.map((folder) => folder.id),
+				fileIds,
+				folderIds,
 				userIdsToRemove: [user.id],
 				token: getCookieValue(cookieKeys.TOKEN),
 			});
 		} else {
 			await share({
-				fileIds: files.map((file) => file.id),
-				folderIds: folders.map((folder) => folder.id),
+				fileIds,
+				folderIds,
 				userIdsToShareWith: [user.id],
 				token: getCookieValue(cookieKeys.TOKEN),
 			});
@@ -112,12 +105,12 @@ const ShareModal: FC<ShareModalProps> = ({
 										: "uninitialized"
 								}
 							>
-								{[...files, ...folders].some((item) =>
+								{items.some((item) =>
 									item.sharedWith.some(
 										(u) => u.id === user.id
 									)
 								)
-									? "Shared"
+									? "Unshare"
 									: "Share"}
 							</Button>
 						</li>

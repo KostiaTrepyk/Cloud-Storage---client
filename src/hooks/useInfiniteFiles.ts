@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getCookieValue } from "helpers/cookie";
 import { GetAllFilesParams, filesApi } from "services/filesApi";
-import { FileDataWithSharedWith, SortValue } from "services/types";
+import { FileData } from "services/types";
 import { cookieKeys } from "types/cookie";
 
 export function useInfiniteFiles(
 	query: GetAllFilesParams,
 	options: { marginBottom: number } = { marginBottom: 300 }
 ) {
-	const [files, setFiles] = useState<FileDataWithSharedWith[]>([]);
+	const [files, setFiles] = useState<FileData[]>([]);
 	const [page, setPage] = useState<number>(1);
 
 	const [fetchFiles, fetchFilesStatus] = filesApi.useLazyGetAllFilesQuery();

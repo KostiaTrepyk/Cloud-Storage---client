@@ -1,5 +1,5 @@
 import { emptySplitApi } from "./emptySplitApi";
-import { FolderData, FileDataWithSharedWith } from "./types";
+import { FileData, FolderData } from "./types";
 
 export const foldersApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -68,7 +68,7 @@ export interface getFolderBody {
 export interface getFolderResponse {
 	currentFolder: FolderData | null;
 	folders: FolderData[];
-	files: FileDataWithSharedWith[];
+	files: FileData[];
 }
 
 /* Create */
