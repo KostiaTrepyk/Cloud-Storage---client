@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { SIGNINROUTE } from "../../core/Router/types/routes";
+import { SIGNINROUTE } from "../../core/Router/routes";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { AuthActions } from "../../store/authSlice/authSlice";

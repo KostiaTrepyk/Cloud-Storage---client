@@ -1,6 +1,6 @@
 import { FC, FormEvent, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { SIGNUPROUTE } from "core/Router/types/routes";
+import { SIGNUPROUTE } from "core/Router/routes";
 import { useAppSelector } from "hooks/useAppSelector";
 import { SignInArg } from "store/authSlice/reducers/signIn";
 

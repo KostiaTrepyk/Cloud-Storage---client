@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { deleteAllCookies } from "helpers/cookie";
-import { HOMEROUTE } from "core/Router/types/routes";
+import { HOMEROUTE } from "core/Router/routes";
 
 const ErrorPage = () => {
 	useEffect(() => {

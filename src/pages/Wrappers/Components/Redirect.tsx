@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { RoutePaths, HOMEROUTE } from "core/Router/types/routes";
+import { RoutePaths, HOMEROUTE } from "core/Router/routes";
 import { searchParamsFromObj } from "helpers/searchParamsFromObj";
 import { SearchParamsEnum } from "types/searchParamsEnum";
 import { searchParamsToObj } from "helpers/searchParamsToObj";

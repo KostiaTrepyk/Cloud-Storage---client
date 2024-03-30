@@ -12,7 +12,7 @@ import { buttonVariants } from "components/ToolBar/animations";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import Tooltip from "components/UI/Tooltip/Tooltip";
 import { useNavigate } from "react-router-dom";
-import { TRASHROUTE } from "core/Router/types/routes";
+import { TRASHROUTE } from "core/Router/routes";
 
 const MIconButton = motion(IconButton);
 const MUploadButton = motion(UploadButton);

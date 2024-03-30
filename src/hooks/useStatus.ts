@@ -9,7 +9,6 @@ export function useStatus(
 		useState<keyof typeof QueryStatus>(initialStatus);
 
 	const timeout = useRef<NodeJS.Timeout>();
-	console.log(initialStatus);
 
 	useEffect(() => {
 		if (status === "fulfilled" || status === "rejected") {

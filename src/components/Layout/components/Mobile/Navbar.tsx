@@ -4,7 +4,7 @@ import {
 	HOMEROUTE,
 	STORAGEROUTE,
 	PROFILEROUTE,
-} from "core/Router/types/routes";
+} from "core/Router/routes";
 import { usePathname } from "hooks/usePathname";
 
 // Icons

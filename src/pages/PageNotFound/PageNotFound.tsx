@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { HOMEROUTE } from "core/Router/types/routes";
+import { HOMEROUTE } from "core/Router/routes";
 
 const PageNotFound = () => {
 	return (

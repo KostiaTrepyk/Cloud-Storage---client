@@ -1,5 +1,4 @@
 import { RouteObject } from "react-router-dom";
-import { generateId } from "../helpers/generateId";
 
 // pages
 import HomePage from "pages/HomePage/HomePage";
@@ -25,43 +24,36 @@ export const RoutePaths = {
 };
 
 export const HOMEROUTE: RouteObject = {
-	id: generateId(),
 	path: RoutePaths.HOME,
 	element: <HomePage />,
 };
 
 export const STORAGEROUTE: RouteObject = {
-	id: generateId(),
 	path: RoutePaths.STORAGE,
 	element: <StoragePage />,
 };
 
 export const TRASHROUTE: RouteObject = {
-	id: generateId(),
 	path: RoutePaths.TRASH,
 	element: <TrashPage />,
 };
 
 export const PROFILEROUTE: RouteObject = {
-	id: generateId(),
 	path: RoutePaths.PROFILE,
 	element: <ProfilePage />,
 };
 
 export const SIGNINROUTE: RouteObject = {
-	id: generateId(),
 	path: RoutePaths.SIGNIN,
 	element: <AuthPage />,
 };
 
 export const SIGNUPROUTE: RouteObject = {
-	id: generateId(),
 	path: RoutePaths.SIGNUP,
 	element: <AuthPage />,
 };
 
 const PAGENOTFOUNDROUTE: RouteObject = {
-	id: generateId(),
 	path: "*",
 	element: <PageNotFound />,
 };

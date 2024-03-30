@@ -18,7 +18,7 @@ const SidebarLinks: React.FC<Props> = ({ routes }) => {
 						!redirect.rootPathname);
 
 				return (
-					<React.Fragment key={route.id}>
+					<React.Fragment key={route.path}>
 						<NavLink
 							to={route.path!}
 							className={`flex flex-row gap-3 transition duration-500 hover:text-rose-600 ${

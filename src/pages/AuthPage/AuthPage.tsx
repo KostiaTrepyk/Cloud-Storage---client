@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { SIGNUPROUTE } from "core/Router/types/routes";
+import { SIGNUPROUTE } from "core/Router/routes";
 import { useAppSelector } from "hooks/useAppSelector";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { SearchParamsEnum } from "types/searchParamsEnum";

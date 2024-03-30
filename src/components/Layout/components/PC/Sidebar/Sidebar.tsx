@@ -3,7 +3,7 @@ import {
 	HOMEROUTE,
 	PROFILEROUTE,
 	STORAGEROUTE,
-} from "core/Router/types/routes";
+} from "core/Router/routes";
 import { Link } from "react-router-dom";
 
 import SidebarLinks from "./SidebarLinks";
