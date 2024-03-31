@@ -10,10 +10,9 @@ import ItemsListContextMenu from "components/ContextMenus/ItemsListContextMenu";
 import AddItem from "components/Lists/ItemsList/AddItem";
 import FileListItem from "components/Lists/ItemsList/FileLisetItem/FileListItem";
 import FolderListItem from "components/Lists/ItemsList/FolderListItem/FolderListItem";
-import ItemsList from "components/Lists/ItemsList/ItemsList";
 import Fade from "components/UI/Animations/Fade/Fade";
 
-import EmptyList from "./Empty";
+import EmptyList from "./EmptyList";
 
 interface ItemListProps {
 	isLoading: boolean;
@@ -68,6 +67,8 @@ const ItemList: React.FC<ItemListProps> = ({
 
 	const { handleContextMenu } = useContextMenuContext();
 
+	const isEmpty = folders.length === 0 && files.length === 0 && !isLoading;
+
 	return (
 		<div
 			className="grow"
@@ -83,8 +84,8 @@ const ItemList: React.FC<ItemListProps> = ({
 				);
 			}}
 		>
-			<ItemsList className="w-full">
-				{folders.length === 0 && files.length === 0 && !isLoading && (
+			<div className="flex w-full flex-wrap gap-2 p-2">
+				{isEmpty && (
 					<EmptyList
 						createFolder={() => createFolder("New Folder")}
 						uploadFile={uploadFile}
@@ -174,7 +175,7 @@ const ItemList: React.FC<ItemListProps> = ({
 							onContextMenu={(e) =>
 								handleContextMenu(
 									e,
-									<FileContextMenu item={file} />
+									<FileContextMenu file={file} />
 								)
 							}
 						/>
@@ -187,7 +188,7 @@ const ItemList: React.FC<ItemListProps> = ({
 						uploadFile={uploadFile}
 					/>
 				)}
-			</ItemsList>
+			</div>
 		</div>
 	);
 };

@@ -1,5 +1,5 @@
 import AddFileIcon from "components/SvgIcons/AddFileIcon";
-import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
+import CreateFolderIcon from "components/SvgIcons/CreateFolderIcon";
 import IconButton from "components/UI/Buttons/IconButton/IconButton";
 
 interface AddItemProps {
@@ -16,7 +16,7 @@ const AddItem: React.FC<AddItemProps> = ({ createFolder, uploadFile }) => {
 				color="rose"
 				onClick={createFolder}
 			>
-				<CraeteFolderIcon />
+				<CreateFolderIcon />
 			</IconButton>
 
 			<IconButton

@@ -67,7 +67,7 @@ const StoragePage = () => {
 									e,
 									<StorageContextMenu
 										refetchStorages={refetchStorages}
-										item={storage}
+										storage={storage}
 										changeStorage={changeStorage}
 									/>
 								);

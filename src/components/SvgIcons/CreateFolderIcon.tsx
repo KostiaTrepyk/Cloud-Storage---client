@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 
-interface CraeteFolderIconProps extends React.SVGAttributes<SVGSVGElement> {}
+interface CreateFolderIconProps extends React.SVGAttributes<SVGSVGElement> {}
 
-const CraeteFolderIcon = forwardRef<SVGSVGElement, CraeteFolderIconProps>(
+const CreateFolderIcon = forwardRef<SVGSVGElement, CreateFolderIconProps>(
 	(svgAttrs, ref) => {
 		return (
 			<svg
@@ -19,4 +19,4 @@ const CraeteFolderIcon = forwardRef<SVGSVGElement, CraeteFolderIconProps>(
 	}
 );
 
-export default CraeteFolderIcon;
+export default CreateFolderIcon;

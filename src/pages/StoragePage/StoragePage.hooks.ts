@@ -71,12 +71,9 @@ export const useStoragePageHooks = () => {
 
 	/** Folders + files */
 	const items = useMemo(() => {
-		const result = [
-			...(getFolderResponse.data?.files ?? []),
-			...(getFolderResponse.data?.folders ?? []),
-		];
+		const result = [...files, ...folders];
 		return result;
-	}, [getFolderResponse.data]);
+	}, [folders, files]);
 
 	const {
 		checkedItems,
@@ -151,8 +148,8 @@ export const useStoragePageHooks = () => {
 		});
 	}
 
-	function refetchStorages() {
-		getStoragesResponse.refetch();
+	async function refetchStorages() {
+		await getStoragesResponse.refetch();
 	}
 
 	return {

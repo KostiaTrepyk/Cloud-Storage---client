@@ -13,7 +13,7 @@ export function uploadFile({
 	folderId,
 	storageId,
 }: {
-	uploadFile: (data: UploadFileBody) => void;
+	uploadFile: (data: UploadFileBody) => Promise<unknown>;
 	folderId?: number;
 	storageId: number;
 }) {
@@ -26,12 +26,12 @@ export function uploadFile({
 	input.click();
 
 	// Set up an event listener for file selection
-	input.onchange = () => {
+	input.onchange = async () => {
 		// Check if files were selected
-		if (!input.files) return;
+		if (!input.files || !input.files[0]) return;
 
 		// Retrieve the selected file and initiate the file upload
-		uploadFile({
+		await uploadFile({
 			folderId,
 			storageId,
 			file: input.files[0],

@@ -11,7 +11,7 @@ import SuccessIcon from "../../../SvgIcons/SuccessIcon";
 import ErrorIcon from "../../../SvgIcons/CloseIcon";
 import Fade from "components/UI/Animations/Fade/Fade";
 
-interface Props
+export interface ButtonProps
 	extends ButtonHTMLAttributes<HTMLButtonElement>,
 		PropsWithChildren {
 	/**  @default "default" */
@@ -31,7 +31,7 @@ interface Props
 }
 
 /** Fix click animation */
-const Button = forwardRef<HTMLButtonElement, Props>(
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 	(
 		{
 			color = "light",
@@ -49,7 +49,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
 			<button
 				{...buttonAtributes}
 				className={twMerge(
-					"relative flex min-w-[4rem] select-none items-center rounded text-center font-semibold uppercase text-white transition duration-300",
+					"relative flex min-w-[4rem] select-none items-center justify-center rounded text-center font-semibold uppercase text-white transition duration-300",
 
 					colorVariants[variant][color],
 

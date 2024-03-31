@@ -3,8 +3,8 @@ import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
 import { foldersApi } from "services/foldersApi";
 import { filesApi } from "services/filesApi";
 
-import CraeteFolderIcon from "components/SvgIcons/CreateFolderIcon";
-import ContextMenuContainer from "./ContextMenuContainer";
+import CreateFolderIcon from "components/SvgIcons/CreateFolderIcon";
+import ContextMenuContainer from "./components/ContextMenuContainer";
 import Button from "components/UI/Buttons/Button/Button";
 import AddFileIcon from "components/SvgIcons/AddFileIcon";
 import BackIcon from "components/SvgIcons/BackIcon";
@@ -28,62 +28,66 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 		foldersApi.useCreateFolderMutation();
 	const [uploadFile, uploadFileResponse] = filesApi.useUploadFileMutation();
 
+	function historyBackHandler() {
+		historyBack();
+		close();
+	}
+
+	async function uploadFileHandler() {
+		uploadFileHelper({
+			uploadFile,
+			storageId: currentStoreId,
+			folderId: currentFolderId,
+		});
+		close();
+	}
+
+	async function createFolderHandler() {
+		await createFolder({
+			parentFolderId: currentFolderId,
+			storageId: currentStoreId,
+			folderName: "New Folder",
+		});
+		close();
+	}
+
 	return (
 		<ContextMenuContainer>
 			<li className="h-8">
 				<Button
+					className="w-full justify-start"
 					color="neutral"
 					variant="contained"
-					className="flex h-full w-full items-center gap-2"
-					onClick={() => {
-						historyBack();
-						close();
-					}}
+					onClick={historyBackHandler}
 					disabled={disableBack}
+					startIcon={<BackIcon />}
 				>
-					<BackIcon className="h-5 w-5" />
-
-					<span>Back</span>
+					Back
 				</Button>
 			</li>
 
 			<li className="h-8">
 				<Button
+					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
-					className="flex h-full w-full items-center gap-2"
-					onClick={() => {
-						createFolder({
-							parentFolderId: currentFolderId,
-							storageId: currentStoreId,
-							folderName: "New Folder",
-						});
-						close();
-					}}
+					onClick={createFolderHandler}
+					startIcon={<CreateFolderIcon />}
+					status={createFolderResponse.status}
 				>
-					<CraeteFolderIcon className="h-5 w-5" />
-
-					<span>Create&nbsp;folder</span>
+					Create&nbsp;folder
 				</Button>
 			</li>
 
 			<li className="h-8">
 				<Button
+					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
-					className="flex h-full w-full items-center gap-2"
-					onClick={() => {
-						uploadFileHelper({
-							uploadFile,
-							storageId: currentStoreId,
-							folderId: currentFolderId,
-						});
-						close();
-					}}
+					onClick={uploadFileHandler}
+					startIcon={<AddFileIcon />}
 				>
-					<AddFileIcon className="h-5 w-5" />
-
-					<span>Upload&nbsp;file</span>
+					Upload&nbsp;file
 				</Button>
 			</li>
 		</ContextMenuContainer>

@@ -1,155 +1,121 @@
 import { useState } from "react";
 import { getFileExtension } from "helpers/getFileExtension";
+import { downloadFile } from "helpers/downloadFile";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { filesApi } from "services/filesApi";
 import { FileData } from "services/types";
 
 import Button from "components/UI/Buttons/Button/Button";
 import TrashIcon from "components/SvgIcons/TrashIcon";
-import ContextMenuContainer from "./ContextMenuContainer";
-import BackIcon from "components/SvgIcons/BackIcon";
+import ContextMenuContainer from "./components/ContextMenuContainer";
 import RenameIcon from "components/SvgIcons/RenameIcon";
-import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import OpenFolderIcon from "components/SvgIcons/OpenFolder";
+import RenameForm from "./components/RenameForm";
 
 interface FileContextMenuProps {
-	item: FileData;
+	file: FileData;
 }
 
-const FileContextMenu: React.FC<FileContextMenuProps> = ({ item }) => {
-	const [mode, setMode] = useState<"default" | "rename">("default");
-	const [itemName, setItemName] = useState<string>(item.originalname);
+type Mode = "default" | "rename";
+
+const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
+	const [mode, setMode] = useState<Mode>("default");
+	const [isDownloading, setDownloading] = useState<boolean>();
 
 	const { close } = useContextMenuContext();
 
-	const [updateFile, updateFileData] = filesApi.useUpdateFileMutation();
-	const [deleteFile] = filesApi.useSoftDeleteFileMutation();
+	const [updateFile, updateFileResponse] = filesApi.useUpdateFileMutation();
+	const [deleteFile, deleteFileResponse] =
+		filesApi.useSoftDeleteFileMutation();
 
-	function downloadFile(item: FileData) {
-		fetch("http://localhost:5000/uploads/" + item.filename, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/pdf",
-			},
-		})
-			.then((response) => response.blob())
-			.then((blob) => {
-				const url = window.URL.createObjectURL(new Blob([blob]));
+	function openFileHandler() {
+		throw new Error("Not implemented!");
+	}
 
-				const link = document.createElement("a");
-				link.href = url;
-				link.download =
-					item.originalname + "." + getFileExtension(item.filename);
+	async function downloadFileHandler() {
+		setDownloading(true);
+		await downloadFile({
+			path: "http://localhost:5000/uploads/" + file.filename,
+			name: file.originalname,
+			extension: getFileExtension(file.filename) ?? "",
+		});
+		setDownloading(false);
+		close();
+	}
 
-				document.body.appendChild(link);
+	async function deleteFileHandler() {
+		await deleteFile({ ids: [file.id] });
+		close();
+	}
 
-				link.click();
-
-				link.parentNode?.removeChild(link);
+	async function renameFileHandler(newName: string) {
+		if (newName !== file.originalname)
+			await updateFile({
+				id: file.id,
+				newOriginalName: newName,
 			});
+		close();
 	}
 
 	return (
 		<ContextMenuContainer>
-			<li>
+			<li className="h-8">
 				<Button
+					className="w-full justify-start"
 					color="neutral"
 					variant="contained"
-					className="flex h-full w-full items-center gap-2"
-					onClick={() => {
-						close();
-					}}
+					onClick={openFileHandler}
+					startIcon={<OpenFolderIcon />}
 				>
-					<OpenFolderIcon className="h-5 w-5" />
-
-					<div>Open</div>
+					Open
 				</Button>
 			</li>
 
-			<li>
+			<li className="h-8">
 				<Button
+					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
-					className="flex h-full w-full items-center gap-2"
-					onClick={() => {
-						downloadFile(item);
-						close();
-					}}
+					onClick={downloadFileHandler}
+					startIcon={<DownloadIcon />}
+					status={isDownloading ? "pending" : "uninitialized"}
 				>
-					<DownloadIcon className="h-5 w-5" />
-
-					<div>Download</div>
+					Download
 				</Button>
 			</li>
 
 			<li className="h-8">
 				{mode === "rename" ? (
-					<form className="flex">
-						<IconButton
-							className="h-8 w-8 rounded-none rounded-l border border-r-0"
-							variant="contained"
-							color="neutral"
-							type="button"
-							onClick={() => {
-								setItemName(item.originalname);
-								setMode("default");
-							}}
-						>
-							<BackIcon />
-						</IconButton>
-
-						<input
-							className="h-8 w-32 rounded-none border-x-0 border-y bg-neutral-500 px-2 text-white hover:bg-neutral-500 focus:bg-neutral-500"
-							type="text"
-							value={itemName}
-							onChange={(e) => setItemName(e.target.value)}
-						/>
-
-						<IconButton
-							className="h-8 w-8 rounded-none rounded-r border border-l-0"
-							variant="contained"
-							color="neutral"
-							type="submit"
-							onClick={() => {
-								if (itemName !== item.originalname)
-									updateFile({
-										id: item.id,
-										newOriginalName: itemName,
-									});
-								close();
-							}}
-						>
-							<RenameIcon />
-						</IconButton>
-					</form>
+					<RenameForm
+						name={file.originalname}
+						back={() => setMode("default")}
+						rename={renameFileHandler}
+						status={updateFileResponse.status}
+					/>
 				) : (
 					<Button
+						className="w-full justify-start hover:bg-yellow-600"
 						color="neutral"
 						variant="contained"
-						className="flex h-full w-full items-center gap-2"
 						onClick={() => setMode("rename")}
+						startIcon={<RenameIcon />}
 					>
-						<RenameIcon className="h-5 w-5" />
-
-						<div>Rename</div>
+						Rename
 					</Button>
 				)}
 			</li>
 
 			<li className="h-8">
 				<Button
+					className="w-full justify-start hover:bg-red-600"
 					color="neutral"
 					variant="contained"
-					className="flex h-full w-full items-center gap-2"
-					onClick={() => {
-						deleteFile({ ids: [item.id] });
-						close();
-					}}
+					onClick={deleteFileHandler}
+					startIcon={<TrashIcon />}
+					status={deleteFileResponse.status}
 				>
-					<TrashIcon className="h-5 w-5" />
-
-					<div>Delete</div>
+					Delete
 				</Button>
 			</li>
 		</ContextMenuContainer>
