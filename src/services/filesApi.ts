@@ -57,24 +57,20 @@ export const filesApi = emptySplitApi.injectEndpoints({
 			SoftDeleteFileResponse,
 			SoftDeleteFileBody
 		>({
-			query: ({ ids }) => ({
+			query: (params) => ({
 				url: "/files/softDelete",
 				method: "DELETE",
-				params: {
-					ids: ids.join(", "),
-				},
+				params,
 				timeout: 1000 * 30, // 30sec,
 			}),
 			invalidatesTags: ["Files"],
 		}),
 
 		deleteFile: build.mutation<DeleteFileResponse, DeleteFileParams>({
-			query: ({ ids }) => ({
+			query: (params) => ({
 				url: "/files/delete",
 				method: "DELETE",
-				params: {
-					ids: ids.join(", "),
-				},
+				params,
 				timeout: 1000 * 30, // 30sec,
 			}),
 			invalidatesTags: ["Files"],
@@ -131,12 +127,12 @@ export interface UpdateFileBody {
 export type SoftDeleteFileResponse = boolean;
 
 export interface SoftDeleteFileBody {
-	ids: number[];
+	id: number;
 }
 
 /* deleteFile */
 export type DeleteFileResponse = boolean;
 
 export interface DeleteFileParams {
-	ids: number[];
+	id: number;
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useStatus } from "hooks/useStatus";
 import { storagesApi } from "services/storagesApi";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { StorageData } from "services/types";
@@ -25,12 +26,15 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 	refetchStorages,
 }) => {
 	const [mode, setMode] = useState<"default" | "rename">("default");
+
+	const [refetchStatus, setRefetchStatus] = useStatus("uninitialized");
+	const [updateStatus, setUpdateStatus] = useStatus("uninitialized");
+	const [deleteStatus, setDeleteStatus] = useStatus("uninitialized");
+
 	const { close } = useContextMenuContext();
 
-	const [updateStorage, updateStorageResponse] =
-		storagesApi.useUpdateStorageMutation();
-	const [deleteStorage, deleteStorageResponse] =
-		storagesApi.useDeleteStorageMutation();
+	const [updateStorage] = storagesApi.useUpdateStorageMutation();
+	const [deleteStorage] = storagesApi.useDeleteStorageMutation();
 
 	function changeHandler() {
 		changeStorage(storage.id);
@@ -38,78 +42,105 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 	}
 
 	async function refetchHandler() {
-		await refetchStorages();
-		close();
+		setRefetchStatus("pending");
+		await refetchStorages()
+			.then(() => {
+				setRefetchStatus("fulfilled");
+				close();
+			})
+			.catch(() => setRefetchStatus("rejected"));
 	}
 
 	async function renameHandler(newName: string) {
+		if (newName === storage.name) {
+			close();
+			return;
+		}
+
+		setUpdateStatus("pending");
+
 		await updateStorage({
 			storageId: storage.id,
 			newName,
-		});
-		close();
+		})
+			.then(() => {
+				setUpdateStatus("fulfilled");
+				close();
+			})
+			.catch(() => setUpdateStatus("rejected"));
 	}
 
 	async function deleteHandler() {
-		await deleteStorage({ storageId: storage.id });
-		close();
+		setDeleteStatus("pending");
+		await deleteStorage({ storageId: storage.id })
+			.then(() => {
+				setDeleteStatus("fulfilled");
+				close();
+			})
+			.catch(() => setDeleteStatus("rejected"));
 	}
 
 	return (
 		<ContextMenuContainer>
-			<li className="h-8">
+			<li>
 				<Button
 					color="neutral"
 					variant="contained"
 					className="w-full justify-start"
 					onClick={changeHandler}
 					startIcon={<OpenFolderIcon />}
+					size="small"
 				>
 					Open
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					color="neutral"
 					variant="contained"
-					className="w-full justify-start"
+					className="w-full justify-start hover:bg-cyan-600"
 					onClick={refetchHandler}
 					startIcon={<LoadIcon className="text-inherit" />}
+					size="small"
+					status={refetchStatus}
 				>
 					Refresh
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				{mode === "rename" ? (
 					<RenameForm
 						name={storage.name}
 						back={() => setMode("default")}
 						rename={(newName) => renameHandler(newName)}
-						status={updateStorageResponse.status}
+						status={updateStatus}
 					/>
 				) : (
 					<Button
 						color="neutral"
 						variant="contained"
-						className="w-full justify-start"
+						className="w-full justify-start hover:bg-yellow-600"
 						onClick={() => setMode("rename")}
 						startIcon={<RenameIcon />}
+						size="small"
+						status={updateStatus}
 					>
 						Rename
 					</Button>
 				)}
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					color="neutral"
 					variant="contained"
-					className="w-full justify-start"
+					className="w-full justify-start hover:bg-red-600"
 					onClick={deleteHandler}
 					startIcon={<TrashIcon />}
-					status={deleteStorageResponse.status}
+					status={deleteStatus}
+					size="small"
 				>
 					Delete
 				</Button>

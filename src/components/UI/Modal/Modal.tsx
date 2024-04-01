@@ -32,12 +32,14 @@ const Modal: FC<ModalProps> = ({ open = false, close, children }) => {
 				className="relative w-5/6 max-w-sm rounded-md bg-white p-7 shadow-lg sm:w-2/3 sm:max-w-xl sm:p-8"
 			>
 				<IconButton
-					className="absolute -right-0 -top-0 h-6 rounded border-0 text-black hover:text-red-600 sm:h-7"
+					className="absolute -right-0 -top-0 h-6 rounded border-0  hover:text-red-600 sm:h-7"
 					onClick={close}
-					title="Close"
+					color="light"
+					aria-label="Close"
 				>
 					<CloseIcon />
 				</IconButton>
+
 				{children}
 			</div>
 		</motion.div>,

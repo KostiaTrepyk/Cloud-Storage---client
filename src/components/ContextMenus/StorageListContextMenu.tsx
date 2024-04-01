@@ -1,3 +1,4 @@
+import { useStatus } from "hooks/useStatus";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { storagesApi } from "services/storagesApi";
 
@@ -8,26 +9,35 @@ import Button from "components/UI/Buttons/Button/Button";
 interface StorageListContextMenuProps {}
 
 const StorageListContextMenu: React.FC<StorageListContextMenuProps> = () => {
+	const [createStorageStatus, setCreateStorageStatus] =
+		useStatus("uninitialized");
+
 	const { close } = useContextMenuContext();
 
-	const [createStorage, createStorageResponse] =
-		storagesApi.useCreateStorageMutation();
+	const [createStorage] = storagesApi.useCreateStorageMutation();
 
 	async function createStorageHandler() {
-		await createStorage({ name: "New Storage" });
-		close();
+		setCreateStorageStatus("pending");
+
+		await createStorage({ name: "New Storage" })
+			.then(() => {
+				setCreateStorageStatus("fulfilled");
+				close();
+			})
+			.catch(() => setCreateStorageStatus("rejected"));
 	}
 
 	return (
 		<ContextMenuContainer>
-			<li className="h-8">
+			<li>
 				<Button
 					color="neutral"
 					variant="contained"
-					className="w-full justify-start"
+					className="w-full justify-start hover:bg-lime-600"
 					onClick={createStorageHandler}
 					startIcon={<CreateFolderIcon />}
-					status={createStorageResponse.status}
+					status={createStorageStatus}
+					size="small"
 				>
 					Create&nbsp;storage
 				</Button>

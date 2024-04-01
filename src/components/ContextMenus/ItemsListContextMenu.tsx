@@ -1,3 +1,4 @@
+import { useStatus } from "hooks/useStatus";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
 import { foldersApi } from "services/foldersApi";
@@ -22,11 +23,13 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 	historyBack,
 	disableBack = false,
 }) => {
+	const [createFolderStatus, setCreateFolderStatus] =
+		useStatus("uninitialized");
+
 	const { close } = useContextMenuContext();
 
-	const [createFolder, createFolderResponse] =
-		foldersApi.useCreateFolderMutation();
-	const [uploadFile, uploadFileResponse] = filesApi.useUploadFileMutation();
+	const [createFolder] = foldersApi.useCreateFolderMutation();
+	const [uploadFile] = filesApi.useUploadFileMutation();
 
 	function historyBackHandler() {
 		historyBack();
@@ -43,17 +46,23 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 	}
 
 	async function createFolderHandler() {
+		setCreateFolderStatus("pending");
+
 		await createFolder({
 			parentFolderId: currentFolderId,
 			storageId: currentStoreId,
 			folderName: "New Folder",
-		});
-		close();
+		})
+			.then(() => {
+				setCreateFolderStatus("fulfilled");
+				close();
+			})
+			.catch(() => setCreateFolderStatus("rejected"));
 	}
 
 	return (
 		<ContextMenuContainer>
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start"
 					color="neutral"
@@ -61,31 +70,34 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 					onClick={historyBackHandler}
 					disabled={disableBack}
 					startIcon={<BackIcon />}
+					size="small"
 				>
 					Back
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
 					onClick={createFolderHandler}
 					startIcon={<CreateFolderIcon />}
-					status={createFolderResponse.status}
+					status={createFolderStatus}
+					size="small"
 				>
 					Create&nbsp;folder
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
 					onClick={uploadFileHandler}
 					startIcon={<AddFileIcon />}
+					size="small"
 				>
 					Upload&nbsp;file
 				</Button>

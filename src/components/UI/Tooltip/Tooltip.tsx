@@ -142,7 +142,7 @@ const Tooltip: React.FC<TooltipProps> = ({
 
 	return (
 		<div
-			className={twMerge("relative w-max", className)}
+			className={twMerge("relative", className)}
 			onMouseEnter={() => setHidden(false)}
 			onMouseLeave={() => setHidden(true)}
 			onClick={() => setHidden(true)}

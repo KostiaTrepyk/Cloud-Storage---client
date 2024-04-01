@@ -21,10 +21,6 @@ export function uploadFile({
 	const input = document.createElement("input");
 	input.setAttribute("type", "file");
 
-	// Append the input element to the document body and trigger a click to open the file selection dialog
-	document.body.appendChild(input);
-	input.click();
-
 	// Set up an event listener for file selection
 	input.onchange = async () => {
 		// Check if files were selected
@@ -37,6 +33,11 @@ export function uploadFile({
 			file: input.files[0],
 		});
 	};
+
+	
+	// Append the input element to the document body and trigger a click to open the file selection dialog
+	document.body.appendChild(input);
+	input.click();
 
 	// Remove the dynamically created input element from the DOM after file selection
 	input.parentNode?.removeChild(input);

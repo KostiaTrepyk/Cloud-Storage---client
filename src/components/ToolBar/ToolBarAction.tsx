@@ -15,6 +15,7 @@ import CloseIcon from "components/SvgIcons/CloseIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
+import Tooltip from "components/UI/Tooltip/Tooltip";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
@@ -33,53 +34,67 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 	disabled,
 }) => {
 	const [isShareModalOpened, setShareModalOpened] = useState<boolean>(false);
+	const [downloadStatus, setDownloadStatus] = useStatus("uninitialized");
+	const [deleteFilesStatus, setDeleteFilesStatus] =
+		useStatus("uninitialized");
 
-	const [deleteFolders, __deleteFoldersStatus] =
-		foldersApi.useDeleteFolderMutation();
-	const [deleteFiles, __deleteFilesStatus] =
-		filesApi.useSoftDeleteFileMutation();
-	const [deleteFilesStatus] = useStatus(__deleteFilesStatus.status);
+	const [deleteFolder] = foldersApi.useDeleteFolderMutation();
+	const [deleteFile] = filesApi.useSoftDeleteFileMutation();
 
-	function downloadCheckedFiles() {
-		for (const item of checkedItems) {
-			if (isFile(item)) {
-				fetch("http://localhost:5000/uploads/" + item.filename, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/pdf",
-					},
-				})
-					.then((response) => response.blob())
-					.then((blob) => {
-						const url = window.URL.createObjectURL(
-							new Blob([blob])
-						);
+	async function downloadCheckedItems() {
+		setDownloadStatus("pending");
 
-						const link = document.createElement("a");
-						link.href = url;
-						link.download =
-							item.originalname +
-							"." +
-							getFileExtension(item.filename);
+		await Promise.all(
+			checkedItems.map(async (item) => {
+				if (isFile(item)) {
+					await fetch(
+						"http://localhost:5000/uploads/" + item.filename,
+						{
+							method: "GET",
+							headers: {
+								"Content-Type": "application/pdf",
+							},
+						}
+					)
+						.then((response) => response.blob())
+						.then((blob) => {
+							const url = window.URL.createObjectURL(
+								new Blob([blob])
+							);
 
-						document.body.appendChild(link);
+							const link = document.createElement("a");
+							link.href = url;
+							link.download =
+								item.originalname +
+								"." +
+								getFileExtension(item.filename);
 
-						link.click();
+							document.body.appendChild(link);
 
-						link.parentNode?.removeChild(link);
+							link.click();
+
+							link.parentNode?.removeChild(link);
+						});
+				} else {
+					await downloadFolder({
+						storageId: currentStorageId,
+						folderId: item.id,
 					});
-			} else {
-				downloadFolder({
-					storageId: currentStorageId,
-					folderId: item.id,
-				});
-			}
-		}
-
-		clearCheckedItems();
+				}
+			})
+		)
+			.then(() => {
+				setDownloadStatus("fulfilled");
+				clearCheckedItems();
+			})
+			.catch(() => {
+				setDownloadStatus("rejected");
+			});
 	}
 
-	function deleteCheckedFiles() {
+	async function deleteCheckedItems() {
+		setDeleteFilesStatus("pending");
+
 		const folderIds: number[] = [];
 		let fileIds: number[] = [];
 
@@ -88,10 +103,17 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 			else folderIds.push(item.id);
 		});
 
-		deleteFiles({ ids: fileIds });
-		deleteFolders({ foldersIds: folderIds });
-
-		clearCheckedItems();
+		await Promise.all([
+			...fileIds.map(async (id) => {
+				await deleteFile({ id });
+			}),
+			await deleteFolder({ foldersIds: folderIds }),
+		])
+			.then(() => {
+				setDeleteFilesStatus("fulfilled");
+				clearCheckedItems();
+			})
+			.catch(() => setDeleteFilesStatus("rejected"));
 	}
 
 	function openShareModal() {
@@ -104,57 +126,78 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 
 	return (
 		<>
-			<MIconButton
-				initial="initial"
-				animate="reveal"
-				variants={buttonVariants}
-				custom={0}
-				title="Uncheck"
-				onClick={clearCheckedItems}
-				disabled={disabled}
+			<Tooltip
+				title="Uncheck all items"
+				className="aspect-square h-full"
+				position="bottom-start"
 			>
-				<CloseIcon />
-			</MIconButton>
+				<MIconButton
+					initial="initial"
+					animate="reveal"
+					variants={buttonVariants}
+					custom={0}
+					onClick={clearCheckedItems}
+					disabled={disabled}
+				>
+					<CloseIcon />
+				</MIconButton>
+			</Tooltip>
 
-			<MIconButton
-				initial="initial"
-				animate="reveal"
-				variants={buttonVariants}
-				custom={1}
-				color="lime"
+			<Tooltip
 				title="Download"
-				onClick={downloadCheckedFiles}
-				disabled={disabled}
+				className="aspect-square h-full"
+				position="bottom-center"
 			>
-				<DownloadIcon />
-			</MIconButton>
+				<MIconButton
+					initial="initial"
+					animate="reveal"
+					variants={buttonVariants}
+					custom={1}
+					color="lime"
+					onClick={downloadCheckedItems}
+					disabled={disabled}
+					status={downloadStatus}
+				>
+					<DownloadIcon />
+				</MIconButton>
+			</Tooltip>
 
-			<MIconButton
-				initial="initial"
-				animate="reveal"
-				variants={buttonVariants}
-				custom={2}
-				color="amber"
+			<Tooltip
 				title="Share"
-				onClick={openShareModal}
-				disabled={disabled}
+				className="aspect-square h-full"
+				position="bottom-center"
 			>
-				<ShareIcon filled />
-			</MIconButton>
+				<MIconButton
+					initial="initial"
+					animate="reveal"
+					variants={buttonVariants}
+					custom={2}
+					color="amber"
+					onClick={openShareModal}
+					disabled={disabled}
+				>
+					<ShareIcon filled />
+				</MIconButton>
+			</Tooltip>
 
-			<MIconButton
-				initial="initial"
-				animate="reveal"
-				variants={buttonVariants}
-				custom={3}
-				color="red"
+			<Tooltip
 				title="Delete"
-				onClick={deleteCheckedFiles}
-				status={deleteFilesStatus}
-				disabled={disabled}
+				className="aspect-square h-full"
+				position="bottom-center"
 			>
-				<TrashIcon />
-			</MIconButton>
+				<MIconButton
+					initial="initial"
+					animate="reveal"
+					variants={buttonVariants}
+					custom={3}
+					color="red"
+					onClick={deleteCheckedItems}
+					status={deleteFilesStatus}
+					disabled={disabled}
+				>
+					<TrashIcon />
+				</MIconButton>
+			</Tooltip>
 
 			<ShareModal
 				open={isShareModalOpened}

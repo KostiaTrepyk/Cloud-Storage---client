@@ -10,6 +10,7 @@ import IconButton from "../../components/UI/Buttons/IconButton/IconButton";
 import LogoutIcon from "../../components/SvgIcons/LogoutIcon";
 import SwitchAccountIcon from "../../components/SvgIcons/SwitchAccountIcon";
 import Private from "../Wrappers/Private";
+import Tooltip from "components/UI/Tooltip/Tooltip";
 
 const ProfilePage = () => {
 	const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ const ProfilePage = () => {
 
 	return (
 		<main className="px-3 pb-3 pt-2">
-			<div className="flex w-full max-w-lg flex-col gap-4 overflow-hidden p-6 shadow-md md:px-8">
+			<div className="flex w-full max-w-lg flex-col gap-4 p-6 shadow-md md:px-8">
 				<h1 className="text-xl md:text-2xl">Profile</h1>
 				<table className="md:text-lg">
 					<tbody>
@@ -76,21 +77,29 @@ const ProfilePage = () => {
 				</table>
 
 				<div className="flex h-10 justify-end gap-2">
-					<IconButton
-						onClick={switchAccountBtnHandler}
-						variant="outlined"
+					<Tooltip
 						title="Switch account"
+						className="aspect-square h-full"
 					>
-						<SwitchAccountIcon />
-					</IconButton>
+						<IconButton
+							onClick={switchAccountBtnHandler}
+							variant="outlined"
+						>
+							<SwitchAccountIcon />
+						</IconButton>
+					</Tooltip>
 
-					<IconButton
-						onClick={logoutBtnHandler}
-						variant="outlined"
+					<Tooltip
 						title="Log out"
+						className="aspect-square h-full"
 					>
-						<LogoutIcon />
-					</IconButton>
+						<IconButton
+							onClick={logoutBtnHandler}
+							variant="outlined"
+						>
+							<LogoutIcon />
+						</IconButton>
+					</Tooltip>
 				</div>
 			</div>
 		</main>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useStatus } from "hooks/useStatus";
 import { getFileExtension } from "helpers/getFileExtension";
 import { downloadFile } from "helpers/downloadFile";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
@@ -21,77 +22,102 @@ type Mode = "default" | "rename";
 
 const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
 	const [mode, setMode] = useState<Mode>("default");
-	const [isDownloading, setDownloading] = useState<boolean>();
+	const [downloadingStatus, setDownloadingStatus] =
+		useStatus("uninitialized");
+	const [updateStatus, setUpdateStatus] = useStatus("uninitialized");
+	const [deleteFileStatus, setDeleteFileStatus] = useStatus("uninitialized");
 
 	const { close } = useContextMenuContext();
 
-	const [updateFile, updateFileResponse] = filesApi.useUpdateFileMutation();
-	const [deleteFile, deleteFileResponse] =
-		filesApi.useSoftDeleteFileMutation();
+	const [updateFile] = filesApi.useUpdateFileMutation();
+	const [deleteFile] = filesApi.useDeleteFileMutation();
 
 	function openFileHandler() {
 		throw new Error("Not implemented!");
 	}
 
 	async function downloadFileHandler() {
-		setDownloading(true);
+		setDownloadingStatus("pending");
+
 		await downloadFile({
 			path: "http://localhost:5000/uploads/" + file.filename,
 			name: file.originalname,
 			extension: getFileExtension(file.filename) ?? "",
-		});
-		setDownloading(false);
+		})
+			.then(() => setDownloadingStatus("fulfilled"))
+			.catch(() => setDownloadingStatus("rejected"));
+
 		close();
 	}
 
 	async function deleteFileHandler() {
-		await deleteFile({ ids: [file.id] });
-		close();
+		setDeleteFileStatus("pending");
+
+		await deleteFile({ id: file.id })
+			.unwrap()
+			.then(() => {
+				setDeleteFileStatus("fulfilled");
+				close();
+			})
+			.catch(() => setDeleteFileStatus("rejected"));
 	}
 
 	async function renameFileHandler(newName: string) {
-		if (newName !== file.originalname)
-			await updateFile({
-				id: file.id,
-				newOriginalName: newName,
-			});
-		close();
+		if (newName === file.originalname) {
+			close();
+			return;
+		}
+
+		setUpdateStatus("pending");
+
+		await updateFile({
+			id: file.id,
+			newOriginalName: newName,
+		})
+			.unwrap()
+			.then(() => {
+				setUpdateStatus("fulfilled");
+				close();
+			})
+			.catch(() => setUpdateStatus("rejected"));
 	}
 
 	return (
 		<ContextMenuContainer>
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start"
 					color="neutral"
 					variant="contained"
 					onClick={openFileHandler}
 					startIcon={<OpenFolderIcon />}
+					size="small"
 				>
 					Open
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
 					onClick={downloadFileHandler}
 					startIcon={<DownloadIcon />}
-					status={isDownloading ? "pending" : "uninitialized"}
+					status={downloadingStatus}
+					size="small"
 				>
 					Download
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				{mode === "rename" ? (
 					<RenameForm
 						name={file.originalname}
 						back={() => setMode("default")}
 						rename={renameFileHandler}
-						status={updateFileResponse.status}
+						status={updateStatus}
 					/>
 				) : (
 					<Button
@@ -100,20 +126,23 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
 						variant="contained"
 						onClick={() => setMode("rename")}
 						startIcon={<RenameIcon />}
+						size="small"
+						status={updateStatus}
 					>
 						Rename
 					</Button>
 				)}
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start hover:bg-red-600"
 					color="neutral"
 					variant="contained"
 					onClick={deleteFileHandler}
 					startIcon={<TrashIcon />}
-					status={deleteFileResponse.status}
+					status={deleteFileStatus}
+					size="small"
 				>
 					Delete
 				</Button>

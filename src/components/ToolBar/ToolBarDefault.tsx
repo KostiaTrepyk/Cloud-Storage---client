@@ -53,7 +53,6 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 					variants={buttonVariants}
 					custom={0}
 					color="light"
-					title="Back"
 					onClick={historyBack}
 					disabled={history.length === 0}
 				>
@@ -63,7 +62,6 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 
 			<Tooltip
 				title="Upload file"
-				className="h-full"
 				position="bottom-center"
 			>
 				<MButton
@@ -94,7 +92,6 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 					variants={buttonVariants}
 					custom={0}
 					color="light"
-					title="Back"
 					onClick={() => navigate(TRASHROUTE.path!)}
 				>
 					<TrashIcon />

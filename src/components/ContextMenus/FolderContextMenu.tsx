@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useStatus } from "hooks/useStatus";
 import { foldersApi } from "services/foldersApi";
 import { downloadFolder } from "helpers/downloadFolder";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
@@ -26,15 +27,19 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 	item,
 	changeFolderId,
 }) => {
+	const [downloadingStatus, setDownloadingStatus] =
+		useStatus("uninitialized");
+	const [updateFolderStatus, setUpdateFolderStatus] =
+		useStatus("uninitialized");
+	const [deleteFolderStatus, setDeleteFolderStatus] =
+		useStatus("uninitialized");
+
 	const [mode, setMode] = useState<Mode>("default");
-	const [isDownloading, setDownloading] = useState<boolean>(false);
 
 	const { close } = useContextMenuContext();
 
-	const [updateFolder, updateFolderResponse] =
-		foldersApi.useUpdateFolderMutation();
-	const [deleteFolder, deleteFolderResponse] =
-		foldersApi.useDeleteFolderMutation();
+	const [updateFolder] = foldersApi.useUpdateFolderMutation();
+	const [deleteFolder] = foldersApi.useDeleteFolderMutation();
 
 	function openFolderHandler() {
 		changeFolderId(item.id);
@@ -42,57 +47,79 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 	}
 
 	async function downloadFolderHandler() {
-		setDownloading(true);
+		setDownloadingStatus("pending");
+
 		await downloadFolder({
 			storageId: currentStorageId,
 			folderId: item.id,
-		});
-		setDownloading(false);
-		close();
+		})
+			.then(() => {
+				setDownloadingStatus("fulfilled");
+				close();
+			})
+			.catch(() => setDownloadingStatus("rejected"));
 	}
 
 	async function renameFodlerHandler(id: number, newName: string) {
-		if (newName !== item.name)
-			await updateFolder({
-				folderId: id,
-				newFolderName: newName,
-			});
-		close();
+		if (newName === item.name) {
+			close();
+			return;
+		}
+
+		setUpdateFolderStatus("pending");
+
+		await updateFolder({
+			folderId: id,
+			newFolderName: newName,
+		})
+			.then(() => {
+				setUpdateFolderStatus("fulfilled");
+				close();
+			})
+			.catch(() => setUpdateFolderStatus("rejected"));
 	}
 
 	async function deleteFolderHandler(id: number) {
-		await deleteFolder({ foldersIds: [id] });
-		close();
+		setDeleteFolderStatus("pending");
+
+		await deleteFolder({ foldersIds: [id] })
+			.then(() => {
+				setDeleteFolderStatus("fulfilled");
+				close();
+			})
+			.catch(() => setDeleteFolderStatus("rejected"));
 	}
 
 	return (
 		<ContextMenuContainer>
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start"
 					color="neutral"
 					variant="contained"
 					onClick={openFolderHandler}
 					startIcon={<OpenFolderIcon />}
+					size="small"
 				>
 					Open
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start hover:bg-lime-600"
 					color="neutral"
 					variant="contained"
 					onClick={downloadFolderHandler}
 					startIcon={<DownloadIcon />}
-					status={isDownloading ? "pending" : "uninitialized"}
+					status={downloadingStatus}
+					size="small"
 				>
 					Download
 				</Button>
 			</li>
 
-			<li className="h-8">
+			<li>
 				{mode === "rename" ? (
 					<RenameForm
 						name={item.name}
@@ -100,7 +127,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 						rename={(newName) =>
 							renameFodlerHandler(item.id, newName)
 						}
-						status={updateFolderResponse.status}
+						status={updateFolderStatus}
 					/>
 				) : (
 					<Button
@@ -109,20 +136,23 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 						variant="contained"
 						onClick={() => setMode("rename")}
 						startIcon={<RenameIcon />}
+						size="small"
+						status={updateFolderStatus}
 					>
 						Rename
 					</Button>
 				)}
 			</li>
 
-			<li className="h-8">
+			<li>
 				<Button
 					className="w-full justify-start hover:bg-red-600"
 					color="neutral"
 					variant="contained"
 					onClick={() => deleteFolderHandler(item.id)}
 					startIcon={<TrashIcon />}
-					status={deleteFolderResponse.status}
+					status={deleteFolderStatus}
+					size="small"
 				>
 					Delete
 				</Button>
