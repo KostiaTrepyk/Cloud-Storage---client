@@ -61,19 +61,19 @@ export const ContextMenuContextProvider: React.FC<React.PropsWithChildren> = ({
 		[]
 	);
 
-	const handleClick = useCallback(() => {
-		showMenu && setShowMenu(false);
-	}, [showMenu]);
+	const handleClick = useCallback((e: MouseEvent) => {
+		if (e.isTrusted) setShowMenu(false);
+	}, []);
 
 	const close = useCallback(() => {
 		setShowMenu(false);
 	}, []);
 
 	useEffect(() => {
-		window.addEventListener("click", handleClick);
+		document.addEventListener("click", handleClick);
 
 		return () => {
-			window.removeEventListener("click", handleClick);
+			document.removeEventListener("click", handleClick);
 		};
 	}, [handleClick, handleContextMenu]);
 

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { getCookieValue } from "helpers/cookie";
-import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
+import { getFile, getFile as uploadFileHelper } from "helpers/getFile";
 import { useCheckedItems } from "hooks/useCheckedItems";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
@@ -101,10 +101,12 @@ export const useStoragePageHooks = () => {
 	}
 
 	function uploadFile(): void {
-		uploadFileHelper({
-			folderId: currentFolderId,
-			storageId: currentStorageId,
-			uploadFile: uploadFileMutation,
+		getFile(async (file) => {
+			await uploadFileMutation({
+				folderId: currentFolderId,
+				storageId: currentStorageId,
+				file,
+			});
 		});
 	}
 

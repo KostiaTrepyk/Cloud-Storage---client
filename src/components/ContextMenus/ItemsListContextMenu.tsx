@@ -1,6 +1,6 @@
 import { useStatus } from "hooks/useStatus";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
-import { uploadFile as uploadFileHelper } from "helpers/uploadFile";
+import { getFile } from "helpers/getFile";
 import { foldersApi } from "services/foldersApi";
 import { filesApi } from "services/filesApi";
 
@@ -25,6 +25,7 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 }) => {
 	const [createFolderStatus, setCreateFolderStatus] =
 		useStatus("uninitialized");
+	const [uploadFileStatus, setUploadFileStatus] = useStatus("uninitialized");
 
 	const { close } = useContextMenuContext();
 
@@ -37,12 +38,23 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 	}
 
 	async function uploadFileHandler() {
-		uploadFileHelper({
-			uploadFile,
-			storageId: currentStoreId,
-			folderId: currentFolderId,
+		getFile(async (file) => {
+			setUploadFileStatus("pending");
+
+			await uploadFile({
+				storageId: currentStoreId,
+				folderId: currentFolderId,
+				file,
+			})
+				.unwrap()
+				.then(() => {
+					setUploadFileStatus("fulfilled");
+					close();
+				})
+				.catch(() => {
+					setUploadFileStatus("rejected");
+				});
 		});
-		close();
 	}
 
 	async function createFolderHandler() {
@@ -98,6 +110,7 @@ const ItemsListContextMenu: React.FC<ItemsListContextMenuProps> = ({
 					onClick={uploadFileHandler}
 					startIcon={<AddFileIcon />}
 					size="small"
+					status={uploadFileStatus}
 				>
 					Upload&nbsp;file
 				</Button>

@@ -68,14 +68,14 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 						>
 							{status === "pending" ? (
 								<LoadIcon
-									className="aspect-square h-full"
+									className="aspect-square h-full text-inherit"
 									spin
 								/>
 							) : status === "fulfilled" ? (
-								<SuccessIcon className="aspect-square h-full text-green-600" />
+								<SuccessIcon className="aspect-square h-full text-inherit" />
 							) : (
 								status === "rejected" && (
-									<ErrorIcon className="aspect-square h-full animate-pulse text-red-600" />
+									<ErrorIcon className="aspect-square h-full animate-pulse text-inherit" />
 								)
 							)}
 						</Fade>

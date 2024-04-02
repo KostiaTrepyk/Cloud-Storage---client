@@ -44,10 +44,11 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
 			name: file.originalname,
 			extension: getFileExtension(file.filename) ?? "",
 		})
-			.then(() => setDownloadingStatus("fulfilled"))
+			.then(() => {
+				setDownloadingStatus("fulfilled");
+				close();
+			})
 			.catch(() => setDownloadingStatus("rejected"));
-
-		close();
 	}
 
 	async function deleteFileHandler() {

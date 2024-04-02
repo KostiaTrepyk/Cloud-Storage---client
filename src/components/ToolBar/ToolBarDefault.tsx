@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { uploadFile } from "helpers/uploadFile";
+import { getFile } from "helpers/getFile";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
 import { filesApi } from "services/filesApi";
 
@@ -33,10 +33,12 @@ const ToolBarDefault: FC<ToolBarDefaultProps> = ({ currentStorageId }) => {
 	const [uploadFileStatus] = useStatus(uploadFileResponse.status);
 
 	function uploadFileHandler() {
-		uploadFile({
-			uploadFile: uploadFileMutation,
-			storageId: currentStorageId,
-			folderId: currentFolderId,
+		getFile(async (file) => {
+			await uploadFileMutation({
+				file,
+				storageId: currentStorageId,
+				folderId: currentFolderId,
+			});
 		});
 	}
 
