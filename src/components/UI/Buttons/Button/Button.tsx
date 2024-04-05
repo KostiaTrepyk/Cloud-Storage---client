@@ -100,10 +100,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 					</Fade>
 				)}
 
-				<Ripple
-					color={variant === "contained" ? "white" : color}
-					borderRadius="4px"
-				/>
+				<Ripple color={variant === "contained" ? "white" : color} />
 			</button>
 		);
 	}

@@ -11,18 +11,17 @@ interface EmptyListProps {
 const EmptyList: React.FC<EmptyListProps> = ({ createFolder, uploadFile }) => {
 	return (
 		<Fade className="w-full">
-			<div className="flex w-full flex-col items-center gap-6 p-2">
+			<div className="mx-auto flex w-fit flex-col items-center gap-6 p-2">
 				<span className="text-2xl font-semibold text-rose-600">
 					Empty
 				</span>
 
-				<div className="flex h-10 w-full justify-center gap-1">
+				<div className="flex h-10 w-full items-center justify-center gap-1">
 					<Button
+						className="h-full"
 						variant="contained"
 						color="rose"
-						onClick={() => {
-							createFolder();
-						}}
+						onClick={() => createFolder()}
 					>
 						Create new folder
 					</Button>

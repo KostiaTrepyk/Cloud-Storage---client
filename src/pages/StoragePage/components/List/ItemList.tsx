@@ -69,6 +69,15 @@ const ItemList: React.FC<ItemListProps> = ({
 
 	const isEmpty = folders.length === 0 && files.length === 0 && !isLoading;
 
+	if (isEmpty) {
+		return (
+			<EmptyList
+				createFolder={() => createFolder("New Folder")}
+				uploadFile={uploadFile}
+			/>
+		);
+	}
+
 	return (
 		<div
 			className="grow"
@@ -85,13 +94,6 @@ const ItemList: React.FC<ItemListProps> = ({
 			}}
 		>
 			<div className="flex w-full flex-wrap gap-2 p-2">
-				{isEmpty && (
-					<EmptyList
-						createFolder={() => createFolder("New Folder")}
-						uploadFile={uploadFile}
-					/>
-				)}
-
 				{folders.map((folder) => (
 					<Fade key={folder.id}>
 						<FolderListItem

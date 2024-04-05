@@ -45,7 +45,7 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 				className={twMerge(
 					`relative aspect-square h-full rounded-full transition duration-300 ${colorVariants[variant][color]}`,
 
-					variant === "outlined" ? "border" : "",
+					variant === "outlined" && "border",
 
 					buttonAtributes.disabled &&
 						"cursor-not-allowed contrast-75",
@@ -54,38 +54,29 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 				)}
 				ref={ref}
 			>
-				<span className="block scale-[.55] bg-inherit">
-					{children}
-
-					{status !== "uninitialized" && (
-						<Fade
-							className={`absolute left-0 top-0 flex h-full w-full items-center justify-center transition duration-300 ${
-								/* To hide children when variant is "outlined" */
-								variant === "outlined"
-									? "bg-white"
-									: "bg-inherit"
-							}`}
-						>
-							{status === "pending" ? (
-								<LoadIcon
-									className="aspect-square h-full text-inherit"
-									spin
-								/>
-							) : status === "fulfilled" ? (
-								<SuccessIcon className="aspect-square h-full text-inherit" />
-							) : (
-								status === "rejected" && (
-									<ErrorIcon className="aspect-square h-full animate-pulse text-inherit" />
-								)
-							)}
-						</Fade>
-					)}
+				<span>
+					<Fade
+						key={status}
+						className={`flex h-full w-full scale-[.55] items-center justify-center`}
+					>
+						{status === "uninitialized" ? (
+							children
+						) : status === "pending" ? (
+							<LoadIcon
+								className="aspect-square h-full text-inherit"
+								spin
+							/>
+						) : status === "fulfilled" ? (
+							<SuccessIcon className="aspect-square h-full text-inherit" />
+						) : (
+							status === "rejected" && (
+								<ErrorIcon className="aspect-square h-full animate-pulse text-inherit" />
+							)
+						)}
+					</Fade>
 				</span>
 
-				<Ripple
-					color={variant === "contained" ? "white" : color}
-					borderRadius="50%"
-				/>
+				<Ripple color={variant === "contained" ? "white" : color} />
 			</button>
 		);
 	}
