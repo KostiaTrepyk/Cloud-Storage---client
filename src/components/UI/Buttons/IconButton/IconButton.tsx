@@ -54,27 +54,27 @@ const IconButton = forwardRef<HTMLButtonElement, Props>(
 				)}
 				ref={ref}
 			>
-				<span>
-					<Fade
-						key={status}
-						className={`flex h-full w-full scale-[.55] items-center justify-center`}
-					>
-						{status === "uninitialized" ? (
-							children
-						) : status === "pending" ? (
-							<LoadIcon
-								className="aspect-square h-full text-inherit"
-								spin
-							/>
-						) : status === "fulfilled" ? (
-							<SuccessIcon className="aspect-square h-full text-inherit" />
-						) : (
-							status === "rejected" && (
-								<ErrorIcon className="aspect-square h-full animate-pulse text-inherit" />
-							)
-						)}
-					</Fade>
-				</span>
+				<Fade
+					key={status}
+					className={`h-full w-full scale-[.55]`}
+				>
+					{status === "uninitialized" ? (
+						<span className="aspect-square h-full text-inherit">
+							{children}
+						</span>
+					) : status === "pending" ? (
+						<LoadIcon
+							className="aspect-square h-full text-inherit"
+							spin
+						/>
+					) : status === "fulfilled" ? (
+						<SuccessIcon className="aspect-square h-full text-inherit" />
+					) : (
+						status === "rejected" && (
+							<ErrorIcon className="aspect-square h-full animate-pulse text-inherit" />
+						)
+					)}
+				</Fade>
 
 				<Ripple color={variant === "contained" ? "white" : color} />
 			</button>
