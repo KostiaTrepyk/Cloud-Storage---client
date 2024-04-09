@@ -12,8 +12,10 @@ const App = () => {
 	const user = useAppSelector((state) => state.auth.userData?.user);
 	const dispatch = useAppDispatch();
 
-	setLocalStorage();
-	axiosConfig();
+	useEffect(() => {
+		setLocalStorage();
+		axiosConfig();
+	}, []);
 
 	useEffect(() => {
 		dispatch(getMe());
