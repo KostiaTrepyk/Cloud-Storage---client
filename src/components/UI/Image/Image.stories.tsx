@@ -6,6 +6,7 @@ import Img from "assets/Logo.webp";
 const meta: Meta<typeof Image> = {
 	title: "UI/Components/Image",
 	component: Image,
+	tags: ["autodocs"],
 } satisfies Meta<typeof Image>;
 
 export default meta;

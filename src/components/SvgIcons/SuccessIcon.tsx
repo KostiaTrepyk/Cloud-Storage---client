@@ -5,8 +5,8 @@ interface Props extends React.SVGAttributes<SVGSVGElement> {}
 const SuccessIcon = forwardRef<SVGSVGElement, Props>(({ ...svgAttrs }, ref) => {
 	return (
 		<svg
-			{...svgAttrs}
 			fill="currentColor"
+			{...svgAttrs}
 			viewBox="-3.5 0 19 19"
 			ref={ref}
 		>
