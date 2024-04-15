@@ -8,10 +8,10 @@ import CloseIcon from "../../SvgIcons/CloseIcon";
 
 interface ModalProps extends PropsWithChildren {
 	open?: boolean;
-	close?: () => void;
+	onClose?: () => void;
 }
 
-const Modal: FC<ModalProps> = ({ open = false, close, children }) => {
+const Modal: FC<ModalProps> = ({ open = false, onClose, children }) => {
 	const portalContainer = document.getElementById("modal");
 
 	if (!portalContainer) {
@@ -25,7 +25,7 @@ const Modal: FC<ModalProps> = ({ open = false, close, children }) => {
 			className="fixed left-0 top-0 z-[1000] flex h-full w-full items-center justify-center backdrop-blur-sm"
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
-			onClick={close}
+			onClick={onClose}
 		>
 			<div
 				onClick={(e) => e.stopPropagation()}
@@ -33,9 +33,9 @@ const Modal: FC<ModalProps> = ({ open = false, close, children }) => {
 			>
 				<IconButton
 					className="absolute -right-0 -top-0 h-6 rounded border-0  hover:text-red-600 sm:h-7"
-					onClick={close}
+					onClick={onClose}
 					color="light"
-					aria-label="Close"
+					aria-label="Close modal"
 				>
 					<CloseIcon />
 				</IconButton>
