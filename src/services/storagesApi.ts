@@ -18,7 +18,7 @@ export const storagesApi = emptySplitApi.injectEndpoints({
 				query: (body) => ({
 					url: "/storages/create",
 					method: "POST",
-					body: { ...body, storageId: 1 },
+					body,
 					timeout: 1000 * 60, // 1min
 				}),
 				invalidatesTags: ["Storages"],

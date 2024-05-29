@@ -6,13 +6,14 @@ import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { filesApi } from "services/filesApi";
 import { FileData } from "services/types";
 
-import Button from "components/UI/Buttons/Button/Button";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import ContextMenuContainer from "./components/ContextMenuContainer";
 import RenameIcon from "components/SvgIcons/RenameIcon";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import OpenFolderIcon from "components/SvgIcons/OpenFolder";
 import RenameForm from "./components/RenameForm";
+import ConfirmModal from "components/Modals/ConfirmModal/ConfirmModal";
+import ContextMenuButton from "./components/ContextMenuButton";
 
 interface FileContextMenuProps {
 	file: FileData;
@@ -22,6 +23,8 @@ type Mode = "default" | "rename";
 
 const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
 	const [mode, setMode] = useState<Mode>("default");
+	const [isConfirmDeletingOpened, setConfirmDeletingOpened] = useState(false);
+
 	const [downloadingStatus, setDownloadingStatus] =
 		useStatus("uninitialized");
 	const [updateStatus, setUpdateStatus] = useStatus("uninitialized");
@@ -86,30 +89,24 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
 	return (
 		<ContextMenuContainer>
 			<li>
-				<Button
-					className="w-full justify-start"
-					color="neutral"
-					variant="contained"
+				<ContextMenuButton
 					onClick={openFileHandler}
 					startIcon={<OpenFolderIcon />}
-					size="small"
 				>
 					Open
-				</Button>
+				</ContextMenuButton>
 			</li>
 
 			<li>
-				<Button
-					className="w-full justify-start hover:bg-lime-600"
-					color="neutral"
-					variant="contained"
+				<ContextMenuButton
+					className="hover:bg-lime-600"
 					onClick={downloadFileHandler}
 					startIcon={<DownloadIcon />}
 					status={downloadingStatus}
-					size="small"
+					disabled={downloadingStatus === "pending"}
 				>
 					Download
-				</Button>
+				</ContextMenuButton>
 			</li>
 
 			<li>
@@ -117,37 +114,43 @@ const FileContextMenu: React.FC<FileContextMenuProps> = ({ file }) => {
 					<RenameForm
 						name={file.originalname}
 						back={() => setMode("default")}
-						rename={renameFileHandler}
+						onSubmit={renameFileHandler}
 						status={updateStatus}
 					/>
 				) : (
-					<Button
-						className="w-full justify-start hover:bg-yellow-600"
-						color="neutral"
-						variant="contained"
+					<ContextMenuButton
+						className="hover:bg-yellow-600"
 						onClick={() => setMode("rename")}
 						startIcon={<RenameIcon />}
-						size="small"
 						status={updateStatus}
+						disabled={updateStatus === "pending"}
 					>
 						Rename
-					</Button>
+					</ContextMenuButton>
 				)}
 			</li>
 
 			<li>
-				<Button
-					className="w-full justify-start hover:bg-red-600"
-					color="neutral"
-					variant="contained"
-					onClick={deleteFileHandler}
+				<ContextMenuButton
+					className="hover:bg-red-600"
+					onClick={() => setConfirmDeletingOpened(true)}
 					startIcon={<TrashIcon />}
 					status={deleteFileStatus}
-					size="small"
+					disabled={deleteFileStatus === "pending"}
 				>
 					Delete
-				</Button>
+				</ContextMenuButton>
 			</li>
+
+			<ConfirmModal
+				open={isConfirmDeletingOpened}
+				onConfirm={deleteFileHandler}
+				onClose={() => setConfirmDeletingOpened(false)}
+				alertProps={{
+					text: "If you delete this file, you will not be able to recover it.",
+					type: "danger",
+				}}
+			/>
 		</ContextMenuContainer>
 	);
 };

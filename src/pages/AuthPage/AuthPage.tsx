@@ -1,67 +1,90 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { useLocation } from "react-router-dom";
-import { SIGNUPROUTE } from "core/Router/routes";
-import { useAppSelector } from "hooks/useAppSelector";
-import { useAppDispatch } from "hooks/useAppDispatch";
-import { SearchParamsEnum } from "types/searchParamsEnum";
-import { SignInArg, signIn } from "store/authSlice/reducers/signIn";
-import { SignUpArg, signUp } from "store/authSlice/reducers/signUp";
+import { SIGNINROUTE, SIGNUPROUTE } from "core/Router/routes";
+import { LoginParams, RegistrationParams, authApi } from "services/authApi";
 import { searchParamsToObj } from "helpers/searchParamsToObj";
+import { SearchParamsEnum } from "types/searchParamsEnum";
 
+import PageConfig from "../Wrappers/PageConfig";
 import SignInForm from "components/Forms/AuthForms/SignInForm";
 import SignUpForm from "components/Forms/AuthForms/SignUpForm";
-import PageConfig from "../Wrappers/PageConfig";
 import LoadIcon from "components/SvgIcons/LoadIcon";
+import { getCookieValue } from "helpers/cookie";
+import { cookieKeys } from "types/cookie";
 
 const AuthPage = () => {
-	const dispatch = useAppDispatch();
 	const location = useLocation();
 
-	const [isSubmited, setIsSubmited] = useState<boolean>(false);
-	const isAuth = useAppSelector((state) => state.auth.isAuth);
-	const status = useAppSelector((state) => state.auth.status);
 	const searchParams = searchParamsToObj(location.search);
+	const token = getCookieValue(cookieKeys.TOKEN)
 
-	const isRedericting = Boolean(isSubmited && status === "fulfilled");
-	const isImmediatelyRedirect = Boolean(
+	const [login, loginData] = authApi.useLoginMutation();
+	const [registration, registrationData] = authApi.useRegistrationMutation();
+	const getMeData = authApi.useGetMeQuery({}, {skip: !token});
+
+	let isFormSubmited: boolean =
+		!loginData.isUninitialized || !registrationData.isUninitialized;
+
+	const isRedericting = Boolean(isFormSubmited && getMeData.isSuccess);
+
+	const showOnlyLoader = Boolean(
 		searchParams[SearchParamsEnum.IMMEDIATELY] &&
-			!isSubmited &&
-			status === "pending"
+			!isFormSubmited &&
+			getMeData.isLoading &&
+			loginData.isLoading &&
+			registrationData.isLoading
 	);
 
+	const isLoading =
+		loginData.isLoading ||
+		registrationData.isLoading ||
+		getMeData.isFetching;
+
 	async function signUpHandler(
-		formData: SignUpArg,
+		formData: RegistrationParams,
 		e: FormEvent<HTMLFormElement>
 	) {
 		e.preventDefault();
-		setIsSubmited(true);
-		await dispatch(signUp(formData));
+		await registration(formData);
 	}
 
 	async function signInHandler(
-		formData: SignInArg,
+		formData: LoginParams,
 		e: FormEvent<HTMLFormElement>
 	) {
 		e.preventDefault();
-		setIsSubmited(true);
-		await dispatch(signIn(formData));
+		await login(formData);
 	}
 
 	return (
 		<PageConfig
-			redirect={{ when: isRedericting, immediately: { when: isAuth } }}
+			redirect={{
+				when: isRedericting,
+				immediately: { when: getMeData.isSuccess },
+			}}
 		>
 			<main className="flex grow items-center px-3 pb-[7vh] max-[340px]:px-2">
-				{isImmediatelyRedirect ? (
+				{showOnlyLoader ? (
 					<div className="flex aspect-square h-12 w-full justify-center text-rose-600">
 						<LoadIcon spin />
 					</div>
 				) : (
 					<>
 						{location.pathname === SIGNUPROUTE.path ? (
-							<SignUpForm onSubmit={signUpHandler} />
+							<SignUpForm
+								onSubmit={signUpHandler}
+								status={isLoading ? "pending" : "uninitialized"}
+							/>
+						) : location.pathname === SIGNINROUTE.path ? (
+							<SignInForm
+								onSubmit={signInHandler}
+								status={isLoading ? "pending" : "uninitialized"}
+							/>
 						) : (
-							<SignInForm onSubmit={signInHandler} />
+							<SignInForm
+								onSubmit={signInHandler}
+								status={isLoading ? "pending" : "uninitialized"}
+							/>
 						)}
 					</>
 				)}

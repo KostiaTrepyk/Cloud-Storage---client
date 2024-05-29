@@ -71,7 +71,7 @@ const ShareModal: FC<ShareModalProps> = ({ open, close, items }) => {
 	return (
 		<Modal
 			open={open}
-			close={close}
+			onClose={close}
 		>
 			{getAllUsers.data?.users && getAllUsers.data.users.length > 0 && (
 				<ul className="flex max-h-96 flex-col gap-1 overflow-y-scroll pr-1">

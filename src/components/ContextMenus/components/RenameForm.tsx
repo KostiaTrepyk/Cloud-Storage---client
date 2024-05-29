@@ -8,17 +8,17 @@ import IconButton from "components/UI/Buttons/IconButton/IconButton";
 interface RenameFormProps {
 	name: string;
 	back: () => void;
-	rename: (newName: string) => void;
+	onSubmit: (name: string) => void;
 	status: keyof typeof QueryStatus;
 }
 
 const RenameForm: React.FC<RenameFormProps> = ({
 	name,
 	back,
-	rename,
+	onSubmit,
 	status,
 }) => {
-	const [inp, setInp] = useState<string>(name);
+	const [inputValue, setInputValue] = useState<string>(name);
 
 	return (
 		<form className="flex">
@@ -33,10 +33,10 @@ const RenameForm: React.FC<RenameFormProps> = ({
 			</IconButton>
 
 			<input
-				className="h-8 w-32 rounded-none border-x-0 border-y bg-neutral-500 px-2 text-white hover:bg-neutral-500 focus:bg-neutral-500"
+				className="h-8 grow rounded-none border-x-0 border-y bg-neutral-500 px-2 text-white hover:bg-neutral-500 focus:bg-neutral-500"
 				type="text"
-				value={inp}
-				onChange={(e) => setInp(e.target.value)}
+				value={inputValue}
+				onChange={(e) => setInputValue(e.target.value)}
 			/>
 
 			<IconButton
@@ -44,8 +44,9 @@ const RenameForm: React.FC<RenameFormProps> = ({
 				variant="contained"
 				color="neutral"
 				type="submit"
-				onClick={() => rename(inp)}
+				onClick={() => onSubmit(inputValue)}
 				status={status}
+				disabled={status === "pending"}
 			>
 				<RenameIcon />
 			</IconButton>

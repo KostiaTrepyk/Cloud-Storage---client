@@ -1,7 +1,6 @@
 import { FC, FormEvent, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SIGNUPROUTE } from "core/Router/routes";
-import { useAppSelector } from "hooks/useAppSelector";
 import { SignInArg } from "store/authSlice/reducers/signIn";
 
 import Input from "components/UI/Input/Input";
@@ -9,16 +8,15 @@ import Button from "components/UI/Buttons/Button/Button";
 import LoadIcon from "components/SvgIcons/LoadIcon";
 
 interface Props {
+	status?: "uninitialized" | "pending" | "fulfilled" | "rejected" | undefined;
 	onSubmit: (formData: SignInArg, e: FormEvent<HTMLFormElement>) => void;
 }
 
-const SignInForm: FC<Props> = ({ onSubmit }) => {
+const SignInForm: FC<Props> = ({ status, onSubmit }) => {
 	const location = useLocation();
 
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
-
-	const status = useAppSelector((state) => state.auth.status);
 
 	const isDisabled = status === "pending";
 
@@ -26,6 +24,7 @@ const SignInForm: FC<Props> = ({ onSubmit }) => {
 		<form
 			className="relative mx-auto flex w-full max-w-md flex-col gap-2 rounded p-6 shadow-[1px_2px_4px_0px_#bbb]"
 			onSubmit={(e) => {
+				e.preventDefault();
 				onSubmit({ email, password }, e);
 			}}
 		>

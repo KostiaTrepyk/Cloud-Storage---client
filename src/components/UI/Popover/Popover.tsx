@@ -1,10 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { twMerge } from "tailwind-merge";
 
 import { getPositionStyles } from "./helpers/getPositionStyles";
-import { Origins } from "./types";
 import { getTransformStyles } from "./helpers/getTransformStyles";
+import { validateCoords } from "./helpers/validateCoords";
+import { Origins } from "./types";
 
 export interface PopoverProps extends React.PropsWithChildren {
 	open: boolean;
@@ -26,30 +27,53 @@ const Popover: React.FC<PopoverProps> = (props) => {
 		attrs,
 	} = props;
 
-	const anchorPosition = anchorElement.current?.getBoundingClientRect()!;
+	const [validatedCoords, setValidatedCoords] = useState({ left: 0, top: 0 });
 
-	const validateCoords = useCallback(
-		(coords: {
-			x: number;
-			y: number;
-		}): {
-			x: number;
-			y: number;
-		} => {
-			const result = { x: coords.x, y: coords.y };
+	const ref = useRef<HTMLDivElement>(null);
 
-			if (window.innerWidth < result.x + anchorPosition.width + 20) {
-				result.x = window.innerWidth - anchorPosition.width - 20;
-			}
+	const a = useCallback(() => {
+		if (ref.current) {
+			const anchorBoundingClientRect =
+				anchorElement.current?.getBoundingClientRect()!;
 
-			if (window.innerHeight < result.y + anchorPosition.height + 20) {
-				result.y = window.innerHeight - anchorPosition.height - 5;
-			}
+			const popoverPositionStyles: { left: number; top: number } =
+				getPositionStyles(anchorBoundingClientRect, anchorOrigin);
 
-			return { x: result.x, y: result.y };
-		},
-		[]
-	);
+			const popoverBoundingClientRect =
+				ref.current?.getBoundingClientRect()!;
+
+			setValidatedCoords((prev) => {
+				const result = { ...prev };
+				const newValidatedCoords = validateCoords(
+					popoverPositionStyles,
+					popoverBoundingClientRect
+				);
+
+				if (
+					newValidatedCoords.left + popoverBoundingClientRect.width >
+					anchorBoundingClientRect.left /* + window.scrollX */
+				) {
+					result.left = newValidatedCoords.left;
+				}
+
+				result.top = newValidatedCoords.top;
+
+				return result;
+			});
+		}
+	}, [anchorElement, anchorOrigin]);
+
+	useEffect(() => {
+		a();
+
+		window.addEventListener("scroll", a);
+		window.addEventListener("resize", a);
+
+		return () => {
+			window.removeEventListener("scroll", a);
+			window.removeEventListener("resize", a);
+		};
+	}, [a]);
 
 	if (!open) return <></>;
 
@@ -67,10 +91,11 @@ const Popover: React.FC<PopoverProps> = (props) => {
 			)}
 			style={{
 				position: "absolute",
-				...getPositionStyles(anchorPosition, anchorOrigin),
+				...validatedCoords,
 				...getTransformStyles(transformOrigin),
 				...attrs?.style,
 			}}
+			ref={ref}
 		>
 			{children}
 		</div>

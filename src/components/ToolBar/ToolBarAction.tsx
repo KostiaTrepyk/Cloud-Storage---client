@@ -16,6 +16,7 @@ import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import Tooltip from "components/UI/Tooltip/Tooltip";
+import ConfirmModal from "components/Modals/ConfirmModal/ConfirmModal";
 
 /* Framer components */
 const MIconButton = motion(IconButton);
@@ -34,6 +35,8 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 	disabled,
 }) => {
 	const [isShareModalOpened, setShareModalOpened] = useState<boolean>(false);
+	const [isConfirmDeletingOpened, setConfirmDeletingOpened] = useState(false);
+
 	const [downloadStatus, setDownloadStatus] = useStatus("uninitialized");
 	const [deleteFilesStatus, setDeleteFilesStatus] =
 		useStatus("uninitialized");
@@ -191,13 +194,23 @@ const ToolBarAction: FC<ToolBarActionProps> = ({
 					variants={buttonVariants}
 					custom={3}
 					color="red"
-					onClick={deleteCheckedItems}
+					onClick={() => setConfirmDeletingOpened(true)}
 					status={deleteFilesStatus}
 					disabled={disabled}
 				>
 					<TrashIcon />
 				</MIconButton>
 			</Tooltip>
+
+			<ConfirmModal
+				open={isConfirmDeletingOpened}
+				onConfirm={deleteCheckedItems}
+				onClose={() => setConfirmDeletingOpened(false)}
+				alertProps={{
+					text: "Once deleted, you will not be able to recover them.",
+					type: "danger",
+				}}
+			/>
 
 			<ShareModal
 				open={isShareModalOpened}

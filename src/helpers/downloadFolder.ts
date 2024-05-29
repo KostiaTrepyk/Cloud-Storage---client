@@ -1,8 +1,8 @@
 // Import necessary dependencies and modules
 import JSZip from "jszip";
-import { type getFolderResponse } from "services/foldersApi";
-import { getCookieValue } from "helpers/cookie";
-import { cookieKeys } from "types/cookie";
+import { store } from "store/store";
+import { foldersApi } from "services/foldersApi";
+import { filesApi } from "services/filesApi";
 
 // Function to download a folder asynchronously
 export async function downloadFolder({
@@ -12,34 +12,33 @@ export async function downloadFolder({
 	storageId: number;
 	folderId: number;
 }) {
-	// Fetch data for the parent folder
-	const parentFolderData = await fetchFolder({
-		storageId,
-		folderId,
-	});
+	const getFolderResponse = await store.dispatch(
+		foldersApi.endpoints.getFolder.initiate({ storageId, folderId })
+	);
 
 	// Check if required data is available
-	if (
-		!parentFolderData ||
-		!parentFolderData.currentFolder ||
-		!parentFolderData.files ||
-		!parentFolderData.folders
-	)
-		return;
+	if (!getFolderResponse.isSuccess) return;
+
+	const { currentFolder } = getFolderResponse.data;
 
 	// Retrieve folder structure and initiate download
-	const result = await getFolder({ storageId, folderId, folder: null });
+	const result = await setFolderStructure({
+		storageId,
+		folderId,
+		folder: null,
+	});
 
 	// Start the download if the folder structure is available
-	if (result)
+	if (result) {
 		await download({
 			folder: result,
-			name: parentFolderData.currentFolder.name,
+			name: currentFolder?.name ?? "Folder",
 		});
+	}
 }
 
 // Recursive function to build the folder structure for download
-async function getFolder({
+async function setFolderStructure({
 	storageId,
 	folderId,
 	folder,
@@ -49,37 +48,43 @@ async function getFolder({
 	folder: JSZip | null;
 }) {
 	// Fetch data for the current folder
-	const parentFolderData = await fetchFolder({
-		storageId,
-		folderId,
-	});
+	const getFolderResponse = await store.dispatch(
+		foldersApi.endpoints.getFolder.initiate({ storageId, folderId })
+	);
+
+	const getFilesResponse = await store.dispatch(
+		filesApi.endpoints.getFolderFiles.initiate({ storageId, folderId })
+	);
+
+	if (!getFolderResponse.isSuccess && !getFilesResponse.isSuccess) return;
 
 	// Check if required data is available
-	if (
-		!parentFolderData ||
-		!parentFolderData.currentFolder ||
-		!parentFolderData.files ||
-		!parentFolderData.folders
-	)
-		return;
+	if (!getFolderResponse.data) return;
 
 	// Create a new JSZip object if it doesn't exist
 	if (!folder) {
 		var zip = new JSZip();
-		folder = zip.folder(parentFolderData.currentFolder.name ?? "Folder");
+		folder = zip.folder(
+			getFolderResponse.data.currentFolder?.name ?? "Folder"
+		);
 
 		// Return if folder creation fails
 		if (!folder) return;
 	}
 
 	// Create a subfolder for the current folder
-	const currentFolder = folder.folder(parentFolderData.currentFolder.name);
+	const currentFolder = folder.folder(
+		getFolderResponse.data.currentFolder?.name ?? "Folder"
+	);
+
+	const { folders } = getFolderResponse.data;
+	const files = getFilesResponse.data ?? [];
 
 	// Return if subfolder creation fails
 	if (!currentFolder) return;
 
 	// Add files to the zip
-	for (const file of parentFolderData.files) {
+	for (const file of files) {
 		const res = await fetch(
 			`http://localhost:5000/uploads/${file.filename}`
 		);
@@ -111,8 +116,8 @@ async function getFolder({
 	}
 
 	// Recursively call getFolder for each subfolder
-	for (const subfolder of parentFolderData.folders) {
-		await getFolder({
+	for (const subfolder of folders) {
+		await setFolderStructure({
 			storageId,
 			folderId: subfolder.id,
 			folder: currentFolder,
@@ -123,33 +128,7 @@ async function getFolder({
 	return folder;
 }
 
-// Function to fetch folder data from the server
-async function fetchFolder({
-	storageId,
-	folderId,
-}: {
-	storageId: number;
-	folderId: number;
-}): Promise<getFolderResponse | null> {
-	const res = await fetch(
-		"http://localhost:5000/folders/one" +
-			`?storageId=${storageId}&folderId=${folderId}`,
-		{
-			method: "GET",
-			headers: {
-				Authorization: "Bearer " + getCookieValue(cookieKeys.TOKEN),
-			},
-		}
-	);
-
-	// Return the folder data if the request is successful
-	if (res.ok) return await res.json();
-
-	// Return null if the request fails
-	return null;
-}
-
-// Function to initiate the download of the generated zip file
+// Initiate the download of the generated zip file
 async function download({
 	folder,
 	name,

@@ -1,23 +1,25 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { SIGNINROUTE } from "../../core/Router/routes";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { useAppSelector } from "../../hooks/useAppSelector";
-import { AuthActions } from "../../store/authSlice/authSlice";
-import { createRedirectQuery } from "../../helpers/createRedirectQuery";
+import { SIGNINROUTE } from "core/Router/routes";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { createRedirectQuery } from "helpers/createRedirectQuery";
+import { deleteCookieByName, getCookieValue } from "helpers/cookie";
+import { authApi } from "services/authApi";
+import { cookieKeys } from "types/cookie";
 
-import IconButton from "../../components/UI/Buttons/IconButton/IconButton";
-
-import LogoutIcon from "../../components/SvgIcons/LogoutIcon";
-import SwitchAccountIcon from "../../components/SvgIcons/SwitchAccountIcon";
 import Private from "../Wrappers/Private";
+import IconButton from "components/UI/Buttons/IconButton/IconButton";
 import Tooltip from "components/UI/Tooltip/Tooltip";
+import LogoutIcon from "components/SvgIcons/LogoutIcon";
+import SwitchAccountIcon from "components/SvgIcons/SwitchAccountIcon";
+
 
 const ProfilePage = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const userData = useAppSelector((state) => state.auth.userData);
+	const token = getCookieValue(cookieKeys.TOKEN)
+	const { currentData } = authApi.useGetMeQuery({}, {skip: !token});
 
 	function switchAccountBtnHandler() {
 		navigate(
@@ -27,7 +29,8 @@ const ProfilePage = () => {
 	}
 
 	function logoutBtnHandler() {
-		dispatch(AuthActions.logout());
+		deleteCookieByName(cookieKeys.TOKEN);
+		dispatch(authApi.util.resetApiState());
 	}
 
 	return (
@@ -38,18 +41,18 @@ const ProfilePage = () => {
 					<tbody>
 						<tr>
 							<td className="pr-4 text-left">Full name</td>
-							<td>{userData?.user.fullName}</td>
+							<td>{currentData?.user.fullName}</td>
 						</tr>
 						<tr>
 							<td className="pr-4 text-left">Email</td>
-							<td>{userData?.user.email}</td>
+							<td>{currentData?.user.email}</td>
 						</tr>
 						<tr>
 							<td className="pr-4 text-left">Created at</td>
 							<td>
-								{userData
+								{currentData
 									? new Date(
-											userData?.user.createdAt
+										currentData?.user.createdAt
 									  ).toDateString()
 									: "-"}
 							</td>
@@ -58,7 +61,7 @@ const ProfilePage = () => {
 							<td className="pr-4 text-left">
 								Quantity of files
 							</td>
-							<td>{userData?.statistic.filesCount}</td>
+							<td>{currentData?.statistic.filesCount}</td>
 						</tr>
 						<tr>
 							<td className="pr-4 text-left">
@@ -66,7 +69,7 @@ const ProfilePage = () => {
 							</td>
 							<td>
 								{(
-									userData?.statistic.averageFileSize! /
+									currentData?.statistic.averageFileSize! /
 									1024 /
 									1024
 								).toFixed(1)}

@@ -63,8 +63,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 					buttonAtributes.disabled && "cursor-not-allowed",
 					buttonAtributes.disabled &&
-						status === "uninitialized" &&
-						"contrast-50",
+						variant === "contained" &&
+						"bg-neutral-500 text-neutral-300 hover:bg-neutral-500",
+					buttonAtributes.disabled &&
+						variant === "outlined" &&
+						"border-neutral-300 bg-transparent text-neutral-400 hover:border-neutral-300 hover:bg-transparent",
+					buttonAtributes.disabled &&
+						variant === "text" &&
+						"bg-transparent text-neutral-400 hover:bg-transparent",
+
 					buttonAtributes.className
 				)}
 				ref={ref}
@@ -83,7 +90,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 					<Fade
 						className={`absolute left-0 top-0 flex h-full w-full items-center justify-center rounded transition duration-300`}
 					>
-						<div className="h-full scale-75 rounded-full bg-neutral-300 bg-opacity-[0.5] p-1">
+						<div className="h-full scale-75 rounded-full bg-neutral-300 bg-opacity-50 p-1">
 							{status === "pending" ? (
 								<LoadIcon
 									className="aspect-square h-full"

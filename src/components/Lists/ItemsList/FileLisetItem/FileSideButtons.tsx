@@ -8,7 +8,6 @@ import ShareModal from "components/Modals/ShareModal";
 
 import FavouriteIcon from "components/SvgIcons/FavouriteIcon";
 import ShareIcon from "components/SvgIcons/ShareIcon";
-import MenuIcon from "components/SvgIcons/MenuIcon";
 
 interface SideButtonsProps {
 	file: FileData;
@@ -21,7 +20,7 @@ const FileSideButtons: FC<SideButtonsProps> = ({ file }) => {
 
 	const [toggleFavouriteStatus, setToggleFavouriteStatus] = useStatus(
 		"uninitialized",
-		1_500
+		1_000
 	);
 
 	async function toggleFavourite() {

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 import Button from "components/UI/Buttons/Button/Button";
@@ -20,6 +21,21 @@ const ConfirmModal: React.FC<ConfirmModalProps> = (props) => {
 		onClose,
 		alertProps,
 	} = props;
+
+	useEffect(() => {
+		function keyboardHandler(e: KeyboardEvent) {
+			if (e.code === "Enter" && open) {
+				onConfirm();
+				onClose();
+			}
+		}
+
+		document.addEventListener("keydown", keyboardHandler);
+
+		return () => {
+			document.removeEventListener("keydown", keyboardHandler);
+		};
+	}, [open, onConfirm, onClose]);
 
 	return (
 		<Modal

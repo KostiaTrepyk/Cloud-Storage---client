@@ -1,13 +1,15 @@
 import { FC, PropsWithChildren } from "react";
 import { SIGNINROUTE } from "core/Router/routes";
-import { useAppSelector } from "hooks/useAppSelector";
 
 import PageConfig from "./PageConfig";
+import { authApi } from "services/authApi";
+import { getCookieValue } from "helpers/cookie";
+import { cookieKeys } from "types/cookie";
 
 const Private: FC<PropsWithChildren> = ({ children }) => {
-	const userData = useAppSelector((state) => state.auth.userData);
-	const isAuth = useAppSelector((state) => state.auth.isAuth);
-	const isRedirecting = !Boolean(isAuth && userData);
+	const token = getCookieValue(cookieKeys.TOKEN)
+	const getMeData = authApi.useGetMeQuery({}, {skip: !token})
+	const isRedirecting = !Boolean(getMeData.currentData?.user);
 
 	return (
 		<PageConfig

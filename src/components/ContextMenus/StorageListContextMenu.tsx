@@ -37,6 +37,7 @@ const StorageListContextMenu: React.FC<StorageListContextMenuProps> = () => {
 					onClick={createStorageHandler}
 					startIcon={<CreateFolderIcon />}
 					status={createStorageStatus}
+					disabled={createStorageStatus === "pending"}
 					size="small"
 				>
 					Create&nbsp;storage

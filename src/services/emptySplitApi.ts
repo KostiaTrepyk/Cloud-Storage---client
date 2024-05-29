@@ -13,6 +13,6 @@ export const emptySplitApi = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ["Storages", "Files", "Users", "Folders"],
+	tagTypes: ["Storages", "Files", "Users", "Folders", "AuthToken"],
 	endpoints: () => ({}),
 });

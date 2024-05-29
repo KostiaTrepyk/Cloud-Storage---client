@@ -13,6 +13,7 @@ import OpenFolderIcon from "components/SvgIcons/OpenFolder";
 import RenameIcon from "components/SvgIcons/RenameIcon";
 import TrashIcon from "components/SvgIcons/TrashIcon";
 import LoadIcon from "components/SvgIcons/LoadIcon";
+import ConfirmModal from "components/Modals/ConfirmModal/ConfirmModal";
 
 interface StorageContextMenuProps {
 	storage: StorageData;
@@ -26,6 +27,7 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 	refetchStorages,
 }) => {
 	const [mode, setMode] = useState<"default" | "rename">("default");
+	const [isConfirmDeletingOpened, setConfirmDeletingOpened] = useState(false);
 
 	const [refetchStatus, setRefetchStatus] = useStatus("uninitialized");
 	const [updateStatus, setUpdateStatus] = useStatus("uninitialized");
@@ -104,6 +106,7 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 					startIcon={<LoadIcon className="text-inherit" />}
 					size="small"
 					status={refetchStatus}
+					disabled={refetchStatus === "pending"}
 				>
 					Refresh
 				</Button>
@@ -114,7 +117,7 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 					<RenameForm
 						name={storage.name}
 						back={() => setMode("default")}
-						rename={(newName) => renameHandler(newName)}
+						onSubmit={(newName) => renameHandler(newName)}
 						status={updateStatus}
 					/>
 				) : (
@@ -126,6 +129,7 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 						startIcon={<RenameIcon />}
 						size="small"
 						status={updateStatus}
+						disabled={updateStatus === "pending"}
 					>
 						Rename
 					</Button>
@@ -137,14 +141,25 @@ const StorageContextMenu: React.FC<StorageContextMenuProps> = ({
 					color="neutral"
 					variant="contained"
 					className="w-full justify-start hover:bg-red-600"
-					onClick={deleteHandler}
+					onClick={() => setConfirmDeletingOpened(true)}
 					startIcon={<TrashIcon />}
 					status={deleteStatus}
 					size="small"
+					disabled={deleteStatus === "pending"}
 				>
 					Delete
 				</Button>
 			</li>
+
+			<ConfirmModal
+				open={isConfirmDeletingOpened}
+				onConfirm={deleteHandler}
+				onClose={() => setConfirmDeletingOpened(false)}
+				alertProps={{
+					text: "If you delete this storage, you will lose all the data stored in it.",
+					type: "danger",
+				}}
+			/>
 		</ContextMenuContainer>
 	);
 };

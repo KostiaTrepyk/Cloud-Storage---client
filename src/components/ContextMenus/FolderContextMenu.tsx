@@ -13,6 +13,7 @@ import TrashIcon from "components/SvgIcons/TrashIcon";
 import ContextMenuContainer from "./components/ContextMenuContainer";
 import DownloadIcon from "components/SvgIcons/DownloadIcon";
 import RenameForm from "./components/RenameForm";
+import ConfirmModal from "components/Modals/ConfirmModal/ConfirmModal";
 
 interface FolderContextMenuProps {
 	currentStorageId: number;
@@ -27,14 +28,15 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 	item,
 	changeFolderId,
 }) => {
+	const [mode, setMode] = useState<Mode>("default");
+	const [isConfirmDeletingOpened, setConfirmDeletingOpened] = useState(false);
+
 	const [downloadingStatus, setDownloadingStatus] =
 		useStatus("uninitialized");
 	const [updateFolderStatus, setUpdateFolderStatus] =
 		useStatus("uninitialized");
 	const [deleteFolderStatus, setDeleteFolderStatus] =
 		useStatus("uninitialized");
-
-	const [mode, setMode] = useState<Mode>("default");
 
 	const { close } = useContextMenuContext();
 
@@ -114,6 +116,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 					startIcon={<DownloadIcon />}
 					status={downloadingStatus}
 					size="small"
+					disabled={downloadingStatus === "pending"}
 				>
 					Download
 				</Button>
@@ -124,7 +127,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 					<RenameForm
 						name={item.name}
 						back={() => setMode("default")}
-						rename={(newName) =>
+						onSubmit={(newName) =>
 							renameFodlerHandler(item.id, newName)
 						}
 						status={updateFolderStatus}
@@ -138,6 +141,7 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 						startIcon={<RenameIcon />}
 						size="small"
 						status={updateFolderStatus}
+						disabled={updateFolderStatus === "pending"}
 					>
 						Rename
 					</Button>
@@ -149,14 +153,25 @@ const FolderContextMenu: React.FC<FolderContextMenuProps> = ({
 					className="w-full justify-start hover:bg-red-600"
 					color="neutral"
 					variant="contained"
-					onClick={() => deleteFolderHandler(item.id)}
+					onClick={() => setConfirmDeletingOpened(true)}
 					startIcon={<TrashIcon />}
 					status={deleteFolderStatus}
 					size="small"
+					disabled={deleteFolderStatus === "pending"}
 				>
 					Delete
 				</Button>
 			</li>
+
+			<ConfirmModal
+				open={isConfirmDeletingOpened}
+				onConfirm={() => deleteFolderHandler(item.id)}
+				onClose={() => setConfirmDeletingOpened(false)}
+				alertProps={{
+					text: "If you delete this folder, you will not be able to recover it.",
+					type: "danger",
+				}}
+			/>
 		</ContextMenuContainer>
 	);
 };

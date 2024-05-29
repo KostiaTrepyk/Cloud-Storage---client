@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { getCookieValue } from "helpers/cookie";
-import { getFile, getFile as uploadFileHelper } from "helpers/getFile";
+import { getFile } from "helpers/getFile";
 import { useCheckedItems } from "hooks/useCheckedItems";
 import { useContextMenuContext } from "contexts/ContextMenuContext";
 import { useFoldersHistoryContext } from "contexts/FoldersHistoryContext";
@@ -26,6 +26,10 @@ export const useStoragePageHooks = () => {
 		},
 		{ skip: currentStorageId === 0 }
 	);
+	const getFilesResponse = filesApi.useGetFolderFilesQuery({
+		storageId: currentStorageId,
+		folderId: currentFolderId,
+	});
 
 	const [createFolderMutation, createFolderResponse] =
 		foldersApi.useCreateFolderMutation();
@@ -65,8 +69,8 @@ export const useStoragePageHooks = () => {
 	);
 
 	const files = useMemo(
-		() => getFolderResponse.data?.files ?? [],
-		[getFolderResponse.data?.files]
+		() => getFilesResponse.data ?? [],
+		[getFilesResponse.data]
 	);
 
 	/** Folders + files */

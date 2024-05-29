@@ -1,5 +1,5 @@
 import { emptySplitApi } from "./emptySplitApi";
-import { FileData, FolderData } from "./types";
+import { FolderData } from "./types";
 
 export const foldersApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -10,7 +10,7 @@ export const foldersApi = emptySplitApi.injectEndpoints({
 				params,
 				timeout: 1000 * 120, // 2min
 			}),
-			providesTags: ["Folders", "Files"],
+			providesTags: ["Folders"],
 		}),
 
 		createFolder: build.mutation<createFolderResponse, createFolderBody>({
@@ -55,7 +55,6 @@ export interface getFolderBody {
 export interface getFolderResponse {
 	currentFolder: FolderData | null;
 	folders: FolderData[];
-	files: FileData[];
 }
 
 /* Create */
