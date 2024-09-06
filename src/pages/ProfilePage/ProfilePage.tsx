@@ -29,7 +29,7 @@ const ProfilePage = () => {
 	}
 
 	function logoutBtnHandler() {
-		deleteCookieByName(cookieKeys.TOKEN);
+		deleteCookieByName(cookieKeys.TOKEN, {path: '/'});
 		dispatch(authApi.util.resetApiState());
 	}
 

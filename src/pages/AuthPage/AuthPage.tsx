@@ -1,7 +1,7 @@
 import { FormEvent } from "react";
 import { useLocation } from "react-router-dom";
 import { SIGNINROUTE, SIGNUPROUTE } from "core/Router/routes";
-import { LoginParams, RegistrationParams, authApi } from "services/authApi";
+import { LoginBody, RegistrationBody, authApi } from "services/authApi";
 import { searchParamsToObj } from "helpers/searchParamsToObj";
 import { SearchParamsEnum } from "types/searchParamsEnum";
 
@@ -41,7 +41,7 @@ const AuthPage = () => {
 		getMeData.isFetching;
 
 	async function signUpHandler(
-		formData: RegistrationParams,
+		formData: RegistrationBody,
 		e: FormEvent<HTMLFormElement>
 	) {
 		e.preventDefault();
@@ -49,7 +49,7 @@ const AuthPage = () => {
 	}
 
 	async function signInHandler(
-		formData: LoginParams,
+		formData: LoginBody,
 		e: FormEvent<HTMLFormElement>
 	) {
 		e.preventDefault();

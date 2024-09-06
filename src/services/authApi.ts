@@ -1,15 +1,15 @@
-import { getCookieValue, setCookie } from "helpers/cookie";
+import { setCookie } from "helpers/cookie";
 import { emptySplitApi } from "./emptySplitApi";
 import { UserStatistic } from "./types";
 import { cookieKeys } from "types/cookie";
 
 export const authApi = emptySplitApi.injectEndpoints({
 	endpoints: (build) => ({
-		login: build.mutation<LoginResponse, LoginParams>({
-			query: (params) => ({
+		login: build.mutation<LoginResponse, LoginBody>({
+			query: (body) => ({
 				url: "/auth/login",
 				method: "POST",
-				params,
+				body,
 				timeout: 1000 * 30, // 30sec,
 			}),
 			transformResponse: (baseQueryReturnValue: LoginResponse) => {
@@ -21,11 +21,11 @@ export const authApi = emptySplitApi.injectEndpoints({
 			invalidatesTags: ["AuthToken"],
 		}),
 
-		registration: build.mutation<RegistrationResponse, RegistrationParams>({
-			query: (params) => ({
+		registration: build.mutation<RegistrationResponse, RegistrationBody>({
+			query: (body) => ({
 				url: "/auth/registration",
 				method: "POST",
-				params,
+				body,
 				timeout: 1000 * 30, // 30sec,
 			}),
 			transformResponse: (baseQueryReturnValue: RegistrationResponse) => {
@@ -55,7 +55,7 @@ export interface LoginResponse {
 	token: string;
 }
 
-export interface LoginParams {
+export interface LoginBody {
 	email: string;
 	password: string;
 }
@@ -65,7 +65,7 @@ export interface RegistrationResponse {
 	token: string;
 }
 
-export interface RegistrationParams {
+export interface RegistrationBody {
 	fullName: string;
 	email: string;
 	password: string;
