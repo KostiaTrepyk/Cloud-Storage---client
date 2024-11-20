@@ -33,7 +33,7 @@ const Sidebar: FC = () => {
 	];
 
 	return (
-		<aside className="fixed left-0 top-0 h-screen w-36 pb-4 pl-3 pr-2 pt-3">
+		<aside className="fixed left-0 top-0 h-screen w-48 pb-4 pl-3 pr-2 pt-3">
 			<Link
 				className="mb-8 flex items-center gap-3"
 				to={HOMEROUTE.path!}
@@ -43,8 +43,8 @@ const Sidebar: FC = () => {
 					src={Logo}
 					alt="Logo"
 				/>
-				<span className="text-lg font-bold tracking-tighter text-neutral-900">
-					FileVault
+				<span className="text-lg font-bold tracking-tighter text-neutral-900 text-center">
+					Cloud Storage
 				</span>
 			</Link>
 			<SidebarLinks routes={routes} />
